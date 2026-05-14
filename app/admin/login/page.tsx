@@ -1,0 +1,208 @@
+"use client"
+
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { authenticatedFetch, readApiErrorMessage } from "@/lib/authenticatedApi"
+import { humanizeAuthError } from "@/lib/clientErrors"
+import { supabase } from "@/lib/supabaseClient"
+
+type Role = "admin" | "moderator" | "provider" | "customer"
+type ApiErrorPayload = { error?: { message?: string } }
+
+function apiErrorMessage(payload: ApiErrorPayload, fallback: string) {
+  return payload.error?.message ?? fallback
+}
+
+export default function AdminLoginPage() {
+  const router = useRouter()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [adminKey, setAdminKey] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState("")
+
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await fetch("/admin/session", { method: "GET", credentials: "same-origin" })
+        if (cancelled) return
+        if (res.ok) {
+          router.replace("/admin")
+          router.refresh()
+          return
+        }
+
+        if (res.status === 503) {
+          try {
+            const payload = (await res.json()) as ApiErrorPayload
+            const nextMessage = apiErrorMessage(payload, "")
+            if (!cancelled && nextMessage) setMessage(nextMessage)
+          } catch {
+            // ignore
+          }
+        }
+      } catch {
+        // ignore auto-check failures; user can still submit.
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [router])
+
+  const submit = async () => {
+    setLoading(true)
+    setMessage("")
+
+    const normalizedEmail = email.trim().toLowerCase()
+    const normalizedKey = adminKey.trim()
+
+    if (!normalizedEmail || !password || !normalizedKey) {
+      setLoading(false)
+      setMessage("Bitte E-Mail, Passwort und Admin-Schlüssel ausfüllen.")
+      return
+    }
+
+    const auth = await supabase.auth.signInWithPassword({
+      email: normalizedEmail,
+      password,
+    })
+
+    if (auth.error || !auth.data.user) {
+      setLoading(false)
+      setMessage(humanizeAuthError(auth.error?.message ?? ""))
+      return
+    }
+
+    let response: Response
+    try {
+      response = await fetch("/admin/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        cache: "no-store",
+        body: JSON.stringify({ password: normalizedKey }),
+      })
+    } catch {
+      setLoading(false)
+      await supabase.auth.signOut()
+      setMessage("Server aktuell nicht erreichbar. Bitte später erneut versuchen.")
+      return
+    }
+
+    let payload: ApiErrorPayload = {}
+    try {
+      payload = (await response.json()) as ApiErrorPayload
+    } catch {
+      payload = {}
+    }
+
+    if (!response.ok) {
+      setLoading(false)
+      await supabase.auth.signOut()
+      setMessage(apiErrorMessage(payload, "Falscher Admin-Schlüssel."))
+      return
+    }
+
+    const roleResponse = await authenticatedFetch("/admin/role", {
+      method: "GET",
+      cache: "no-store",
+    })
+
+    if (!roleResponse.ok) {
+      setLoading(false)
+      await fetch("/admin/session", { method: "DELETE", credentials: "same-origin" })
+      await supabase.auth.signOut()
+      setMessage(await readApiErrorMessage(roleResponse))
+      return
+    }
+
+    const rolePayload = (await roleResponse.json()) as { data?: { role?: Role | null } }
+    const role = (rolePayload.data?.role ?? null) as Role | null
+    if (!role) {
+      setLoading(false)
+      await fetch("/admin/session", { method: "DELETE", credentials: "same-origin" })
+      await supabase.auth.signOut()
+      setMessage("Kein Admin-Profil gefunden (profiles). Zugriff verweigert.")
+      return
+    }
+
+    if (!["admin", "moderator"].includes(role)) {
+      setLoading(false)
+      await fetch("/admin/session", { method: "DELETE", credentials: "same-origin" })
+      await supabase.auth.signOut()
+      setMessage("Kein Admin-/Moderator-Profil. Zugriff verweigert.")
+      return
+    }
+
+    setLoading(false)
+    router.replace("/admin")
+    router.refresh()
+  }
+
+  return (
+    <main className="min-h-screen px-6 py-10 sm:px-10 lg:px-12">
+      <div className="mx-auto max-w-md animate-float-up">
+        <section className="card-surface rounded-[14px] p-7">
+          <h1 className="text-3xl font-semibold">Admin Login</h1>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+            Nur mit Admin-Passwort zugänglich.
+          </p>
+
+          {message && (
+            <p className="mt-4 rounded-[8px] bg-rose-500/10 px-3 py-2 text-sm text-rose-700 dark:text-rose-300">
+              {message}
+            </p>
+          )}
+
+          <label className="mt-6 block text-sm font-semibold text-slate-800 dark:text-slate-200">
+            Admin E-Mail
+            <input
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              className="field-input mt-2 min-h-12 w-full rounded-[10px] px-4"
+              placeholder="admin@hilfino.de"
+              autoComplete="email"
+            />
+          </label>
+
+          <label className="mt-3 block text-sm font-semibold text-slate-800 dark:text-slate-200">
+            Account Passwort
+            <input
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              className="field-input mt-2 min-h-12 w-full rounded-[10px] px-4"
+              placeholder="Supabase Auth Passwort"
+              autoComplete="current-password"
+            />
+          </label>
+
+          <label className="mt-3 block text-sm font-semibold text-slate-800 dark:text-slate-200">
+            Admin Panel Schlüssel
+            <input
+              type="password"
+              value={adminKey}
+              onChange={(event) => setAdminKey(event.target.value)}
+              className="field-input mt-2 min-h-12 w-full rounded-[10px] px-4"
+              placeholder="ADMIN_PANEL_PASSWORD"
+              autoComplete="off"
+            />
+          </label>
+
+          <button
+            type="button"
+            disabled={loading}
+            onClick={submit}
+            className="mt-5 w-full rounded-[10px] bg-[var(--brand)] px-4 py-3 font-semibold text-white transition hover:bg-[var(--brand-strong)] disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {loading ? "Prüfe..." : "Als Admin einloggen"}
+          </button>
+        </section>
+      </div>
+    </main>
+  )
+}

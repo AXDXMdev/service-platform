@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hilfinio
 
-## Getting Started
+Lokaler Service-Marktplatz auf Basis von Next.js App Router, Supabase Auth/DB/Storage und Vercel Speed Insights.
 
-First, run the development server:
+## Website Starten
 
 ```bash
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Die Website läuft lokal unter [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Vor einem Deployment:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run typecheck
+npm run build
+npm run start
+```
 
-## Learn More
+Fuer die neue Live-Supabase-Integrationsspur:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run test:integration
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Der Lauf nutzt echte Supabase-/RLS-Pfade und braucht zusaetzlich `SUPABASE_SERVICE_ROLE_KEY` in `.env.local`. Ohne diesen Key skipped die Suite bewusst sauber.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Environment Variables
 
-## Deploy on Vercel
+Pflicht:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `NEXT_PUBLIC_SUPABASE_URL`: Supabase Projekt-URL.
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabase Anon Key. Nur mit korrekt aktivierten RLS-Policies verwenden.
+- `NEXT_PUBLIC_SITE_URL`: Kanonische Website-URL, z. B. `https://www.hilfinio.de`.
+- `SUPABASE_SERVICE_ROLE_KEY`: Server-only Key für Admin-/Support-APIs. Nie mit `NEXT_PUBLIC_` prefixen.
+- `ADMIN_PANEL_PASSWORD`: Admin-Login-Schlüssel, nicht wiederverwenden.
+- `ADMIN_PANEL_TOKEN`: Separates, langes Cookie-Token für die Admin-Session.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Optional:
+
+- `NEXT_PUBLIC_GOOGLE_ADS_CLIENT`
+- `NEXT_PUBLIC_GOOGLE_ADS_SLOT_HOME`
+- `NEXT_PUBLIC_GOOGLE_ADS_SLOT_SERVICES`
+
+Keine echten Secrets committen. `.env.local` bleibt ignoriert, `.env.example` enthält nur leere Platzhalter.
+
+## Supabase
+
+Die Migrationen liegen in `supabase/migrations/`. Vor Launch müssen alle Migrationen im Zielprojekt ausgeführt sein, insbesondere RLS-Policies für `services`, `requests`, `reviews`, `favorites`, `chat_messages`, `profiles`, `support_audit_events` und Storage-Bucket `service-media`.
+
+## Launch-Dokumente
+
+- [HILFINIO_GREEN_STATUS_REPORT.md](/Users/alaadinadem/service-platform/HILFINIO_GREEN_STATUS_REPORT.md:1)
+- [LEGAL_LAUNCH_READINESS_AUDIT.md](/Users/alaadinadem/service-platform/LEGAL_LAUNCH_READINESS_AUDIT.md:1)
+- [HILFINIO_LAUNCH_OPERATIONS_CHECKLIST.md](/Users/alaadinadem/service-platform/HILFINIO_LAUNCH_OPERATIONS_CHECKLIST.md:1)
+
+## Backend Support API
+
+`GET /api/admin/support` liefert eine gefilterte Support-Liste für Anfragen/Leads. Voraussetzungen:
+
+- gültige Admin-Session über `/admin/session`
+- `SUPABASE_SERVICE_ROLE_KEY` serverseitig gesetzt
+- Migration `20260503_support_hardening.sql` ausgeführt
+
+Query-Parameter: `q`, `status`, `priority`, `limit`.
+
+## Mobile MVP
+
+Eine Expo-Vorversion liegt in `mobile/`.
+
+```bash
+cd mobile
+npm install
+npm run ios
+```
+
+Die App nutzt bewusst gekennzeichnete Mockdaten und ist für spätere API-Anbindung vorbereitet.
