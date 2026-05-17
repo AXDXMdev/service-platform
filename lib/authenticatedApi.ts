@@ -55,3 +55,27 @@ export async function requestSignedUpload(input: {
 
   return payload.data
 }
+
+export async function completeSignedUpload(input: {
+  bucket: "service-media" | "site-assets"
+  path: string
+  fileSize: number
+  contentType: string
+}) {
+  const response = await authenticatedFetch("/api/uploads/complete", {
+    method: "POST",
+    body: JSON.stringify(input),
+  })
+
+  if (!response.ok) {
+    return null
+  }
+
+  return response.json() as Promise<{
+    data: {
+      id: string
+      status: "queued" | "duplicate"
+      fingerprint: string
+    }
+  }>
+}

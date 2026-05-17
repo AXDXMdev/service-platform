@@ -1,5 +1,6 @@
 import { apiError, apiOk } from "@/lib/apiResponse"
-import { getRequestIp, isRateLimited } from "@/lib/serverRateLimit"
+import { readJsonBody } from "@/lib/requestSecurity"
+import { buildRateLimitKey, getRequestIp, isRateLimitedAsync } from "@/lib/serverRateLimit"
 import { requireAuthenticatedUser } from "@/lib/serverAuth"
 import { createServerSupabaseAdminClient, getSupabaseServiceRoleEnv } from "@/lib/serverSupabase"
 import { logServerError, logServerWarn } from "@/lib/serverLogger"
@@ -32,16 +33,26 @@ async function safeInsertDeletionRequest(
 
 export async function POST(request: Request) {
   const ip = getRequestIp(request)
-  if (isRateLimited(`account-delete:${ip}`, 5, 15 * 60 * 1000)) {
+  if (await isRateLimitedAsync(buildRateLimitKey(["account-delete", ip]), 5, 15 * 60 * 1000)) {
     return apiError(429, "rate_limited", "Zu viele Loeschungsversuche. Bitte spaeter erneut.")
   }
 
   const auth = await requireAuthenticatedUser(request)
   if (auth.error || !auth.user) return auth.error
+  if (
+    await isRateLimitedAsync(
+      buildRateLimitKey(["account-delete-user", auth.user.id]),
+      3,
+      60 * 60 * 1000
+    )
+  ) {
+    return apiError(429, "rate_limited", "Zu viele Loeschungsversuche fuer dieses Konto.")
+  }
 
-  const body = (await request.json().catch(() => null)) as
+  const json = await readJsonBody(request)
+  if (!json.ok) return json.response
+  const body = json.body as
     | { mode?: DeleteMode; confirmationText?: string; reason?: string }
-    | null
 
   const mode: DeleteMode = body?.mode === "delete_now" ? "delete_now" : "request"
   const confirmationText = normalizeText(body?.confirmationText ?? "", 40)

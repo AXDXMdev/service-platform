@@ -7,8 +7,11 @@ import { AccessibilityProvider } from "@/components/AccessibilityProvider";
 import { SiteSettingsProvider } from "@/components/SiteSettingsProvider";
 import ConsentBanner from "@/components/ConsentBanner";
 import MarketingScripts from "@/components/MarketingScripts";
+import ClientErrorReporter from "@/components/ClientErrorReporter";
 import Navigation from "@/components/Navigation";
 import SiteFooter from "@/components/SiteFooter";
+import JsonLd from "@/components/JsonLd";
+import { localMarketplaceJsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import "./globals.css";
 
 const uiSans = Nunito_Sans({
@@ -26,6 +29,7 @@ const uiMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   applicationName: "Hilfinio",
+  manifest: "/manifest.webmanifest",
   title: {
     default: "Hilfinio - Lokale Hilfe und Dienstleistungen buchen",
     template: "%s | Hilfinio",
@@ -74,12 +78,14 @@ export default function RootLayout({
       className={`${uiSans.variable} ${uiMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <JsonLd data={[organizationJsonLd(), websiteJsonLd(), localMarketplaceJsonLd()]} />
         <MarketingScripts adsClient={adsClient} />
         <ThemeProvider>
           <AccessibilityProvider>
             <LanguageProvider>
               <SiteSettingsProvider>
                 <Navigation />
+                <ClientErrorReporter />
                 {children}
                 <SiteFooter />
                 <ConsentBanner enabled={Boolean(adsClient)} />

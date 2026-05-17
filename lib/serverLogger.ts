@@ -1,3 +1,5 @@
+import { trackServerError } from "@/lib/observability"
+
 type LogContext = Record<string, unknown>
 
 function redact(value: unknown): unknown {
@@ -32,13 +34,14 @@ function emit(level: "info" | "warn" | "error", message: string, context: LogCon
   const line = JSON.stringify(payload)
   if (level === "error") {
     console.error(line)
+    trackServerError(message, safeContext)
     return
   }
   if (level === "warn") {
     console.warn(line)
     return
   }
-  console.log(line)
+  console.info(line)
 }
 
 export function createRequestLogContext(

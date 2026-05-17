@@ -1,4 +1,5 @@
 import { apiError, apiOk } from "@/lib/apiResponse"
+import { readJsonBody } from "@/lib/requestSecurity"
 import { requireUserContext } from "@/services/authService"
 import { updateProviderOffer } from "@/services/requestService"
 import { validateProviderOfferInput } from "@/services/validation"
@@ -11,8 +12,9 @@ export async function PATCH(
   if (auth.error || !auth.user || !auth.supabase) return auth.error
 
   const params = await context.params
-  const body = await request.json().catch(() => null)
-  const parsed = validateProviderOfferInput(body)
+  const json = await readJsonBody(request)
+  if (!json.ok) return json.response
+  const parsed = validateProviderOfferInput(json.body)
   if (!parsed.ok) {
     return apiError(400, "bad_request", parsed.message)
   }

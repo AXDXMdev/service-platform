@@ -1,9 +1,10 @@
 import { apiError, apiOk } from "@/lib/apiResponse"
-import { getRequestIp, isRateLimited } from "@/lib/serverRateLimit"
+import { buildRateLimitKey, getRequestIp, isRateLimitedAsync } from "@/lib/serverRateLimit"
 import { createServerSupabaseAdminClient, getSupabaseServiceRoleEnv } from "@/lib/serverSupabase"
 import { logServerError } from "@/lib/serverLogger"
 import { createServerSupabasePublicClient, getSupabasePublicEnv } from "@/lib/serverSupabase"
 import { submitAbuseReport } from "@/services/moderationService"
+import { readJsonBody } from "@/lib/requestSecurity"
 import { isLikelySpamTrapFilled, isValidEmail, normalizeText } from "@/lib/validation"
 
 const ALLOWED_CATEGORIES = new Set([
@@ -17,7 +18,7 @@ const ALLOWED_CATEGORIES = new Set([
 
 export async function POST(request: Request) {
   const ip = getRequestIp(request)
-  if (isRateLimited(`abuse-report:${ip}`, 8, 10 * 60 * 1000)) {
+  if (await isRateLimitedAsync(buildRateLimitKey(["abuse-report", ip]), 8, 10 * 60 * 1000)) {
     return apiError(429, "rate_limited", "Zu viele Meldungen in kurzer Zeit. Bitte spaeter erneut.")
   }
 
@@ -29,7 +30,9 @@ export async function POST(request: Request) {
     )
   }
 
-  const body = (await request.json().catch(() => null)) as
+  const json = await readJsonBody(request)
+  if (!json.ok) return json.response
+  const body = json.body as
     | {
         category?: string
         targetUrl?: string
@@ -38,7 +41,6 @@ export async function POST(request: Request) {
         contactEmail?: string
         website?: string
       }
-    | null
 
   const category = normalizeText(body?.category ?? "", 40)
   const targetUrl = normalizeText(body?.targetUrl ?? "", 500)

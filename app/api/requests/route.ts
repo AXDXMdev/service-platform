@@ -1,6 +1,8 @@
 import { apiError, apiOk } from "@/lib/apiResponse"
 import { requireUserContext } from "@/services/authService"
 import { createRequestLogContext, logServerInfo } from "@/lib/serverLogger"
+import { readJsonBody } from "@/lib/requestSecurity"
+import { buildRateLimitKey, getRequestIp, isRateLimitedAsync } from "@/lib/serverRateLimit"
 import { createRequest } from "@/services/requestService"
 import { validateRequestCreateInput } from "@/services/validation"
 
@@ -17,9 +19,19 @@ export function createRequestsPostHandler(deps: RequestRouteDeps) {
 
     const auth = await deps.requireUserContext(request)
     if (auth.error || !auth.user || !auth.supabase) return auth.error
+    if (
+      await isRateLimitedAsync(
+        buildRateLimitKey(["request-create", getRequestIp(request), auth.user.id]),
+        20,
+        10 * 60 * 1000
+      )
+    ) {
+      return apiError(429, "rate_limited", "Zu viele Anfragen in kurzer Zeit. Bitte spaeter erneut.")
+    }
 
-    const body = await request.json().catch(() => null)
-    const parsed = deps.validateRequestCreateInput(body)
+    const json = await readJsonBody(request)
+    if (!json.ok) return json.response
+    const parsed = deps.validateRequestCreateInput(json.body)
     if (!parsed.ok) {
       return apiError(400, "bad_request", parsed.message)
     }

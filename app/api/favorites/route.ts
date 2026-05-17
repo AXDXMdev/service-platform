@@ -1,4 +1,5 @@
 import { apiError, apiOk } from "@/lib/apiResponse"
+import { readJsonBody } from "@/lib/requestSecurity"
 import { requireUserContext } from "@/services/authService"
 import { addFavorite, removeFavorite } from "@/services/userService"
 import { validateFavoriteInput } from "@/services/validation"
@@ -15,8 +16,9 @@ export function createFavoritesPostHandler(deps: FavoriteRouteDeps) {
     const auth = await deps.requireUserContext(request)
     if (auth.error || !auth.user || !auth.supabase) return auth.error
 
-    const body = await request.json().catch(() => null)
-    const parsed = deps.validateFavoriteInput(body)
+    const json = await readJsonBody(request)
+    if (!json.ok) return json.response
+    const parsed = deps.validateFavoriteInput(json.body)
     if (!parsed.ok) {
       return apiError(400, "bad_request", parsed.message)
     }
@@ -41,8 +43,9 @@ export function createFavoritesDeleteHandler(deps: FavoriteRouteDeps) {
     const auth = await deps.requireUserContext(request)
     if (auth.error || !auth.user || !auth.supabase) return auth.error
 
-    const body = await request.json().catch(() => null)
-    const parsed = deps.validateFavoriteInput(body)
+    const json = await readJsonBody(request)
+    if (!json.ok) return json.response
+    const parsed = deps.validateFavoriteInput(json.body)
     if (!parsed.ok) {
       return apiError(400, "bad_request", parsed.message)
     }

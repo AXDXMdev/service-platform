@@ -6,7 +6,12 @@ import { supabase } from "@/lib/supabaseClient"
 import { roundCoords } from "@/app/location"
 import { PILOT_MODE_ENABLED, isPilotCity, pilotCityLabel } from "@/lib/pilotMode"
 import { useLanguage } from "@/components/LanguageProvider"
-import { authenticatedFetch, readApiErrorMessage, requestSignedUpload } from "@/lib/authenticatedApi"
+import {
+  authenticatedFetch,
+  completeSignedUpload,
+  readApiErrorMessage,
+  requestSignedUpload,
+} from "@/lib/authenticatedApi"
 import {
   SERVICE_MEDIA_POLICY,
   validateUploadSelection,
@@ -81,6 +86,13 @@ export default function CreateService() {
       if (uploadResult.error) {
         throw uploadResult.error
       }
+
+      await completeSignedUpload({
+        bucket: uploadGrant.bucket,
+        path: uploadGrant.path,
+        fileSize: file.size,
+        contentType: file.type,
+      })
 
       urls.push(uploadGrant.publicUrl)
     }

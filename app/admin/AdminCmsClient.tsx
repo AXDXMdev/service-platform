@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabaseClient"
 import { SITE_ASSET_POLICY, validateUploadFile } from "@/lib/mediaUpload"
 import { toValidHttpUrls } from "@/lib/validation"
-import { requestSignedUpload } from "@/lib/authenticatedApi"
+import { completeSignedUpload, requestSignedUpload } from "@/lib/authenticatedApi"
 import { getAdminOverview } from "@/app/admin/adminOverviewApi"
 import { postAdminCmsAction } from "@/app/admin/adminCmsApi"
 import {
@@ -336,6 +336,12 @@ export default function AdminCmsClient() {
       cacheControl: "3600",
     })
     if (upload.error) throw new Error(upload.error.message)
+    await completeSignedUpload({
+      bucket: uploadGrant.bucket,
+      path: uploadGrant.path,
+      fileSize: file.size,
+      contentType: file.type,
+    })
     return uploadGrant.publicUrl
   }
 

@@ -11,7 +11,7 @@ export const LEGAL_PLACEHOLDERS = {
 
 export const LEGAL_OPERATOR = {
   name: "Alaadin Adem",
-  addressMultiline: [LEGAL_PLACEHOLDERS.operatorAddress],
+  addressMultiline: ["Stubaier Straße 18", "70327 Stuttgart", "Deutschland"],
   email: "alaadinadem@icloud.com",
   phone: null as string | null,
   responsiblePersonMstv: null as string | null,
@@ -22,8 +22,9 @@ export function hasOperatorAddress() {
   return !LEGAL_OPERATOR.addressMultiline.includes(LEGAL_PLACEHOLDERS.operatorAddress)
 }
 
-export const LEGAL_HOSTING_PROVIDER = LEGAL_PLACEHOLDERS.hostingProvider
-export const LEGAL_VSBG_STATUS = LEGAL_PLACEHOLDERS.vsbgStatus
+export const LEGAL_HOSTING_PROVIDER: string =
+  "Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA"
+export const LEGAL_VSBG_STATUS: string = "nicht bereit und nicht verpflichtet"
 
 export function hasHostingProvider() {
   return LEGAL_HOSTING_PROVIDER !== LEGAL_PLACEHOLDERS.hostingProvider

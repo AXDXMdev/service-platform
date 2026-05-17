@@ -7,7 +7,8 @@ import {
   hasValidAdminCookie,
   isAdminConfigured,
 } from "@/lib/adminSession"
-import { getRequestIp, isRateLimited } from "@/lib/serverRateLimit"
+import { readJsonBody, requireSameOrigin } from "@/lib/requestSecurity"
+import { buildRateLimitKey, getRequestIp, isRateLimitedAsync } from "@/lib/serverRateLimit"
 
 export async function GET() {
   if (!isAdminConfigured()) {
@@ -30,14 +31,11 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const requestUrl = new URL(request.url)
-  const origin = request.headers.get("origin")
-  if (origin && origin !== requestUrl.origin) {
-    return apiError(403, "forbidden", "Ungültige Herkunft (Origin).")
-  }
+  const originError = requireSameOrigin(request)
+  if (originError) return originError
 
   const ip = getRequestIp(request)
-  if (isRateLimited(`admin-login:${ip}`)) {
+  if (await isRateLimitedAsync(buildRateLimitKey(["admin-login", ip]), 8, 15 * 60 * 1000)) {
     return apiError(429, "rate_limited", "Zu viele Login-Versuche. Bitte später erneut.")
   }
 
@@ -46,16 +44,9 @@ export async function POST(request: Request) {
   }
 
   const password = getAdminPassword()
-  let payload: { password?: string } = {}
-  try {
-    const contentType = request.headers.get("content-type") ?? ""
-    if (!contentType.includes("application/json")) {
-      return apiError(415, "unsupported_media_type", "Content-Type muss application/json sein.")
-    }
-    payload = (await request.json()) as { password?: string }
-  } catch {
-    return apiError(400, "bad_request", "Ungültiger Request-Body.")
-  }
+  const json = await readJsonBody(request)
+  if (!json.ok) return json.response
+  const payload = json.body as { password?: string }
 
   if (
     typeof payload.password !== "string" ||

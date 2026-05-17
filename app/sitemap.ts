@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next"
+import { serviceCategories } from "@/app/serviceCatalog"
+import { getBaseUrl, seoCities } from "@/lib/seo"
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+const baseUrl = getBaseUrl()
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
@@ -20,7 +22,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/register",
   ]
 
-  return routes.map((route) => ({
+  const localSeoRoutes = seoCities.flatMap((city) =>
+    serviceCategories.map((category) => `/${city}/${category.slug}`)
+  )
+
+  return [...routes, ...localSeoRoutes].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: route === "/" ? "daily" : "weekly",

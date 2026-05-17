@@ -1,6 +1,7 @@
 import { cookies } from "next/headers"
 import { apiError, apiOk } from "@/lib/apiResponse"
 import { ADMIN_COOKIE, hasValidAdminCookie, isAdminConfigured } from "@/lib/adminSession"
+import { readJsonBody, requireSameOrigin } from "@/lib/requestSecurity"
 import { createServerSupabaseAdminClient, getSupabaseServiceRoleEnv } from "@/lib/serverSupabase"
 import { logServerError } from "@/lib/serverLogger"
 import { executeAdminCmsAction, type AdminCmsAction } from "@/services/adminCmsService"
@@ -22,6 +23,9 @@ function isAdminCmsAction(value: unknown): value is AdminCmsAction {
 
 export function createAdminCmsPostHandler(deps: AdminCmsRouteDeps) {
   return async function POST(request: Request) {
+    const originError = requireSameOrigin(request)
+    if (originError) return originError
+
     const cookieValue = await deps.getAdminCookieValue()
     if (!deps.hasAdminSession(cookieValue)) {
       return apiError(401, "unauthorized", "Admin-Session erforderlich.")
@@ -36,7 +40,9 @@ export function createAdminCmsPostHandler(deps: AdminCmsRouteDeps) {
       return apiError(503, "configuration_error", "Supabase Admin Client konnte nicht initialisiert werden.")
     }
 
-    const body = await request.json().catch(() => null)
+    const json = await readJsonBody(request)
+    if (!json.ok) return json.response
+    const body = json.body
     if (!isAdminCmsAction(body)) {
       return apiError(400, "bad_request", "Ungültige CMS-Aktion.")
     }

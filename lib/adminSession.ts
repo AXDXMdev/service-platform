@@ -1,13 +1,14 @@
 import { timingSafeEqual } from "node:crypto"
+import { getServerEnv } from "@/lib/env"
 
 export const ADMIN_COOKIE = "taskora_admin_session"
 
 export function getAdminPassword() {
-  return (process.env.ADMIN_PANEL_PASSWORD || "").trim()
+  return getServerEnv().ADMIN_PANEL_PASSWORD ?? ""
 }
 
 export function getAdminToken() {
-  return (process.env.ADMIN_PANEL_TOKEN || "").trim()
+  return getServerEnv().ADMIN_PANEL_TOKEN ?? ""
 }
 
 export function isAdminConfigured() {

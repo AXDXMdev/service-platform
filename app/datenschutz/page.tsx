@@ -61,8 +61,8 @@ export default function DatenschutzPage() {
                 LEGAL_OPERATOR.addressMultiline.map((line) => <p key={line}>{line}</p>)
               ) : (
                 <p className="text-amber-700 dark:text-amber-300">
-                  TODO vor Livegang: ladungsfaehige Anschrift im Impressum und hier
-                  vollstaendig eintragen.
+                  Die ladungsfaehige Anschrift wird aus den zentralen Legal-Konstanten
+                  geladen.
                 </p>
               )}
             </section>
@@ -127,10 +127,9 @@ export default function DatenschutzPage() {
               <div className="mt-2 space-y-3">
                 <p>
                   <span className="font-semibold">Hosting:</span> Hilfinio wird ueber{" "}
-                  {LEGAL_HOSTING_PROVIDER} technisch bereitgestellt. Vor Livegang sind hier der
-                  konkrete Anbieter, Sitz, Funktionsumfang und die datenschutzrechtliche
-                  Einordnung als Auftragsverarbeiter oder eigener Verantwortlicher
-                  zu ergaenzen.
+                  {LEGAL_HOSTING_PROVIDER} technisch bereitgestellt. Der Dienst dient dem
+                  Hosting, der Auslieferung, dem Deployment und sicherheitsrelevanten
+                  Plattformfunktionen.
                 </p>
                 <p>
                   Fuer Datenbank, Authentifizierung, Storage und API-Funktionen nutzt

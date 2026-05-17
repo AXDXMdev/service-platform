@@ -1,5 +1,6 @@
 import { apiError, apiOk } from "@/lib/apiResponse"
 import { pilotCityLabel } from "@/lib/pilotMode"
+import { readJsonBody } from "@/lib/requestSecurity"
 import { requireUserContext } from "@/services/authService"
 import { createServiceListing } from "@/services/providerService"
 import { validateServiceCreateInput } from "@/services/validation"
@@ -8,8 +9,9 @@ export async function POST(request: Request) {
   const auth = await requireUserContext(request)
   if (auth.error || !auth.user || !auth.supabase) return auth.error
 
-  const body = await request.json().catch(() => null)
-  const parsed = validateServiceCreateInput(body)
+  const json = await readJsonBody(request)
+  if (!json.ok) return json.response
+  const parsed = validateServiceCreateInput(json.body)
   if (!parsed.ok) {
     if (parsed.message === "pilot_only") {
       return apiError(

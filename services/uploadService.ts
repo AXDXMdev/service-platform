@@ -1,4 +1,5 @@
 import type { User } from "@supabase/supabase-js"
+import { z } from "zod"
 import {
   buildStorageObjectPath,
   UPLOAD_PRESET_CONFIG,
@@ -31,32 +32,31 @@ function invalid(message: string) {
 }
 
 export function validateUploadGrantInput(input: unknown) {
-  const payload = (input ?? {}) as {
-    kind?: string
-    fileName?: string
-    fileSize?: number | string
-    contentType?: string
-  }
+  const parsed = z
+    .object({
+      kind: z.enum(["serviceMedia", "siteAsset"]),
+      fileName: z.preprocess(
+        (value) => normalizeText(typeof value === "string" ? value : "", 180),
+        z.string().min(1)
+      ),
+      fileSize: z.preprocess((value) => Number(value), z.number().positive()),
+      contentType: z.preprocess(
+        (value) => normalizeText(typeof value === "string" ? value : "", 120).toLowerCase(),
+        z.string().min(1)
+      ),
+    })
+    .safeParse(input ?? {})
 
-  const kind = normalizeText(payload.kind ?? "", 40)
-  if (kind !== "serviceMedia" && kind !== "siteAsset") {
+  if (!parsed.success) {
     return invalid("Ungueltiger Upload-Typ.")
   }
 
-  const fileName = normalizeText(payload.fileName ?? "", 180)
-  const fileSize = Number(payload.fileSize)
-  const contentType = normalizeText(payload.contentType ?? "", 120).toLowerCase()
-
-  if (!fileName || !Number.isFinite(fileSize) || fileSize <= 0 || !contentType) {
-    return invalid("Dateiname, Dateityp und Dateigroesse sind erforderlich.")
-  }
-
-  const preset = UPLOAD_PRESET_CONFIG[kind]
+  const preset = UPLOAD_PRESET_CONFIG[parsed.data.kind]
   const fileValidation = validateUploadFile(
     {
-      name: fileName,
-      size: fileSize,
-      type: contentType,
+      name: parsed.data.fileName,
+      size: parsed.data.fileSize,
+      type: parsed.data.contentType,
     },
     preset.policy
   )
@@ -68,10 +68,10 @@ export function validateUploadGrantInput(input: unknown) {
   return {
     ok: true as const,
     value: {
-      kind: kind as UploadPreset,
-      fileName,
-      fileSize,
-      contentType,
+      kind: parsed.data.kind as UploadPreset,
+      fileName: parsed.data.fileName,
+      fileSize: parsed.data.fileSize,
+      contentType: parsed.data.contentType,
     },
   }
 }

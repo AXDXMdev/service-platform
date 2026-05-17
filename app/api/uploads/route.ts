@@ -3,6 +3,7 @@ import { requireAuthenticatedUser } from "@/lib/serverAuth"
 import { createServerSupabaseAdminClient, getSupabaseServiceRoleEnv } from "@/lib/serverSupabase"
 import { getRequestIp, isRateLimited } from "@/lib/serverRateLimit"
 import { createRequestLogContext, logServerError, logServerInfo } from "@/lib/serverLogger"
+import { readJsonBody } from "@/lib/requestSecurity"
 import { createSignedUploadGrant, validateUploadGrantInput } from "@/services/uploadService"
 
 type UploadRouteDependencies = {
@@ -76,8 +77,9 @@ export function createUploadsPostHandler(overrides: Partial<UploadRouteDependenc
       )
     }
 
-    const body = await request.json().catch(() => null)
-    const validation = deps.validateInput(body)
+    const json = await readJsonBody(request)
+    if (!json.ok) return json.response
+    const validation = deps.validateInput(json.body)
     if (!validation.ok) {
       return apiError(400, "bad_request", validation.message)
     }
