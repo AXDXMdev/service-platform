@@ -1,6 +1,7 @@
 export type RequestStatus =
   | "pending"
   | "accepted"
+  | "declined"
   | "rejected"
   | "completed"
   | "cancelled"
@@ -12,7 +13,7 @@ export function canProviderTransition(
 ) {
   const current = currentStatus ?? "pending"
   if (nextStatus === "deleted") return true
-  if (current === "pending") return nextStatus === "accepted" || nextStatus === "rejected"
+  if (current === "pending") return nextStatus === "accepted" || nextStatus === "declined" || nextStatus === "rejected"
   if (current === "accepted") return nextStatus === "completed"
   return false
 }

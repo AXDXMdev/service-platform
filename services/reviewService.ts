@@ -33,7 +33,7 @@ export async function createReview(
     return { ok: false as const, status: 400, message: "Bewertung passt nicht zur Anfrage." }
   }
 
-  if (!["accepted", "completed"].includes(requestQuery.data.status ?? "")) {
+  if (requestQuery.data.status !== "completed") {
     return { ok: false as const, status: 400, message: "Diese Anfrage ist noch nicht bewertbar." }
   }
 

@@ -6,15 +6,17 @@ const mediaUpload = await import("../lib/mediaUpload.ts")
 const uploadService = await import("../services/uploadService.ts")
 
 test("request creation validation rejects invalid budget and accepts normal payload", () => {
-  assert.equal(validation.validateRequestCreateInput({ serviceId: "abc", customerBudgetEur: "99,50" }).ok, true)
-  assert.equal(validation.validateRequestCreateInput({ serviceId: "", customerBudgetEur: null }).ok, false)
-  assert.equal(validation.validateRequestCreateInput({ serviceId: "abc", customerBudgetEur: "-5" }).ok, false)
+  assert.equal(validation.validateRequestCreateInput({ serviceId: "abc", message: "Bitte um Hilfe beim Umzug.", customerBudgetEur: "99,50" }).ok, true)
+  assert.equal(validation.validateRequestCreateInput({ serviceId: "", message: "Bitte um Hilfe.", customerBudgetEur: null }).ok, false)
+  assert.equal(validation.validateRequestCreateInput({ serviceId: "abc", message: "Bitte um Hilfe.", customerBudgetEur: "-5" }).ok, false)
+  assert.equal(validation.validateRequestCreateInput({ serviceId: "abc", message: "zu kurz", customerBudgetEur: null }).ok, false)
 })
 
 test("request status validation and transition rules stay strict", () => {
   assert.equal(validation.validateRequestStatusInput({ nextStatus: "accepted" }).ok, true)
   assert.equal(validation.validateRequestStatusInput({ nextStatus: "unsupported" }).ok, false)
   assert.equal(requestRules.canProviderTransition("pending", "accepted"), true)
+  assert.equal(requestRules.canProviderTransition("pending", "declined"), true)
   assert.equal(requestRules.canProviderTransition("accepted", "rejected"), false)
   assert.equal(requestRules.canCustomerTransition("pending", "cancelled"), true)
   assert.equal(requestRules.canCustomerTransition("accepted", "cancelled"), false)

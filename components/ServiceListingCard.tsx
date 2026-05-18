@@ -29,9 +29,16 @@ export default function ServiceListingCard({
   const { t } = useLanguage()
   const category = getServiceCategory(service)
   const firstMedia = service.media_urls?.[0] ?? null
+  const serviceAreaLabel =
+    service.service_radius_km && service.service_radius_km > 0
+      ? `${service.service_radius_km} km Einsatzgebiet`
+      : null
 
   return (
-    <article className="card-surface interactive-card flex h-full min-w-0 flex-col overflow-hidden rounded-[12px] p-5">
+    <article
+      className="card-surface interactive-card flex h-full min-w-0 flex-col overflow-hidden rounded-[12px] p-5"
+      aria-label={`${service.title}, ${categoryLabel}`}
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="icon-chip flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] text-white">
           <ServiceCategoryIcon slug={category.slug} className="h-5 w-5" />
@@ -79,11 +86,25 @@ export default function ServiceListingCard({
             {distanceLabel}
           </span>
         )}
+        {serviceAreaLabel && (
+          <span className="rounded-full bg-cyan-500/10 px-2.5 py-1 font-semibold text-cyan-700 dark:text-cyan-300">
+            {serviceAreaLabel}
+          </span>
+        )}
       </div>
 
       <p className="mt-3 line-clamp-2 text-sm leading-6 text-slate-700 dark:text-slate-300">
         {service.description || t("serviceCardDetailsSoon")}
       </p>
+
+      <div className="mt-4 grid gap-2 text-xs text-slate-600 dark:text-slate-300 sm:grid-cols-2">
+        <span className="panel-muted rounded-[10px] px-3 py-2 font-semibold">
+          Anfrage ohne Vorkasse
+        </span>
+        <span className="panel-muted rounded-[10px] px-3 py-2 font-semibold">
+          Antwort im Chat
+        </span>
+      </div>
 
       <div className="mt-auto grid grid-cols-2 gap-2 pt-4">
         <Link

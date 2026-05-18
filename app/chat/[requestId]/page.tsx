@@ -14,6 +14,7 @@ export default function RequestChatPage() {
   const [draft, setDraft] = useState("")
   const [status, setStatus] = useState("")
   const [sending, setSending] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
 
   useEffect(() => {
@@ -26,6 +27,8 @@ export default function RequestChatPage() {
         setStatus(
           error instanceof Error ? error.message : "Chat konnte nicht geladen werden."
         )
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -47,8 +50,19 @@ export default function RequestChatPage() {
             </p>
           )}
 
-          <div className="panel-muted mt-5 max-h-[420px] space-y-2 overflow-y-auto rounded-[12px] p-3">
-            {messages.length === 0 && (
+          <div
+            className="panel-muted mt-5 max-h-[420px] space-y-2 overflow-y-auto rounded-[12px] p-3"
+            role="log"
+            aria-live="polite"
+            aria-label="Chat Nachrichten"
+          >
+            {loading && (
+              <div className="space-y-2">
+                <div className="h-12 w-2/3 animate-pulse rounded-[10px] bg-slate-200 dark:bg-slate-800" />
+                <div className="ml-auto h-12 w-1/2 animate-pulse rounded-[10px] bg-slate-200 dark:bg-slate-800" />
+              </div>
+            )}
+            {!loading && messages.length === 0 && (
               <p className="text-sm text-slate-600 dark:text-slate-300">
                 Noch keine Nachrichten.
               </p>
@@ -62,7 +76,12 @@ export default function RequestChatPage() {
                     : "bg-white text-slate-800 dark:bg-slate-900 dark:text-slate-100"
                 }`}
               >
-                <p>{message.message}</p>
+                {message.system_event_type && (
+                  <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide opacity-75">
+                    Status-Update
+                  </p>
+                )}
+                <p>{message.body || message.message}</p>
                 <p className="mt-1 text-[11px] opacity-75">
                   {new Date(message.created_at).toLocaleString("de-DE")}
                 </p>
@@ -70,49 +89,55 @@ export default function RequestChatPage() {
             ))}
           </div>
 
-          <div className="mt-4 flex gap-2">
+          <form
+            className="mt-4 flex flex-col gap-2 sm:flex-row"
+            onSubmit={async (event) => {
+              event.preventDefault()
+              const text = normalizeText(draft, 1500)
+              if (!text) return
+              setStatus("")
+              setSending(true)
+
+              const response = await authenticatedFetch(`/api/requests/${requestId}/messages`, {
+                method: "POST",
+                body: JSON.stringify({
+                  message: text.slice(0, 1500),
+                }),
+              })
+
+              if (!response.ok) {
+                const responseBody = (await response.json().catch(() => null)) as
+                  | { error?: { message?: string } }
+                  | null
+                setStatus(responseBody?.error?.message ?? "Senden fehlgeschlagen.")
+                setSending(false)
+                return
+              }
+
+              const responseBody = (await response.json()) as { data: ChatMessage }
+              setMessages((current) => [...current, responseBody.data])
+              setDraft("")
+              setSending(false)
+            }}
+          >
+            <label htmlFor="chat-message" className="sr-only">
+              Nachricht schreiben
+            </label>
             <input
+              id="chat-message"
               className="field-input min-h-12 flex-1 rounded-[10px] px-4"
               placeholder="Nachricht schreiben..."
               value={draft}
               onChange={(event) => setDraft(event.target.value)}
             />
             <button
-              type="button"
+              type="submit"
               disabled={sending}
-              className="rounded-[10px] bg-[var(--brand)] px-4 font-semibold text-white transition hover:bg-[var(--brand-strong)] disabled:cursor-not-allowed disabled:opacity-60"
-              onClick={async () => {
-                const text = normalizeText(draft, 1500)
-                if (!text) return
-                setStatus("")
-                setSending(true)
-
-                const response = await authenticatedFetch("/api/chat", {
-                  method: "POST",
-                  body: JSON.stringify({
-                    requestId,
-                    message: text.slice(0, 1500),
-                  }),
-                })
-
-                if (!response.ok) {
-                  const responseBody = (await response.json().catch(() => null)) as
-                    | { error?: { message?: string } }
-                    | null
-                  setStatus(responseBody?.error?.message ?? "Senden fehlgeschlagen.")
-                  setSending(false)
-                  return
-                }
-
-                const responseBody = (await response.json()) as { data: ChatMessage }
-                setMessages((current) => [...current, responseBody.data])
-                setDraft("")
-                setSending(false)
-              }}
+              className="min-h-12 rounded-[10px] bg-[var(--brand)] px-5 font-semibold text-white transition hover:bg-[var(--brand-strong)] disabled:cursor-not-allowed disabled:opacity-60 sm:min-w-28"
             >
-              Senden
+              {sending ? "Sendet..." : "Senden"}
             </button>
-          </div>
+          </form>
         </section>
       </div>
     </main>

@@ -6,6 +6,8 @@ import { createServerSupabasePublicClient, getSupabasePublicEnv } from "@/lib/se
 import { submitAbuseReport } from "@/services/moderationService"
 import { readJsonBody } from "@/lib/requestSecurity"
 import { isLikelySpamTrapFilled, isValidEmail, normalizeText } from "@/lib/validation"
+import { calculateSpamScore } from "@/lib/trustSignals"
+import { recordSecurityEvent } from "@/services/securityEventService"
 
 const ALLOWED_CATEGORIES = new Set([
   "bug",
@@ -50,6 +52,17 @@ export async function POST(request: Request) {
   const website = normalizeText(body?.website ?? "", 200)
 
   if (isLikelySpamTrapFilled(website)) {
+    const admin = createServerSupabaseAdminClient()
+    if (admin) {
+      await recordSecurityEvent(admin, {
+        eventType: "abuse_report_honeypot",
+        severity: "warning",
+        route: "/api/report",
+        ip,
+        userAgent: request.headers.get("user-agent"),
+        metadata: { category },
+      }).catch(() => undefined)
+    }
     return apiOk({ status: "accepted" })
   }
 
@@ -76,6 +89,20 @@ export async function POST(request: Request) {
     return apiError(503, "configuration_error", "Supabase Admin Client konnte nicht initialisiert werden.")
   }
 
+  const urlCount = (description.match(/https?:\/\//gi) ?? []).length
+  const spamScore = calculateSpamScore({ text: description, email: contactEmail, urlCount })
+  if (spamScore >= 75) {
+    await recordSecurityEvent(admin, {
+      actorUserId: reporterUserId,
+      eventType: "abuse_report_high_spam_score",
+      severity: "warning",
+      route: "/api/report",
+      ip,
+      userAgent: request.headers.get("user-agent"),
+      metadata: { category, spamScore, urlCount },
+    }).catch(() => undefined)
+  }
+
   const insertResult = await submitAbuseReport(admin, {
     reporterUserId,
     contactEmail: contactEmail || null,
@@ -83,6 +110,11 @@ export async function POST(request: Request) {
     targetUrl: targetUrl || null,
     targetEntityId: targetEntityId || null,
     description,
+    metadata: {
+      spamScore,
+      urlCount,
+      source: "web_report_form",
+    },
   })
 
   if (insertResult.error) {

@@ -83,10 +83,12 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
 }
 
 html {
   scroll-padding-top: 6rem;
+  overflow-x: clip;
 }
 
 html,

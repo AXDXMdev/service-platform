@@ -9,6 +9,9 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "type-check": "npm run typecheck",
+    "mobile:type-check": "npm --prefix mobile run typecheck",
+    "secret-scan": "node scripts/secret-scan.mjs",
+    "ci": "npm run secret-scan && npm run lint && npm run type-check && npm test && npm run mobile:type-check && npm run build",
     "test": "tsx --test tests/**/*.test.mjs",
     "test:integration": "node --env-file=.env.local ./node_modules/tsx/dist/cli.mjs --test tests/supabase-integration.test.mjs"
   },

@@ -14,7 +14,7 @@ import {
 import { Button } from "./src/components/Button"
 import { ProviderCard } from "./src/components/ProviderCard"
 import { TextField } from "./src/components/TextField"
-import { serviceMode } from "./src/api/client"
+import { allowDemoMode, serviceMode } from "./src/api/client"
 import { legalDocuments } from "./src/data/mockData"
 import { login, logout, register } from "./src/services/authService"
 import { getCategories, getProviderById, searchProviders } from "./src/services/providerService"
@@ -275,11 +275,13 @@ export default function App() {
                   </Text>
                   <View style={styles.buttonStack}>
                     <Button label="Loslegen" onPress={() => setScreen("auth")} />
-                    <Button
-                      label="Direkt Demo ansehen"
-                      variant="secondary"
-                      onPress={() => setScreen("home")}
-                    />
+                    {allowDemoMode ? (
+                      <Button
+                        label="Direkt Demo ansehen"
+                        variant="secondary"
+                        onPress={() => setScreen("home")}
+                      />
+                    ) : null}
                   </View>
                 </View>
               )}
@@ -317,7 +319,7 @@ export default function App() {
                   <Text style={styles.notice}>
                     {serviceMode === "supabase"
                       ? "Live-Modus: Login nutzt Supabase Auth mit Expo Session-Speicherung."
-                      : "Demo-Modus: Sobald EXPO_PUBLIC_SUPABASE_URL und EXPO_PUBLIC_SUPABASE_ANON_KEY gesetzt sind, nutzt die App echten Supabase-Login."}
+                      : "Mobile Backend fehlt: setze EXPO_PUBLIC_SUPABASE_URL und EXPO_PUBLIC_SUPABASE_ANON_KEY oder aktiviere Demo bewusst."}
                   </Text>
                   <Button
                     label={
@@ -555,9 +557,10 @@ export default function App() {
                   <View style={styles.panel}>
                     <Text style={styles.eyebrow}>Kundenprofil</Text>
                     <Text style={styles.h2}>{customer.name}</Text>
-                    <Text style={styles.copy}>
-                      Demo-Profil fuer Kundendaten, Favoriten und Anfragen. Die echte Session wird
-                      spaeter serverseitig abgesichert.
+                      <Text style={styles.copy}>
+                      {serviceMode === "supabase"
+                        ? "Live-Profil fuer Kundendaten, Favoriten und Anfragen."
+                        : "Demo-Profil fuer Kundendaten, Favoriten und Anfragen."}
                     </Text>
                     <View style={styles.quickFacts}>
                       <QuickFact
@@ -913,7 +916,7 @@ function LoadingState() {
       <Text style={styles.eyebrow}>Hilfinio App</Text>
       <Text style={styles.h2}>Vorbereitung laeuft</Text>
       <Text style={styles.copy}>
-        Kategorien, Demo-Profile, Support-Hinweise und Einstellungen werden geladen.
+        Kategorien, Profile, Support-Hinweise und Einstellungen werden geladen.
       </Text>
     </View>
   )

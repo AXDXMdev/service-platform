@@ -143,6 +143,8 @@ export async function loadProviderProfileData(
   const query = await selectFirstAvailable(
     supabase,
     [
+      "id,title,description,provider_name,user_id,city,district,price_from_eur,is_verified,is_top_rated,provider_avatar_url,response_time_minutes,response_rate_percent,completed_jobs_count,repeat_customer_rate_percent,media_urls",
+      "id,title,description,provider_name,user_id,city,district,price_from_eur,is_verified,media_urls",
       "id,title,description,provider_name,user_id,media_urls",
       "id,title,description,provider_name,user_id",
     ],

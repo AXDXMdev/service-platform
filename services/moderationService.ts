@@ -11,6 +11,7 @@ export async function submitAbuseReport(
     targetUrl: string | null
     targetEntityId: string | null
     description: string
+    metadata?: Record<string, unknown>
   }
 ) {
   return admin.from("abuse_reports").insert([
@@ -21,6 +22,7 @@ export async function submitAbuseReport(
       target_url: input.targetUrl,
       target_entity_id: input.targetEntityId,
       description: input.description,
+      metadata: input.metadata ?? {},
       status: "open",
     },
   ])

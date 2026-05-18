@@ -300,6 +300,7 @@ export default function MyRequests() {
                         try {
                           await createServiceRequest({
                             serviceId: service.id,
+                            message: `Ich moechte diesen Service erneut anfragen: ${service.title}`,
                             customerBudgetEur: request.customer_budget_eur ?? null,
                           })
                         } catch (error) {

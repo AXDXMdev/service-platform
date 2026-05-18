@@ -5,6 +5,34 @@ import { normalizeText } from "@/lib/validation"
 
 type SupabasePublicClient = NonNullable<ReturnType<typeof createServerSupabasePublicClient>>
 
+async function selectServiceById(
+  supabase: SupabasePublicClient,
+  serviceId: string,
+  selects: string[]
+) {
+  let lastError: string | null = null
+
+  for (const select of selects) {
+    const result = await supabase
+      .from("services")
+      .select(select)
+      .eq("id", serviceId)
+      .limit(1)
+      .returns<Service[]>()
+
+    if (result.data?.[0]) {
+      return { service: result.data[0], error: null as string | null }
+    }
+
+    lastError = result.error?.message ?? lastError
+    if (result.error && !/column|schema|relation|not found/i.test(result.error.message)) {
+      break
+    }
+  }
+
+  return { service: null as Service | null, error: lastError }
+}
+
 export async function loadServiceDetailData(
   supabase: SupabasePublicClient,
   serviceId: string,
@@ -15,33 +43,13 @@ export async function loadServiceDetailData(
     return { ok: false as const, status: 400, message: "Service fehlt." }
   }
 
-  const richQuery = await supabase
-    .from("services")
-    .select(
-      "id,title,description,provider_name,user_id,city,district,provider_bio,years_experience,service_radius_km,approx_lat,approx_lng,supports_sign_language,text_chat_only,barrier_free_support,is_volunteer,is_verified,media_urls,availability_days,availability_note,is_premium,boost_until"
-    )
-    .eq("id", id)
-    .single()
-
-  let service = richQuery.data as Service | null
-  if (!service && richQuery.error) {
-    if (
-      /column|schema|supports_sign_language|text_chat_only|barrier_free_support|is_volunteer|media_urls/i.test(
-        richQuery.error.message
-      )
-    ) {
-      const fallbackQuery = await supabase
-        .from("services")
-        .select(
-          "id,title,description,provider_name,user_id,city,district,provider_bio,years_experience,service_radius_km,approx_lat,approx_lng,is_verified,media_urls,availability_days,availability_note,is_premium,boost_until"
-        )
-        .eq("id", id)
-        .single()
-      service = (fallbackQuery.data as Service | null) ?? null
-    } else {
-      return { ok: false as const, status: 500, message: "Service konnte nicht geladen werden." }
-    }
-  }
+  const serviceResult = await selectServiceById(supabase, id, [
+    "id,title,description,provider_name,user_id,city,district,price_from_eur,provider_bio,years_experience,service_radius_km,approx_lat,approx_lng,supports_sign_language,text_chat_only,barrier_free_support,is_volunteer,is_verified,email_verified,phone_verified,identity_verified,business_verified,is_top_rated,provider_avatar_url,provider_last_active_at,response_time_minutes,response_rate_percent,completed_jobs_count,repeat_customer_rate_percent,media_urls,availability_days,availability_note,is_premium,boost_until",
+    "id,title,description,provider_name,user_id,city,district,price_from_eur,provider_bio,years_experience,service_radius_km,approx_lat,approx_lng,supports_sign_language,text_chat_only,barrier_free_support,is_volunteer,is_verified,media_urls,availability_days,availability_note,is_premium,boost_until",
+    "id,title,description,provider_name,user_id,city,district,provider_bio,years_experience,service_radius_km,approx_lat,approx_lng,is_verified,media_urls,availability_days,availability_note,is_premium,boost_until",
+    "id,title,description,provider_name,user_id,city,district,is_verified",
+  ])
+  const service = serviceResult.service
 
   if (!service) {
     return { ok: false as const, status: 404, message: "Service nicht gefunden." }

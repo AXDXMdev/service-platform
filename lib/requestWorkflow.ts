@@ -20,6 +20,7 @@ export function statusLabel(status: RequestStatus | null) {
     case "accepted":
       return "Angenommen"
     case "rejected":
+    case "declined":
       return "Abgelehnt"
     case "completed":
       return "Abgeschlossen"
@@ -37,6 +38,7 @@ export function statusTone(status: RequestStatus | null) {
     case "accepted":
       return "border border-emerald-500/35 bg-emerald-500/15 text-emerald-800 dark:text-emerald-300"
     case "rejected":
+    case "declined":
       return "border border-rose-500/35 bg-rose-500/15 text-rose-800 dark:text-rose-300"
     case "completed":
       return "border border-blue-500/35 bg-blue-500/15 text-blue-800 dark:text-blue-300"
@@ -58,6 +60,7 @@ export function requestStatusRank(status: RequestStatus | null) {
     case "completed":
       return 2
     case "rejected":
+    case "declined":
       return 3
     case "cancelled":
       return 4
@@ -116,7 +119,11 @@ export async function updateProviderOffer(input: {
 
 export async function createServiceRequest(input: {
   serviceId: string
+  message: string
   customerBudgetEur: number | null
+  preferredDate?: string | null
+  location?: string | null
+  contactPreference?: string | null
 }) {
   const response = await authenticatedFetch("/api/requests", {
     method: "POST",

@@ -17,6 +17,8 @@ import { featureFlags } from "@/lib/featureFlags"
 import ServiceListingCard from "@/components/ServiceListingCard"
 import { useSiteSettings } from "@/components/SiteSettingsProvider"
 import { getServicesCatalogData } from "@/lib/publicCatalogApi"
+import MarketplaceTrustBar from "@/components/MarketplaceTrustBar"
+import EmptyState from "@/components/EmptyState"
 
 type SortMode = "rating" | "price" | "distance" | "newest"
 
@@ -147,6 +149,19 @@ export default function Services() {
         ? t(categoryBySlug.get(activeCategory)!.labelKey)
         : t("allServices")
 
+  const hasActiveFilters =
+    query.trim().length > 0 ||
+    locationFilter.trim().length > 0 ||
+    activeCategory !== "all" ||
+    sortBy !== "rating"
+
+  const resetFilters = () => {
+    setQuery("")
+    setLocationFilter("")
+    setActiveCategory("all")
+    setSortBy("rating")
+  }
+
   const captureViewerLocation = () => {
     if (!navigator.geolocation) {
       setDistanceMessage("Standortfreigabe wird auf diesem Gerät nicht unterstützt.")
@@ -197,7 +212,12 @@ export default function Services() {
             </p>
           </div>
 
-          <div className="mt-8 grid gap-3 lg:grid-cols-[1fr_1fr_auto_auto]">
+          <form
+            role="search"
+            aria-label="Services suchen und filtern"
+            className="mt-8 grid gap-3 lg:grid-cols-[1fr_1fr_auto_auto]"
+            onSubmit={(event) => event.preventDefault()}
+          >
             <label className="sr-only" htmlFor="service-search">
               {t("servicesSearchLabel")}
             </label>
@@ -231,7 +251,7 @@ export default function Services() {
             >
               {t("offerService")}
             </Link>
-          </div>
+          </form>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <label htmlFor="services-sort" className="text-sm font-semibold text-slate-700 dark:text-slate-200">
               {t("servicesSortLabel")}
@@ -247,6 +267,15 @@ export default function Services() {
               <option value="distance">{t("servicesSortDistance")}</option>
               <option value="newest">{t("servicesSortNewest")}</option>
             </select>
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="btn-secondary min-h-11 justify-center px-3 py-2 text-sm font-semibold"
+              >
+                Filter zuruecksetzen
+              </button>
+            )}
           </div>
           {PILOT_MODE_ENABLED && (
             <div className="panel-muted mt-4 rounded-[12px] p-4">
@@ -305,6 +334,12 @@ export default function Services() {
         </div>
       </section>
 
+      <section className="px-6 pt-8 sm:px-10 lg:px-12">
+        <div className="mx-auto max-w-7xl">
+          <MarketplaceTrustBar />
+        </div>
+      </section>
+
       <section className="px-6 py-10 sm:px-10 lg:px-12">
         <div className="mx-auto max-w-7xl animate-float-up">
           <div className="mb-6 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
@@ -335,18 +370,16 @@ export default function Services() {
           )}
 
           {!loading && sortedServices.length === 0 && (
-            <div className="card-surface rounded-[12px] border-dashed p-10 text-center">
-              <h3 className="text-xl font-semibold">{t("noServicesTitle")}</h3>
-              <p className="mx-auto mt-3 max-w-xl leading-7 text-slate-600 dark:text-slate-300">
-                {t("noServicesText")}
-              </p>
-              <Link
-                href="/create-service"
-                className="mt-6 inline-flex rounded-[10px] bg-[var(--brand)] px-5 py-3 font-semibold text-white transition hover:bg-[var(--brand-strong)]"
-              >
-                {t("createService")}
-              </Link>
-            </div>
+            <EmptyState
+              title={t("noServicesTitle")}
+              description={t("noServicesText")}
+              primaryAction={{ href: "/create-service", label: t("createService") }}
+              secondaryAction={
+                hasActiveFilters
+                  ? { href: "/services", label: "Alle Services anzeigen" }
+                  : { href: "/waitlist", label: t("waitlistCta") }
+              }
+            />
           )}
 
           {!loading && sortedServices.length > 0 && (

@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/upload-processing",
+      "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/api/cron/trust-metrics-aggregation",
+      "schedule": "*/30 * * * *"
+    }
+  ]
+}

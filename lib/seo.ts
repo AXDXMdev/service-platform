@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { serviceCategories } from "@/app/serviceCatalog"
+import type { Service } from "@/app/types"
 
 export const seoCities = ["stuttgart", "esslingen", "ludwigsburg", "fellbach", "waiblingen"] as const
 
@@ -151,6 +152,158 @@ export function serviceLandingJsonLd(input: {
           },
         },
       ],
+    },
+  ]
+}
+
+export function servicesMarketplaceJsonLd() {
+  const servicesUrl = canonicalUrl("/services")
+
+  return [
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Hilfinio", item: canonicalUrl("/") },
+        { "@type": "ListItem", position: 2, name: "Dienstleistungen", item: servicesUrl },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: "Dienstleistungen auf Hilfinio",
+      description:
+        "Finde lokale Dienstleister in Stuttgart, Esslingen und Umgebung. Vergleiche Kategorien, Anbieterprofile, Verifizierung und stelle sichere Anfragen.",
+      url: servicesUrl,
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: serviceCategories.map((category, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          url: canonicalUrl(`/services?category=${category.slug}`),
+          name: category.slug,
+        })),
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "Wie finde ich passende Dienstleister auf Hilfinio?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Nutze Suche, Kategorie-Filter und Standortfilter. Vergleiche Profile, Verifizierung, Bewertungen und Leistungsbeschreibungen.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Wie kann ich Anbieter auf Hilfinio sicher anfragen?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Oeffne ein Serviceprofil, pruefe Anbieterinformationen und sende eine Anfrage ueber den Hilfinio-Anfrageflow.",
+          },
+        },
+      ],
+    },
+  ]
+}
+
+export function serviceDetailJsonLd(input: {
+  service: Service
+  ratingAverage?: number | null
+  ratingCount?: number
+}) {
+  const { service, ratingAverage = null, ratingCount = 0 } = input
+  const path = `/service/${service.id}`
+  const locationLabel = [service.city, service.district].filter(Boolean).join(", ")
+  const serviceNode: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.title,
+    description: service.description || `Lokale Dienstleistung auf Hilfinio${locationLabel ? ` in ${locationLabel}` : ""}.`,
+    url: canonicalUrl(path),
+    areaServed: service.city
+      ? {
+          "@type": "City",
+          name: service.city,
+        }
+      : "Deutschland",
+    provider: {
+      "@type": service.provider_name ? "Person" : "Organization",
+      name: service.provider_name || "Hilfinio Anbieter",
+      url: service.user_id ? canonicalUrl(`/provider/${service.user_id}`) : canonicalUrl(path),
+    },
+  }
+
+  if (service.price_from_eur) {
+    serviceNode.offers = {
+      "@type": "Offer",
+      priceCurrency: "EUR",
+      price: service.price_from_eur,
+      availability: "https://schema.org/InStock",
+      url: canonicalUrl(`${path}#anfrage`),
+    }
+  }
+
+  if (ratingAverage != null && ratingCount > 0) {
+    serviceNode.aggregateRating = {
+      "@type": "AggregateRating",
+      ratingValue: ratingAverage,
+      reviewCount: ratingCount,
+      bestRating: 5,
+      worstRating: 1,
+    }
+  }
+
+  if (service.media_urls?.[0]) {
+    serviceNode.image = service.media_urls[0]
+  }
+
+  return [
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Hilfinio", item: canonicalUrl("/") },
+        { "@type": "ListItem", position: 2, name: "Dienstleistungen", item: canonicalUrl("/services") },
+        { "@type": "ListItem", position: 3, name: service.title, item: canonicalUrl(path) },
+      ],
+    },
+    serviceNode,
+  ]
+}
+
+export function providerProfileJsonLd(input: {
+  providerId: string
+  providerName: string
+  services: Service[]
+}) {
+  const path = `/provider/${input.providerId}`
+
+  return [
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      name: `${input.providerName} auf Hilfinio`,
+      url: canonicalUrl(path),
+      mainEntity: {
+        "@type": "Person",
+        name: input.providerName,
+        url: canonicalUrl(path),
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: `Services von ${input.providerName}`,
+      itemListElement: input.services.slice(0, 12).map((service, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: canonicalUrl(`/service/${service.id}`),
+        name: service.title,
+      })),
     },
   ]
 }

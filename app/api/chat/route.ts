@@ -1,5 +1,6 @@
 import { apiError, apiOk } from "@/lib/apiResponse"
 import { readJsonBody } from "@/lib/requestSecurity"
+import { buildRateLimitKey, getRequestIp, isRateLimitedAsync } from "@/lib/serverRateLimit"
 import { requireUserContext } from "@/services/authService"
 import { createChatMessage } from "@/services/chatService"
 import { validateChatMessageInput } from "@/services/validation"
@@ -20,6 +21,16 @@ export function createChatPostHandler(deps: ChatRouteDeps) {
     const parsed = deps.validateChatMessageInput(json.body)
     if (!parsed.ok) {
       return apiError(400, "bad_request", parsed.message)
+    }
+
+    if (
+      await isRateLimitedAsync(
+        buildRateLimitKey(["chat-message", getRequestIp(request), auth.user.id, parsed.value.requestId]),
+        40,
+        10 * 60 * 1000
+      )
+    ) {
+      return apiError(429, "rate_limited", "Zu viele Nachrichten in kurzer Zeit. Bitte spaeter erneut.")
     }
 
     const result = await deps.createChatMessage(auth.supabase, auth.user, parsed.value)

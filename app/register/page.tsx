@@ -72,24 +72,29 @@ export default function Register() {
               onChange={(e) => setWebsiteTrap(e.target.value)}
             />
             <input
+              id="register-email"
               className="field-input min-h-12 w-full rounded-[10px] px-4"
               placeholder={t("authEmailPlaceholder")}
               type="email"
               autoComplete="email"
+              aria-label={t("authEmailPlaceholder")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
+              id="register-password"
               className="field-input min-h-12 w-full rounded-[10px] px-4"
               type="password"
               placeholder={t("authPasswordPlaceholder")}
               autoComplete="new-password"
+              aria-label={t("authPasswordPlaceholder")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
           <button
+            type="button"
             className="mt-5 w-full rounded-[10px] bg-[var(--brand)] px-4 py-3 font-semibold text-white transition hover:bg-[var(--brand-strong)] disabled:cursor-not-allowed disabled:opacity-60"
             onClick={register}
             disabled={loading}

@@ -6,7 +6,7 @@ import type { RequestStatus } from "@/services/requestRules"
 export const AVAILABILITY_DAYS = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"] as const
 const MAX_MEDIA_URLS = 6
 const ALLOWED_WAITLIST_ROLES = new Set(["customer", "provider", "volunteer"])
-const allowedRequestStatuses = ["accepted", "rejected", "completed", "cancelled", "deleted"] as const
+const allowedRequestStatuses = ["accepted", "declined", "rejected", "completed", "cancelled", "deleted"] as const
 
 const textField = (maxLength: number) =>
   z.preprocess((value) => normalizeText(typeof value === "string" ? value : "", maxLength), z.string())
@@ -48,16 +48,24 @@ export function validateRequestCreateInput(input: unknown) {
   const parsed = z
     .object({
       serviceId: textField(80).pipe(z.string().min(1)),
+      message: textField(1500).pipe(z.string().min(10).max(1500)),
       customerBudgetEur: moneyField.optional().default(null),
+      preferredDate: optionalTextField(120).optional().default(null),
+      location: optionalTextField(160).optional().default(null),
+      contactPreference: optionalTextField(80).optional().default(null),
     })
     .safeParse(input ?? {})
 
-  if (!parsed.success) return invalid("Service fehlt oder Kundenbudget ist ungueltig.")
+  if (!parsed.success) return invalid("Bitte Service und eine konkrete Nachricht mit mindestens 10 Zeichen angeben.")
 
   return valid({
     serviceId: parsed.data.serviceId,
+    message: parsed.data.message,
     customerBudgetEur:
       parsed.data.customerBudgetEur === null ? null : Number(parsed.data.customerBudgetEur.toFixed(2)),
+    preferredDate: parsed.data.preferredDate,
+    location: parsed.data.location,
+    contactPreference: parsed.data.contactPreference,
   })
 }
 

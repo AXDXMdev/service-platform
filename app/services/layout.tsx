@@ -1,15 +1,23 @@
 import type { Metadata } from "next"
+import JsonLd from "@/components/JsonLd"
+import { buildDefaultMetadata, servicesMarketplaceJsonLd } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Dienstleistungen",
+export const metadata: Metadata = buildDefaultMetadata({
+  title: "Dienstleistungen in Stuttgart und Esslingen finden",
   description:
-    "Finde verifizierte Anbieter in deiner Nähe. Suche nach Kategorien, Standort und passenden Leistungen.",
-}
+    "Finde lokale Dienstleister auf Hilfinio. Suche nach Kategorien, Standort, Verifizierung, Bewertungen und stelle sichere Anfragen.",
+  path: "/services",
+})
 
 export default function ServicesLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return children
+  return (
+    <>
+      <JsonLd data={servicesMarketplaceJsonLd()} />
+      {children}
+    </>
+  )
 }

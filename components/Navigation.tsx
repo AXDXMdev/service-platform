@@ -7,6 +7,7 @@ import AuthButton from "@/components/AuthButton"
 import AccessibilityControls from "@/components/AccessibilityControls"
 import LanguageSwitcher from "@/components/LanguageSwitcher"
 import ThemeToggle from "@/components/ThemeToggle"
+import NotificationBell from "@/components/NotificationBell"
 import { useLanguage } from "@/components/LanguageProvider"
 import { useSiteSettings } from "@/components/SiteSettingsProvider"
 
@@ -71,15 +72,18 @@ export default function Navigation() {
           <AccessibilityControls />
           <ThemeToggle />
           <LanguageSwitcher />
+          <NotificationBell />
           <AuthButton />
         </div>
       </div>
-      <div className="no-scrollbar mx-auto mt-2 flex max-w-7xl gap-2 overflow-x-auto pb-1 lg:hidden">
-        <Link className={navLinkClass("/services")} href="/services">{t("navServices")}</Link>
-        <Link className={navLinkClass("/create-service", true)} href="/create-service">{t("navCreate")}</Link>
-        <Link className={navLinkClass("/dashboard")} href="/dashboard">{t("navDashboard")}</Link>
-        <Link className={navLinkClass("/my-requests")} href="/my-requests">{t("navRequests")}</Link>
-        <Link className={navLinkClass("/favorites")} href="/favorites">{t("navFavorites")}</Link>
+      <div className="no-scrollbar mx-auto mt-2 w-full max-w-7xl overflow-x-auto overscroll-x-contain pb-1 lg:hidden">
+        <div className="flex w-max min-w-full gap-2">
+          <Link className={navLinkClass("/services")} href="/services">{t("navServices")}</Link>
+          <Link className={navLinkClass("/create-service", true)} href="/create-service">{t("navCreate")}</Link>
+          <Link className={navLinkClass("/dashboard")} href="/dashboard">{t("navDashboard")}</Link>
+          <Link className={navLinkClass("/my-requests")} href="/my-requests">{t("navRequests")}</Link>
+          <Link className={navLinkClass("/favorites")} href="/favorites">{t("navFavorites")}</Link>
+        </div>
       </div>
     </nav>
   )

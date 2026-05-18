@@ -25,6 +25,11 @@ const serverEnvSchema = publicEnvSchema.extend({
   SENTRY_DSN: optionalUrl,
   OBSERVABILITY_INGEST_URL: optionalUrl,
   OBSERVABILITY_INGEST_TOKEN: z.string().trim().optional().or(z.literal("")).transform((value) => value || null),
+  CRON_SECRET: z.string().trim().optional().or(z.literal("")).transform((value) => value || null),
+  UPLOAD_AV_SCAN_URL: optionalUrl,
+  UPLOAD_AV_SCAN_TOKEN: z.string().trim().optional().or(z.literal("")).transform((value) => value || null),
+  UPLOAD_IMAGE_SANITIZER_URL: optionalUrl,
+  UPLOAD_IMAGE_SANITIZER_TOKEN: z.string().trim().optional().or(z.literal("")).transform((value) => value || null),
 })
 
 export type PublicEnv = z.infer<typeof publicEnvSchema>
@@ -69,4 +74,27 @@ export function getProductionReadinessIssues() {
   }
 
   return issues
+}
+
+export function getOpenLaunchReadinessIssues() {
+  const env = getServerEnv()
+  const issues = [...getProductionReadinessIssues()]
+
+  if (!env.NEXT_PUBLIC_SITE_URL || /localhost|127\.0\.0\.1/i.test(env.NEXT_PUBLIC_SITE_URL)) {
+    issues.push("NEXT_PUBLIC_SITE_URL muss fuer Open Launch auf die finale HTTPS-Domain zeigen.")
+  }
+
+  if (!env.CRON_SECRET || env.CRON_SECRET.length < 32) {
+    issues.push("CRON_SECRET fehlt oder ist zu kurz fuer Worker-/Cron-Endpunkte.")
+  }
+
+  if (!env.UPLOAD_AV_SCAN_URL) {
+    issues.push("Upload-AV-Scan ist nicht konfiguriert.")
+  }
+
+  if (!env.UPLOAD_IMAGE_SANITIZER_URL) {
+    issues.push("Image-Sanitizer/Metadata-Stripping ist nicht konfiguriert.")
+  }
+
+  return [...new Set(issues)]
 }
