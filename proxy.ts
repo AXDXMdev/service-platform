@@ -60,6 +60,14 @@ function withCsp(request: NextRequest, response?: NextResponse) {
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const host = request.headers.get("host")?.toLowerCase()
+
+  if (host === "www.hilfinio.de") {
+    const canonicalUrl = request.nextUrl.clone()
+    canonicalUrl.hostname = "hilfinio.de"
+    return withCsp(request, NextResponse.redirect(canonicalUrl, 308))
+  }
+
   const isAdminPath =
     pathname.startsWith("/admin") || pathname.startsWith("/dashboard/admin")
 
