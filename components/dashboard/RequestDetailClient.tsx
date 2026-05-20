@@ -164,7 +164,7 @@ export default function RequestDetailClient({ requestId }: { requestId: string }
       .map((item) => item.trim())
       .filter((item) => /^https?:\/\//i.test(item))
     if (links.length === 0) {
-      setNotice("Bitte mindestens einen gueltigen Foto-Link als Nachweis angeben.")
+      setNotice("Bitte mindestens einen gültigen Foto-Link als Nachweis angeben.")
       return
     }
     setBusy(true)

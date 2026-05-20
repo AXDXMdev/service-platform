@@ -5,7 +5,7 @@ type ReviewSnapshotProps = {
 
 const dimensions = [
   "Kommunikation",
-  "Qualitaet",
+  "Qualität",
   "Puenktlichkeit",
   "Preis-Leistung",
 ]
@@ -24,7 +24,7 @@ export default function ReviewSnapshot({
             Bewertungen
           </h2>
           <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">
-            Nur abgeschlossene Auftraege koennen perspektivisch bewertet werden.
+            Nur abgeschlossene Aufträge können perspektivisch bewertet werden.
           </p>
         </div>
         <div className="rounded-[12px] bg-amber-500/10 px-4 py-3 text-sm font-semibold text-amber-800 dark:text-amber-200">

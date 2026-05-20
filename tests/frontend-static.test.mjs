@@ -68,8 +68,8 @@ test("service discovery includes trust, empty state, and filter reset affordance
   const providerPage = read("app/provider/[id]/page.tsx")
 
   assert.match(servicesPage, /MarketplaceTrustBar/)
-  assert.match(servicesPage, /Filter zuruecksetzen/)
-  assert.match(servicesPage, /EmptyState/)
+  assert.match(servicesPage, /Filter zurücksetzen/)
+  assert.match(servicesPage, /Noch keine Anbieter|Regionaler Marktplatz im Aufbau/)
   assert.match(providerPage, /MarketplaceTrustBar/)
   assert.match(providerPage, /Anfragen/)
 })

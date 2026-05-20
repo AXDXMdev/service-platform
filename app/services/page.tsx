@@ -11,14 +11,12 @@ import {
 import { formatDistanceKm, getDistanceKm, type Coords } from "@/app/location"
 import { useLanguage } from "@/components/LanguageProvider"
 import { PILOT_MODE_ENABLED, isPilotCity, pilotCityLabel } from "@/lib/pilotMode"
-import AdSlot from "@/components/AdSlot"
 import { getCached, setCached } from "@/lib/clientCache"
 import { featureFlags } from "@/lib/featureFlags"
 import ServiceListingCard from "@/components/ServiceListingCard"
 import { useSiteSettings } from "@/components/SiteSettingsProvider"
 import { getServicesCatalogData } from "@/lib/publicCatalogApi"
 import MarketplaceTrustBar from "@/components/MarketplaceTrustBar"
-import EmptyState from "@/components/EmptyState"
 
 type SortMode = "rating" | "price" | "distance" | "newest"
 
@@ -32,6 +30,7 @@ export default function Services() {
   const [locationFilter, setLocationFilter] = useState("")
   const [sortBy, setSortBy] = useState<SortMode>("rating")
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState("")
   const [viewerCoords, setViewerCoords] = useState<Coords | null>(null)
   const [distanceMessage, setDistanceMessage] = useState("")
   const [ratingsByService, setRatingsByService] = useState<
@@ -67,6 +66,9 @@ export default function Services() {
         setRatingsByService(data.ratingsByService)
         setCached("hilfino:services:list", data.services, 45_000)
         setCached("hilfino:services:ratings", data.ratingsByService, 45_000)
+        setLoadError("")
+      } catch {
+        setLoadError("Dienstleistungen konnten gerade nicht geladen werden. Bitte versuche es erneut.")
       } finally {
         setLoading(false)
       }
@@ -273,7 +275,7 @@ export default function Services() {
                 onClick={resetFilters}
                 className="btn-secondary min-h-11 justify-center px-3 py-2 text-sm font-semibold"
               >
-                Filter zuruecksetzen
+                Filter zurücksetzen
               </button>
             )}
           </div>
@@ -369,17 +371,82 @@ export default function Services() {
             </div>
           )}
 
-          {!loading && sortedServices.length === 0 && (
-            <EmptyState
-              title={t("noServicesTitle")}
-              description={t("noServicesText")}
-              primaryAction={{ href: "/create-service", label: t("createService") }}
-              secondaryAction={
-                hasActiveFilters
-                  ? { href: "/services", label: "Alle Services anzeigen" }
-                  : { href: "/waitlist", label: t("waitlistCta") }
-              }
-            />
+          {!loading && loadError && (
+            <div className="card-surface rounded-[12px] border border-rose-200 p-6 text-rose-900 dark:border-rose-900/60 dark:text-rose-200">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em]">{t("errorLabel")}</p>
+              <h3 className="mt-2 text-xl font-semibold">{t("errorTitle")}</h3>
+              <p className="mt-2 text-sm leading-6">{loadError}</p>
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="btn-secondary mt-4 min-h-11 px-4 py-2 text-sm font-semibold"
+              >
+                {t("errorRetry")}
+              </button>
+            </div>
+          )}
+
+          {!loading && !loadError && sortedServices.length === 0 && (
+            <div className="card-surface rounded-[14px] border-dashed p-7">
+              <div className="grid gap-6 lg:grid-cols-[1fr_0.8fr] lg:items-center">
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--brand)]">
+                    Regionaler Marktplatz im Aufbau
+                  </p>
+                  <h3 className="mt-3 text-2xl font-semibold text-slate-950 dark:text-slate-100">
+                    {hasActiveFilters ? "Keine passenden Treffer gefunden" : t("noServicesTitle")}
+                  </h3>
+                  <p className="mt-3 max-w-2xl leading-7 text-slate-600 dark:text-slate-300">
+                    {hasActiveFilters
+                      ? "Passe Suche, Kategorie oder Stadt an. Wenn du genau diesen Service anbietest, kannst du jetzt als erster Anbieter sichtbar werden."
+                      : t("noServicesText")}
+                  </p>
+                  <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+                    <Link
+                      href="/create-service"
+                      className="btn-primary min-h-12 justify-center px-5 py-3 font-semibold text-white"
+                    >
+                      {t("offerService")}
+                    </Link>
+                    <Link
+                      href="/waitlist"
+                      className="btn-secondary min-h-12 justify-center px-5 py-3 font-semibold"
+                    >
+                      {t("waitlistCta")}
+                    </Link>
+                    {hasActiveFilters && (
+                      <button
+                        type="button"
+                        onClick={resetFilters}
+                        className="btn-secondary min-h-12 justify-center px-5 py-3 font-semibold"
+                      >
+                        Filter zurücksetzen
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <div className="panel-muted rounded-[12px] p-5">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    Beispiel-Kategorien
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {serviceCategories.slice(0, 6).map((category) => (
+                      <button
+                        key={category.slug}
+                        type="button"
+                        onClick={() => setActiveCategory(category.slug)}
+                        className="rounded-full bg-white px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm ring-1 ring-slate-200 transition hover:text-[var(--brand)] dark:bg-slate-900 dark:text-slate-100 dark:ring-slate-700"
+                      >
+                        {t(category.labelKey)}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="mt-4 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                    Gesucht werden vor allem Reinigung, Reparatur, Umzug, Nachhilfe, IT-Hilfe und Alltagshilfe.
+                  </p>
+                </div>
+              </div>
+            </div>
           )}
 
           {!loading && sortedServices.length > 0 && (
@@ -421,11 +488,6 @@ export default function Services() {
         </div>
       </section>
 
-      <section className="px-6 py-2 sm:px-10 lg:px-12">
-        <div className="mx-auto max-w-7xl">
-          <AdSlot slot={process.env.NEXT_PUBLIC_GOOGLE_ADS_SLOT_SERVICES ?? ""} />
-        </div>
-      </section>
     </main>
   )
 }

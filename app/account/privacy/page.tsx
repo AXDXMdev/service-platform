@@ -38,7 +38,7 @@ export default function AccountPrivacyPage() {
           </h1>
           <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">
             Hier kannst du deine Consent-Einstellungen aendern, deine Daten exportieren oder
-            dein Konto loeschen lassen.
+            dein Konto löschen lassen.
           </p>
 
           {status ? (
@@ -66,7 +66,7 @@ export default function AccountPrivacyPage() {
             <div className="rounded-[14px] border border-slate-200 p-5 dark:border-slate-700">
               <h2 className="font-semibold text-slate-950 dark:text-slate-100">Cookie-Einstellungen</h2>
               <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                Aendere jederzeit deine Einwilligungen fuer Analytics und Marketing.
+                Ändere jederzeit deine Einwilligungen für Analytics und Marketing.
               </p>
               <Link
                 href="/cookie-einstellungen"
@@ -77,15 +77,15 @@ export default function AccountPrivacyPage() {
             </div>
 
             <div className="rounded-[14px] border border-rose-200 p-5 dark:border-rose-900/60">
-              <h2 className="font-semibold text-slate-950 dark:text-slate-100">Konto loeschen</h2>
+              <h2 className="font-semibold text-slate-950 dark:text-slate-100">Konto löschen</h2>
               <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                Beantrage die Loeschung deines Kontos oder loese sie direkt aus.
+                Beantrage die Löschung deines Kontos oder loese sie direkt aus.
               </p>
               <Link
                 href="/account/delete"
                 className="mt-4 inline-flex rounded-[10px] bg-rose-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-rose-700"
               >
-                Loeschung verwalten
+                Löschung verwalten
               </Link>
             </div>
           </div>

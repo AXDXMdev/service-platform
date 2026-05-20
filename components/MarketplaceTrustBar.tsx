@@ -14,7 +14,7 @@ type MarketplaceTrustBarProps = {
 
 const defaultTrustItems: TrustItem[] = [
   {
-    label: "Anbieterpruefung",
+    label: "Anbieterprüfung",
     value: "Verifizierte Profile sichtbar",
     href: "/provider-verification",
   },
@@ -25,7 +25,7 @@ const defaultTrustItems: TrustItem[] = [
   },
   {
     label: "Sichere Anfragen",
-    value: "Missbrauch melden und pruefen lassen",
+    value: "Missbrauch melden und prüfen lassen",
     href: "/report",
   },
   {

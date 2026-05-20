@@ -32,7 +32,7 @@ export default function AccountDeletePage() {
     setLoading(null)
 
     if (!response.ok) {
-      setStatus(payload?.error?.message ?? "Kontoloeschung konnte nicht verarbeitet werden.")
+      setStatus(payload?.error?.message ?? "Kontolöschung konnte nicht verarbeitet werden.")
       return
     }
 
@@ -50,11 +50,11 @@ export default function AccountDeletePage() {
       <div className="mx-auto max-w-3xl animate-float-up">
         <section className="card-surface rounded-[14px] border border-rose-200 p-7 dark:border-rose-900/60">
           <h1 className="text-3xl font-semibold text-slate-950 dark:text-slate-100">
-            Konto loeschen
+            Konto löschen
           </h1>
           <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">
             Dieser Schritt ist ernst. Je nach Datenlage kann Hilfinio dein Konto direkt
-            entfernen oder zunaechst einen Loeschungsantrag zur manuellen Pruefung speichern.
+            entfernen oder zunächst einen Löschungsantrag zur manuellen Prüfung speichern.
           </p>
 
           {status ? (
@@ -78,7 +78,7 @@ export default function AccountDeletePage() {
 
             <div>
               <label className="mb-2 block text-sm font-semibold text-slate-800 dark:text-slate-100">
-                Bestaetigung
+                Bestätigung
               </label>
               <p className="mb-2 text-sm text-slate-600 dark:text-slate-300">
                 Gib zur Bestätigung exakt <span className="font-semibold">LOESCHEN</span> ein.
@@ -99,7 +99,7 @@ export default function AccountDeletePage() {
               disabled={loading !== null}
               className="rounded-[10px] border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
             >
-              {loading === "request" ? "Sende Antrag..." : "Loeschung beantragen"}
+              {loading === "request" ? "Sende Antrag..." : "Löschung beantragen"}
             </button>
             <button
               type="button"
@@ -107,7 +107,7 @@ export default function AccountDeletePage() {
               disabled={loading !== null}
               className="rounded-[10px] bg-rose-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading === "delete" ? "Loesche Konto..." : "Konto direkt loeschen"}
+              {loading === "delete" ? "Lösche Konto..." : "Konto direkt löschen"}
             </button>
           </div>
         </section>

@@ -31,15 +31,15 @@ export default function WaitlistPage() {
     setStatus("")
 
     if (!name.trim() || !email.trim() || !city.trim()) {
-      setStatus("Bitte Name, E-Mail und Stadt ausfuellen.")
+      setStatus("Bitte Name, E-Mail und Stadt ausfüllen.")
       return
     }
     if (!isValidEmail(email)) {
-      setStatus("Bitte eine gueltige E-Mail eingeben.")
+      setStatus("Bitte eine gültige E-Mail eingeben.")
       return
     }
     if (!privacyAccepted) {
-      setStatus("Bitte den Datenschutzhinweis bestaetigen.")
+      setStatus("Bitte den Datenschutzhinweis bestätigen.")
       return
     }
 
@@ -88,16 +88,16 @@ export default function WaitlistPage() {
             {pageContent?.is_active === false ? t("waitlistText") : pageContent?.subtitle || t("waitlistText")}
           </p>
           <p className="mt-2 text-sm font-medium text-[var(--brand)]">
-            Pilot-Staedte: {pilotCityLabel()}
+            Pilot-Städte: {pilotCityLabel()}
           </p>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-            Wir nutzen deine Angaben fuer die regionale Launch-Planung und fuer eine
-            einmalige oder wiederkehrende Information ueber den Start von Hilfinio in deiner
+            Wir nutzen deine Angaben für die regionale Launch-Planung und für eine
+            einmalige oder wiederkehrende Information über den Start von Hilfinio in deiner
             Stadt. Freiwillige Marketing-E-Mails versenden wir nur bei separater Zustimmung.
           </p>
 
           {status && (
-            <p className="panel-muted mt-4 rounded-[10px] px-3 py-2 text-sm text-slate-700 dark:text-slate-200">
+            <p role="status" className="panel-muted mt-4 rounded-[10px] px-3 py-2 text-sm text-slate-700 dark:text-slate-200">
               {status}
             </p>
           )}
@@ -106,6 +106,8 @@ export default function WaitlistPage() {
             <input
               className="field-input min-h-12 rounded-[10px] px-4"
               placeholder={t("waitlistName")}
+              aria-label={`${t("waitlistName")} Pflichtfeld`}
+              required
               value={name}
               onChange={(event) => setName(event.target.value)}
             />
@@ -113,12 +115,16 @@ export default function WaitlistPage() {
               className="field-input min-h-12 rounded-[10px] px-4"
               placeholder={t("waitlistEmail")}
               type="email"
+              aria-label={`${t("waitlistEmail")} Pflichtfeld`}
+              required
               value={email}
               onChange={(event) => setEmail(event.target.value)}
             />
             <input
               className="field-input min-h-12 rounded-[10px] px-4 sm:col-span-2"
               placeholder={t("waitlistCity")}
+              aria-label={`${t("waitlistCity")} Pflichtfeld`}
+              required
               value={city}
               onChange={(event) => setCity(event.target.value)}
             />
@@ -158,9 +164,9 @@ export default function WaitlistPage() {
                   href="/datenschutz"
                   className="font-semibold text-[var(--brand)] underline-offset-4 hover:underline"
                 >
-                  Datenschutzerklaerung
+                  Datenschutzerklärung
                 </Link>{" "}
-                gelesen und bin mit der Verarbeitung meiner Angaben fuer die Warteliste
+                gelesen und bin mit der Verarbeitung meiner Angaben für die Warteliste
                 einverstanden.
               </span>
             </label>
@@ -172,7 +178,7 @@ export default function WaitlistPage() {
                 onChange={(event) => setMarketingAccepted(event.target.checked)}
               />
               <span>
-                Ich moechte zusaetzlich Produktupdates und Marketing-E-Mails zu Hilfinio
+                Ich möchte zusätzlich Produktupdates und Marketing-E-Mails zu Hilfinio
                 erhalten. Diese Einwilligung ist freiwillig und jederzeit widerrufbar.
               </span>
             </label>

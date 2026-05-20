@@ -33,13 +33,7 @@ export default function AdSlot({
   }, [adEnabled, slot])
 
   if (!adEnabled) {
-    return (
-      <div
-        className={`panel-muted rounded-[12px] px-4 py-3 text-xs font-semibold uppercase tracking-[0.08em] text-slate-600 dark:text-slate-300 ${className ?? ""}`}
-      >
-        Werbefläche
-      </div>
-    )
+    return null
   }
 
   return (

@@ -202,7 +202,7 @@ export function servicesMarketplaceJsonLd() {
           name: "Wie kann ich Anbieter auf Hilfinio sicher anfragen?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Oeffne ein Serviceprofil, pruefe Anbieterinformationen und sende eine Anfrage ueber den Hilfinio-Anfrageflow.",
+            text: "Öffne ein Serviceprofil, prüfe Anbieterinformationen und sende eine Anfrage über den Hilfinio-Anfrageflow.",
           },
         },
       ],

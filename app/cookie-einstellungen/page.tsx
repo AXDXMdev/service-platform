@@ -23,13 +23,13 @@ export default function CookieSettingsPage() {
             Cookie- und Consent-Einstellungen
           </h1>
           <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">
-            Hier kannst du deine Einwilligungen fuer optionale Technologien jederzeit aendern
-            oder widerrufen. Notwendige Speicherungen fuer Login, Sprache, Darstellung und
+            Hier kannst du deine Einwilligungen für optionale Technologien jederzeit ändern
+            oder widerrufen. Notwendige Speicherungen für Login, Sprache, Darstellung und
             Barrierefreiheit bleiben aktiv.
           </p>
 
           {status ? (
-            <p className="panel-muted mt-4 rounded-[10px] px-3 py-2 text-sm text-slate-700 dark:text-slate-200">
+            <p role="status" className="panel-muted mt-4 rounded-[10px] px-3 py-2 text-sm text-slate-700 dark:text-slate-200">
               {status}
             </p>
           ) : null}
@@ -40,8 +40,8 @@ export default function CookieSettingsPage() {
                 Notwendige Technologien
               </p>
               <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                Immer aktiv. Dazu gehoeren Sitzungsfunktionen, Sicherheitsmechanismen und
-                lokale Einstellungen fuer Theme, Sprache und Barrierefreiheit.
+                Immer aktiv. Dazu gehören Sitzungsfunktionen, Sicherheitsmechanismen und
+                lokale Einstellungen für Theme, Sprache und Barrierefreiheit.
               </p>
             </div>
 
@@ -74,22 +74,48 @@ export default function CookieSettingsPage() {
                   Marketing und Werbung
                 </span>
                 <span className="mt-1 block text-sm text-slate-600 dark:text-slate-300">
-                  Optional. Dazu zaehlen insbesondere Werbeskripte wie Google AdSense.
+                  Optional. Dazu zählen insbesondere Werbeskripte wie Google AdSense.
                 </span>
               </span>
             </label>
           </div>
 
-          <button
-            type="button"
-            onClick={() => {
-              writeConsentSettings({ necessary: true, analytics, marketing })
-              setStatus("Deine Einstellungen wurden gespeichert.")
-            }}
-            className="mt-6 rounded-[10px] bg-[var(--brand)] px-4 py-3 font-semibold text-white transition hover:bg-[var(--brand-strong)]"
-          >
-            Einstellungen speichern
-          </button>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={() => {
+                writeConsentSettings({ necessary: true, analytics, marketing })
+                setStatus("Deine Einstellungen wurden gespeichert.")
+              }}
+              className="btn-primary min-h-12 justify-center px-4 py-3 font-semibold text-white"
+            >
+              Einstellungen speichern
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setAnalytics(false)
+                setMarketing(false)
+                writeConsentSettings({ necessary: true, analytics: false, marketing: false })
+                setStatus("Optionale Technologien wurden deaktiviert.")
+              }}
+              className="btn-secondary min-h-12 justify-center px-4 py-3 font-semibold"
+            >
+              Optionale ablehnen
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setAnalytics(true)
+                setMarketing(true)
+                writeConsentSettings({ necessary: true, analytics: true, marketing: true })
+                setStatus("Optionale Technologien wurden aktiviert.")
+              }}
+              className="btn-secondary min-h-12 justify-center px-4 py-3 font-semibold"
+            >
+              Optionale akzeptieren
+            </button>
+          </div>
         </section>
       </div>
     </main>

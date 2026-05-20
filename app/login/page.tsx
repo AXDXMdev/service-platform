@@ -21,6 +21,12 @@ export default function Login() {
   const [message, setMessage] = useState("")
   const [websiteTrap, setWebsiteTrap] = useState("")
 
+  const getSafeRedirectTarget = () => {
+    const target = new URLSearchParams(window.location.search).get("redirect")
+    if (!target || !target.startsWith("/") || target.startsWith("//")) return "/dashboard"
+    return target
+  }
+
   const login = async () => {
     if (isLikelySpamTrapFilled(websiteTrap)) {
       setMessage(t("authUnavailable"))
@@ -44,7 +50,7 @@ export default function Login() {
       return
     }
 
-    router.push("/dashboard")
+    router.push(getSafeRedirectTarget())
   }
 
   const signUp = async () => {

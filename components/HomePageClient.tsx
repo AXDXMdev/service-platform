@@ -6,11 +6,11 @@ import { getServiceCategory, serviceCategories } from "@/app/serviceCatalog"
 import { ServiceCategoryIcon } from "@/app/serviceIcons"
 import { useLanguage } from "@/components/LanguageProvider"
 import type { Service } from "@/app/types"
-import AdSlot from "@/components/AdSlot"
 import ServiceListingCard from "@/components/ServiceListingCard"
 import { getCached, setCached } from "@/lib/clientCache"
 import { useSiteSettings } from "@/components/SiteSettingsProvider"
 import { getHomeFeaturedData } from "@/lib/publicCatalogApi"
+import { pilotCityLabel } from "@/lib/pilotMode"
 
 export default function Home() {
   const { t } = useLanguage()
@@ -161,6 +161,33 @@ export default function Home() {
                   </span>
                 ))}
               </div>
+
+              <div className="mt-6 grid max-w-4xl gap-3 rounded-[14px] border border-white/70 bg-white/82 p-4 shadow-[0_18px_45px_-35px_rgba(15,23,42,0.5)] dark:border-slate-700 dark:bg-slate-950/72 sm:grid-cols-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--brand)]">
+                    Pilotstädte
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    {pilotCityLabel()}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--brand)]">
+                    Plattformrolle
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    Vermittlung, kein Vertragspartner
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--brand)]">
+                    Sicherheit
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    Consent, Meldesystem und geprüfte Profile
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -271,12 +298,6 @@ export default function Home() {
         </div>
       </section>
       )}
-
-      <section className="px-6 py-8 sm:px-10 lg:px-12">
-        <div className="mx-auto max-w-7xl">
-          <AdSlot slot={process.env.NEXT_PUBLIC_GOOGLE_ADS_SLOT_HOME ?? ""} />
-        </div>
-      </section>
 
       {sectionEnabled("provider_cta") && (
       <section className="px-6 py-16 sm:px-10 lg:px-12">

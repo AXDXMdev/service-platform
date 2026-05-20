@@ -34,7 +34,7 @@ async function safeInsertDeletionRequest(
 export async function POST(request: Request) {
   const ip = getRequestIp(request)
   if (await isRateLimitedAsync(buildRateLimitKey(["account-delete", ip]), 5, 15 * 60 * 1000)) {
-    return apiError(429, "rate_limited", "Zu viele Loeschungsversuche. Bitte spaeter erneut.")
+    return apiError(429, "rate_limited", "Zu viele Löschungsversuche. Bitte später erneut.")
   }
 
   const auth = await requireAuthenticatedUser(request)
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
       60 * 60 * 1000
     )
   ) {
-    return apiError(429, "rate_limited", "Zu viele Loeschungsversuche fuer dieses Konto.")
+    return apiError(429, "rate_limited", "Zu viele Löschungsversuche für dieses Konto.")
   }
 
   const json = await readJsonBody(request)
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
   const reason = normalizeText(body?.reason ?? "", 1000)
 
   if (confirmationText !== "LOESCHEN") {
-    return apiError(400, "bad_request", 'Bitte bestaetige die Loeschung mit dem Text "LOESCHEN".')
+    return apiError(400, "bad_request", 'Bitte bestätige die Löschung mit dem Text "LOESCHEN".')
   }
 
   const user = auth.user
@@ -71,7 +71,7 @@ export async function POST(request: Request) {
       mode,
       status: "pending",
       message:
-        "Dein Loeschungsantrag wurde gespeichert. Wir pruefen, ob gesetzliche Aufbewahrungspflichten entgegenstehen.",
+        "Dein Löschungsantrag wurde gespeichert. Wir prüfen, ob gesetzliche Aufbewahrungspflichten entgegenstehen.",
     })
   }
 
@@ -80,7 +80,7 @@ export async function POST(request: Request) {
     return apiError(
       503,
       "configuration_error",
-      "Direkte Kontoloeschung ist aktuell nicht verfuegbar. Dein Antrag wurde stattdessen zur manuellen Bearbeitung gespeichert."
+      "Direkte Kontolöschung ist aktuell nicht verfuegbar. Dein Antrag wurde stattdessen zur manuellen Bearbeitung gespeichert."
     )
   }
 
@@ -173,6 +173,6 @@ export async function POST(request: Request) {
       userId: user.id,
       error: message,
     })
-    return apiError(500, "upstream_error", "Kontoloeschung fehlgeschlagen. Bitte kontaktiere den Support.")
+    return apiError(500, "upstream_error", "Kontolöschung fehlgeschlagen. Bitte kontaktiere den Support.")
   }
 }

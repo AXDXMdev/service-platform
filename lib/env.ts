@@ -62,7 +62,7 @@ export function getProductionReadinessIssues() {
   }
 
   if (env.UPSTASH_REDIS_REST_URL && !env.UPSTASH_REDIS_REST_TOKEN) {
-    issues.push("UPSTASH_REDIS_REST_TOKEN fehlt fuer verteiltes Rate Limiting.")
+    issues.push("UPSTASH_REDIS_REST_TOKEN fehlt für verteiltes Rate Limiting.")
   }
 
   if (!env.UPSTASH_REDIS_REST_URL || !env.UPSTASH_REDIS_REST_TOKEN) {
@@ -81,11 +81,11 @@ export function getOpenLaunchReadinessIssues() {
   const issues = [...getProductionReadinessIssues()]
 
   if (!env.NEXT_PUBLIC_SITE_URL || /localhost|127\.0\.0\.1/i.test(env.NEXT_PUBLIC_SITE_URL)) {
-    issues.push("NEXT_PUBLIC_SITE_URL muss fuer Open Launch auf die finale HTTPS-Domain zeigen.")
+    issues.push("NEXT_PUBLIC_SITE_URL muss für Open Launch auf die finale HTTPS-Domain zeigen.")
   }
 
   if (!env.CRON_SECRET || env.CRON_SECRET.length < 32) {
-    issues.push("CRON_SECRET fehlt oder ist zu kurz fuer Worker-/Cron-Endpunkte.")
+    issues.push("CRON_SECRET fehlt oder ist zu kurz für Worker-/Cron-Endpunkte.")
   }
 
   if (!env.UPLOAD_AV_SCAN_URL) {

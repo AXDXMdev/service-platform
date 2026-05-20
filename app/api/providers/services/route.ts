@@ -17,7 +17,7 @@ export async function POST(request: Request) {
       return apiError(
         409,
         "forbidden",
-        `Diese Stadt ist noch nicht im Pilot. Aktuelle Pilot-Staedte: ${pilotCityLabel()}.`
+        `Diese Stadt ist noch nicht im Pilot. Aktuelle Pilot-Städte: ${pilotCityLabel()}.`
       )
     }
     return apiError(400, "bad_request", parsed.message)

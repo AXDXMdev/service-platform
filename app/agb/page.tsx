@@ -10,7 +10,7 @@ export default function AgbPage() {
         <section className="card-surface rounded-[14px] p-7">
           <PageContentHeader
             slug="agb"
-            fallbackTitle="Allgemeine Geschaeftsbedingungen"
+            fallbackTitle="Allgemeine Geschäftsbedingungen"
             fallbackSubtitle={`Stand: ${LEGAL_LAST_UPDATED}. Diese Bedingungen regeln die Nutzung von Hilfinio als Vermittlungs- und Kommunikationsplattform.`}
           />
         </section>
@@ -18,10 +18,14 @@ export default function AgbPage() {
         <section className="card-surface mt-6 rounded-[14px] p-7 text-sm leading-7 text-slate-800 dark:text-slate-200">
           {!resolvedVsbgStatus ? (
             <div className="mb-6 rounded-[12px] border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-200">
-              <p className="font-semibold">Pflichtangabe vor Livegang ergaenzen</p>
+              <p className="font-semibold">TODO_LEGAL_REVIEW</p>
               <p>{LEGAL_NOTES.missingVsbgStatus}</p>
             </div>
           ) : null}
+          <div className="mb-6 rounded-[12px] border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-200">
+            <p className="font-semibold">TODO_LEGAL_REVIEW</p>
+            <p>{LEGAL_NOTES.legalReview}</p>
+          </div>
 
           <div className="space-y-6">
             <section>
@@ -29,7 +33,7 @@ export default function AgbPage() {
                 1. Geltungsbereich
               </h2>
               <p className="mt-2">
-                Diese AGB gelten fuer die Nutzung der Plattform Hilfinio durch registrierte
+                Diese AGB gelten für die Nutzung der Plattform Hilfinio durch registrierte
                 und nicht registrierte Nutzer, insbesondere Kunden, Anbieter und sonstige
                 Interessenten.
               </p>
@@ -40,15 +44,15 @@ export default function AgbPage() {
                 2. Rolle von Hilfinio
               </h2>
               <p className="mt-2">
-                Hilfinio stellt eine technische Plattform bereit, ueber die Kunden und
+                Hilfinio stellt eine technische Plattform bereit, über die Kunden und
                 Anbieter miteinander in Kontakt treten, Anfragen austauschen und Leistungen
-                anbahnen koennen.
+                anbahnen können.
               </p>
               <p className="mt-2">
                 Hilfinio wird selbst nicht Vertragspartner der zwischen Kunden und Anbietern
-                geschlossenen Dienstleistungsvertraege, schuldet nicht deren Erfuellung und
-                uebernimmt keine Inkasso-, Gewaehrleistungs- oder Erfolgsgarantie fuer die
-                vermittelte Leistung, sofern im Einzelfall nichts Abweichendes ausdruecklich
+                geschlossenen Dienstleistungsverträge, schuldet nicht deren Erfüllung und
+                übernimmt keine Inkasso-, Gewährleistungs- oder Erfolgsgarantie für die
+                vermittelte Leistung, sofern im Einzelfall nichts Abweichendes ausdrücklich
                 vereinbart wurde.
               </p>
             </section>
@@ -58,8 +62,8 @@ export default function AgbPage() {
                 3. Registrierung und Nutzerkonto
               </h2>
               <p className="mt-2">
-                Fuer bestimmte Funktionen ist ein Nutzerkonto erforderlich. Nutzer muessen
-                zutreffende, aktuelle und vollstaendige Angaben machen und ihre Zugangsdaten
+                Für bestimmte Funktionen ist ein Nutzerkonto erforderlich. Nutzer müssen
+                zutreffende, aktuelle und vollständige Angaben machen und ihre Zugangsdaten
                 geheim halten.
               </p>
               <p className="mt-2">
@@ -73,9 +77,9 @@ export default function AgbPage() {
                 4. Anbieterpflichten
               </h2>
               <p className="mt-2">
-                Anbieter duerfen nur rechtmaessige und tatsaechlich verfuegbare Leistungen
-                einstellen. Sie sind fuer die Richtigkeit ihrer Angaben, das Vorliegen
-                erforderlicher Qualifikationen, Gewerbe- oder Berufszulassungen sowie fuer die
+                Anbieter dürfen nur rechtmäßige und tatsächlich verfügbare Leistungen
+                einstellen. Sie sind für die Richtigkeit ihrer Angaben, das Vorliegen
+                erforderlicher Qualifikationen, Gewerbe- oder Berufszulassungen sowie für die
                 Einhaltung steuerlicher, berufsrechtlicher und verbraucherschutzrechtlicher
                 Pflichten selbst verantwortlich.
               </p>
@@ -86,15 +90,15 @@ export default function AgbPage() {
                 5. Anfragen, Kommunikation und Vertragsabschluss
               </h2>
               <p className="mt-2">
-                Kunden koennen ueber Hilfinio Anfragen an Anbieter stellen. Ein Vertrag kommt
-                ausschliesslich zwischen Kunde und Anbieter zustande, wenn beide sich ueber die
+                Kunden können über Hilfinio Anfragen an Anbieter stellen. Ein Vertrag kommt
+                ausschließlich zwischen Kunde und Anbieter zustande, wenn beide sich über die
                 konkreten Vertragsbedingungen einigen. Hilfinio ist an diesem Vertragsschluss
                 nicht beteiligt.
               </p>
               <p className="mt-2">
                 Nutzer sind verpflichtet, im Rahmen der Kommunikation keine rechtswidrigen,
-                beleidigenden, diskriminierenden, irrefuehrenden oder missbraeuchlichen
-                Inhalte zu uebermitteln.
+                beleidigenden, diskriminierenden, irreführenden oder missbräuchlichen
+                Inhalte zu übermitteln.
               </p>
             </section>
 
@@ -103,10 +107,10 @@ export default function AgbPage() {
                 6. Verifizierungshinweis
               </h2>
               <p className="mt-2">
-                Ein Verifizierungsstatus bedeutet ausschliesslich, dass Hilfinio bestimmte
-                Nachweise oder Angaben zum Zeitpunkt der Pruefung gesichtet hat. Der Status ist
-                keine Zusicherung der fachlichen Qualitaet, Bonitaet, Zuverlaessigkeit,
-                Rechtmaessigkeit oder fortbestehenden Berechtigung eines Anbieters.
+                Ein Verifizierungsstatus bedeutet ausschließlich, dass Hilfinio bestimmte
+                Nachweise oder Angaben zum Zeitpunkt der Prüfung gesichtet hat. Der Status ist
+                keine Zusicherung der fachlichen Qualität, Bonität, Zuverlässigkeit,
+                Rechtmäßigkeit oder fortbestehenden Berechtigung eines Anbieters.
               </p>
             </section>
 
@@ -115,35 +119,35 @@ export default function AgbPage() {
                 7. Inhalte, Bewertungen und Moderation
               </h2>
               <p className="mt-2">
-                Hilfinio kann Inhalte und Bewertungen nach billigem Ermessen pruefen,
+                Hilfinio kann Inhalte und Bewertungen nach billigem Ermessen prüfen,
                 einschränken, ausblenden oder entfernen, wenn konkrete Hinweise auf
-                Rechtsverstoesse, Irrefuehrung, Missbrauch, Sicherheitsrisiken oder
-                Verstoesse gegen diese AGB vorliegen.
+                Rechtsverstöße, Irreführung, Missbrauch, Sicherheitsrisiken oder
+                Verstöße gegen diese AGB vorliegen.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                8. Sperrung, Einschraenkung und Kuendigung
+                8. Sperrung, Einschränkung und Kündigung
               </h2>
               <p className="mt-2">
-                Hilfinio kann Konten oder einzelne Inhalte voruebergehend oder dauerhaft
-                einschraenken, wenn ein sachlicher Grund vorliegt, insbesondere bei
+                Hilfinio kann Konten oder einzelne Inhalte vorübergehend oder dauerhaft
+                einschränken, wenn ein sachlicher Grund vorliegt, insbesondere bei
                 Missbrauch, Umgehung von Sicherheitsmechanismen, falschen Angaben,
                 Rechtsverletzungen, ausbleibender Mitwirkung im Verifizierungsprozess oder zur
-                Abwehr konkreter Risiken fuer andere Nutzer oder die Plattform.
+                Abwehr konkreter Risiken für andere Nutzer oder die Plattform.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                9. Verfuegbarkeit
+                9. Verfügbarkeit
               </h2>
               <p className="mt-2">
-                Hilfinio bemueht sich um eine moeglichst hohe Verfuegbarkeit. Eine jederzeit
-                stoerungsfreie und unterbrechungslose Verfuegbarkeit wird jedoch nicht
-                geschuldet. Wartungen, Sicherheitsupdates, technische Stoerungen oder
-                Umstellungen koennen die Nutzbarkeit zeitweise einschraenken.
+                Hilfinio bemüht sich um eine möglichst hohe Verfügbarkeit. Eine jederzeit
+                störungsfreie und unterbrechungslose Verfügbarkeit wird jedoch nicht
+                geschuldet. Wartungen, Sicherheitsupdates, technische Störungen oder
+                Umstellungen können die Nutzbarkeit zeitweise einschränken.
               </p>
             </section>
 
@@ -152,14 +156,14 @@ export default function AgbPage() {
                 10. Haftung
               </h2>
               <p className="mt-2">
-                Hilfinio haftet unbeschraenkt bei Vorsatz, grober Fahrlaessigkeit, bei
-                Verletzung von Leben, Koerper oder Gesundheit sowie nach zwingenden
+                Hilfinio haftet unbeschränkt bei Vorsatz, grober Fahrlässigkeit, bei
+                Verletzung von Leben, Körper oder Gesundheit sowie nach zwingenden
                 gesetzlichen Vorschriften.
               </p>
               <p className="mt-2">
-                Bei leicht fahrlaessiger Verletzung wesentlicher Vertragspflichten ist die
-                Haftung auf den vertragstypisch vorhersehbaren Schaden begrenzt. Im Uebrigen
-                ist die Haftung fuer leicht fahrlaessige Pflichtverletzungen ausgeschlossen.
+                Bei leicht fahrlässiger Verletzung wesentlicher Vertragspflichten ist die
+                Haftung auf den vertragstypisch vorhersehbaren Schaden begrenzt. Im Übrigen
+                ist die Haftung für leicht fahrlässige Pflichtverletzungen ausgeschlossen.
               </p>
             </section>
 
@@ -180,7 +184,7 @@ export default function AgbPage() {
               <p className="mt-2">
                 Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts, soweit dem keine
                 zwingenden Verbraucherschutzvorschriften des Staates entgegenstehen, in dem der
-                Verbraucher seinen gewoehnlichen Aufenthalt hat.
+                Verbraucher seinen gewöhnlichen Aufenthalt hat.
               </p>
               <p className="mt-2">{LEGAL_NOTES.germanVersionAuthoritative}</p>
             </section>

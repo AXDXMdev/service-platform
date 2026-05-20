@@ -62,7 +62,7 @@ export default function ReportPage() {
             Inhalt oder Problem melden
           </h1>
           <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">
-            Nutze dieses Formular fuer technische Bugs sowie Meldungen zu rechtswidrigen
+            Nutze dieses Formular für technische Bugs sowie Meldungen zu rechtswidrigen
             Inhalten, Betrug, Belaestigung, Datenschutzproblemen oder sonstigen Plattformproblemen.
           </p>
 

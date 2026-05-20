@@ -1,5 +1,5 @@
-export const LEGAL_LAST_UPDATED = "06.05.2026"
-export const LEGAL_CONSENT_VERSION = "2026-05-06"
+export const LEGAL_LAST_UPDATED = "21.05.2026"
+export const LEGAL_CONSENT_VERSION = "2026-05-21"
 
 export const LEGAL_PLACEHOLDERS = {
   operatorName: "{{OPERATOR_NAME}}",
@@ -36,15 +36,17 @@ export function hasVsbgStatus() {
 
 export const LEGAL_NOTES = {
   missingPostalAddress:
-    "Vor dem Livegang muss eine vollstaendige ladungsfaehige Anschrift (Strasse, Hausnummer, Postleitzahl) ergaenzt werden.",
+    "TODO_LEGAL_REVIEW: Die vollständige ladungsfähige Anschrift muss vor Veröffentlichung juristisch gegengeprüft werden.",
   missingHostingProvider:
-    "Vor dem Livegang muss der finale Hosting-Anbieter mit Sitz, DPA-Lage und technischer Rolle in der Datenschutzerklaerung eingetragen werden.",
+    "TODO_LEGAL_REVIEW: Der finale Hosting- und Auftragsverarbeitungsstatus muss juristisch gegengeprüft werden.",
   missingVsbgStatus:
-    "Vor dem Livegang muss entschieden und eingetragen werden, ob Hilfinio bereit oder verpflichtet ist, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.",
+    "TODO_LEGAL_REVIEW: Der Status zur Verbraucherstreitbeilegung muss juristisch bestätigt werden.",
   disputeResolution:
     `Hilfinio ist ${LEGAL_VSBG_STATUS} an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.`,
   germanVersionAuthoritative:
-    "Massgeblich ist die deutsche Fassung dieser Rechtstexte.",
+    "Maßgeblich ist die deutsche Fassung dieser Rechtstexte.",
   odrDiscontinued:
-    "Die fruehere EU-Online-Streitbeilegungsplattform wurde zum 20.07.2025 eingestellt und wird daher nicht mehr verlinkt.",
+    "Die frühere EU-Online-Streitbeilegungsplattform wurde zum 20.07.2025 eingestellt und wird daher nicht mehr verlinkt.",
+  legalReview:
+    "TODO_LEGAL_REVIEW: Diese Rechtstexte sind eine technische Plattformfassung und ersetzen keine anwaltliche Prüfung für den öffentlichen Launch.",
 }

@@ -68,7 +68,7 @@ function hasAllowedMimeType(file: UploadLike, policy: UploadPolicy) {
 
 export function validateUploadFile(file: UploadLike, policy: UploadPolicy) {
   if (!file.name || !file.type) {
-    return { ok: false as const, message: "Datei ohne gueltigen Namen oder Typ wurde uebersprungen." }
+    return { ok: false as const, message: "Datei ohne gültigen Namen oder Typ wurde übersprungen." }
   }
   if (!hasAllowedMimeType(file, policy) || !hasAllowedExtension(file, policy)) {
     return {

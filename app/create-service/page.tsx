@@ -152,8 +152,14 @@ export default function CreateService() {
     const cityInPilot = isPilotCity(city)
     if (PILOT_MODE_ENABLED && !cityInPilot) {
       setMessage(
-        `${t("pilotOnlyHint")} (Pilot-Staedte: ${pilotCityLabel()}). Bitte nutze die Warteliste, wenn wir dich zum Start informieren sollen.`
+        `${t("pilotOnlyHint")} (Pilot-Städte: ${pilotCityLabel()}). Bitte nutze die Warteliste, wenn wir dich zum Start informieren sollen.`
       )
+      return
+    }
+
+    const sessionResult = await supabase.auth.getSession()
+    if (!sessionResult.data.session) {
+      router.push("/login?redirect=/create-service")
       return
     }
 
@@ -242,6 +248,10 @@ export default function CreateService() {
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
             Je ausführlicher dein Profil, desto besser passende Anfragen bekommst du.
           </p>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+            Pflichtfelder sind mit * markiert. Medien werden erst nach serverseitiger Prüfung
+            hochgeladen; wenn du nicht angemeldet bist, leiten wir dich zum Login weiter.
+          </p>
           {PILOT_MODE_ENABLED && (
             <p className="mt-2 rounded-[8px] bg-blue-500/10 px-3 py-2 text-sm text-blue-800 dark:text-blue-300">
               {t("pilotBannerTitle")}: {pilotCityLabel()}
@@ -249,7 +259,7 @@ export default function CreateService() {
           )}
 
           {message && (
-            <p className="mt-4 rounded-[8px] bg-slate-100 px-3 py-2 text-sm text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+            <p role="status" className="mt-4 rounded-[8px] bg-slate-100 px-3 py-2 text-sm text-slate-700 dark:bg-slate-800 dark:text-slate-200">
               {message}
             </p>
           )}
@@ -257,21 +267,27 @@ export default function CreateService() {
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             <input
               className="field-input min-h-12 rounded-[10px] px-4 sm:col-span-2"
-              placeholder="Titel (z. B. Umzugshilfe am Wochenende)"
+              placeholder="Titel * (z. B. Umzugshilfe am Wochenende)"
+              aria-label="Titel Pflichtfeld"
+              required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
 
             <input
               className="field-input min-h-12 rounded-[10px] px-4"
-              placeholder="Name oder Firma"
+              placeholder="Name oder Firma *"
+              aria-label="Name oder Firma Pflichtfeld"
+              required
               value={providerName}
               onChange={(e) => setProviderName(e.target.value)}
             />
 
             <input
               className="field-input min-h-12 rounded-[10px] px-4"
-              placeholder="Stadt"
+              placeholder="Stadt *"
+              aria-label="Stadt Pflichtfeld"
+              required
               value={city}
               onChange={(e) => setCity(e.target.value)}
             />
@@ -308,7 +324,9 @@ export default function CreateService() {
 
             <textarea
               className="field-input min-h-28 rounded-[10px] px-4 py-3 sm:col-span-2"
-              placeholder="Leistungsbeschreibung"
+              placeholder="Leistungsbeschreibung *"
+              aria-label="Leistungsbeschreibung Pflichtfeld"
+              required
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />

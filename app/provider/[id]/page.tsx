@@ -145,7 +145,7 @@ export default function ProviderProfile() {
                       : "bg-slate-500/10 text-slate-600 dark:text-slate-300"
                   }`}
                 >
-                  {service.is_verified ? "Geprueft" : "Neu"}
+                  {service.is_verified ? "Geprüft" : "Neu"}
                 </span>
               </div>
               <p className="mt-2 line-clamp-3 text-sm leading-6 text-slate-600 dark:text-slate-300">

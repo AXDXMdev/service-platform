@@ -9,7 +9,7 @@ export default function PlatformComplaintsPage() {
             Plattform-Beschwerden und DSA-Meldeweg
           </h1>
           <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">
-            Hilfinio stellt einen internen Melde- und Beschwerdeweg fuer Hinweise auf
+            Hilfinio stellt einen internen Melde- und Beschwerdeweg für Hinweise auf
             rechtswidrige Inhalte, Betrug, Missbrauch, Datenschutzprobleme und vergleichbare
             Plattformvorfaelle bereit.
           </p>
@@ -35,7 +35,7 @@ export default function PlatformComplaintsPage() {
                   /report
                 </Link>{" "}
                 kannst du die betroffene URL oder ID, die Kategorie des Problems und eine
-                konkrete Beschreibung uebermitteln.
+                konkrete Beschreibung übermitteln.
               </p>
             </section>
 
@@ -44,9 +44,9 @@ export default function PlatformComplaintsPage() {
                 3. Interne Bearbeitung
               </h2>
               <p>
-                Meldungen werden intern geprueft, priorisiert und dokumentiert. Hilfinio kann
+                Meldungen werden intern geprüft, priorisiert und dokumentiert. Hilfinio kann
                 Inhalte sperren, Nutzerkonten einschraenken, Nachweise anfordern oder
-                Meldungen als unbegruendet zurueckweisen.
+                Meldungen als unbegründet zurückweisen.
               </p>
             </section>
 
@@ -55,8 +55,8 @@ export default function PlatformComplaintsPage() {
                 4. Beschwerde gegen Plattformentscheidungen
               </h2>
               <p>
-                Wenn du eine Moderations- oder Einschraenkungsentscheidung fuer falsch haeltst,
-                kannst du dieselbe Seite ebenfalls fuer eine begruendete Beschwerde nutzen und
+                Wenn du eine Moderations- oder Einschraenkungsentscheidung für falsch haeltst,
+                kannst du dieselbe Seite ebenfalls für eine begruendete Beschwerde nutzen und
                 dabei auf die betroffene URL, Anfrage, Nachricht oder das Profil verweisen.
               </p>
             </section>

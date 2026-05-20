@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import type { Review, Service, ServiceRequest } from "@/app/types"
 import { authenticatedFetch, readApiErrorMessage } from "@/lib/authenticatedApi"
 import { getCustomerDashboardData } from "@/lib/dashboardApi"
@@ -24,6 +25,7 @@ function displayServiceTitle(title: string | null | undefined) {
 }
 
 export default function MyRequests() {
+  const router = useRouter()
   const [requests, setRequests] = useState<ServiceRequest[]>([])
   const [services, setServices] = useState<Service[]>([])
   const [loading, setLoading] = useState(true)
@@ -134,8 +136,14 @@ export default function MyRequests() {
         }
         setReviewsByRequest(byRequest)
       } catch (error) {
-        setMessage(
+        const errorMessage =
           error instanceof Error ? error.message : "Anfragen konnten nicht geladen werden."
+        if (/authorization|nicht eingeloggt|unauthorized/i.test(errorMessage)) {
+          router.push("/login?redirect=/my-requests")
+          return
+        }
+        setMessage(
+          errorMessage
         )
       } finally {
         setLoading(false)
@@ -143,7 +151,7 @@ export default function MyRequests() {
     }
 
     void loadRequests()
-  }, [])
+  }, [router])
 
   return (
     <main className="readable-page min-h-screen px-6 py-10 sm:px-10 lg:px-12">
@@ -300,7 +308,7 @@ export default function MyRequests() {
                         try {
                           await createServiceRequest({
                             serviceId: service.id,
-                            message: `Ich moechte diesen Service erneut anfragen: ${service.title}`,
+                            message: `Ich möchte diesen Service erneut anfragen: ${service.title}`,
                             customerBudgetEur: request.customer_budget_eur ?? null,
                           })
                         } catch (error) {

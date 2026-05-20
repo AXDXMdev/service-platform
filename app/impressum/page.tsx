@@ -12,7 +12,7 @@ export default function ImpressumPage() {
           <PageContentHeader
             slug="impressum"
             fallbackTitle="Impressum"
-            fallbackSubtitle="Angaben gemaess § 5 DDG und weitere Pflichtinformationen fuer Hilfinio."
+            fallbackSubtitle="Angaben gemäß § 5 DDG und weitere Pflichtinformationen für Hilfinio."
           />
         </section>
 
@@ -25,7 +25,7 @@ export default function ImpressumPage() {
           ) : null}
           {!resolvedVsbgStatus ? (
             <div className="mt-4 rounded-[12px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-200">
-              <p className="font-semibold">Pflichtangabe vor Livegang ergaenzen</p>
+              <p className="font-semibold">TODO_LEGAL_REVIEW</p>
               <p>{LEGAL_NOTES.missingVsbgStatus}</p>
             </div>
           ) : null}
@@ -72,6 +72,11 @@ export default function ImpressumPage() {
             <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
               {LEGAL_NOTES.odrDiscontinued}
             </p>
+          </div>
+
+          <div className="mt-6 rounded-[12px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-200">
+            <p className="font-semibold">TODO_LEGAL_REVIEW</p>
+            <p>{LEGAL_NOTES.legalReview}</p>
           </div>
         </section>
       </div>

@@ -14,10 +14,10 @@ type TrustBadge = {
 export default function TrustBadgeGrid({ service }: TrustBadgeGridProps) {
   const badges: TrustBadge[] = [
     {
-      label: "Profil geprueft",
+      label: "Profil geprüft",
       checked: Boolean(service.is_verified),
-      pendingText: "Profilpruefung ausstehend",
-      description: "Hilfinio prueft Profildaten und auffaellige Angaben.",
+      pendingText: "Profilprüfung ausstehend",
+      description: "Hilfinio prüft Profildaten und auffällige Angaben.",
     },
     {
       label: "E-Mail verifiziert",
@@ -32,16 +32,16 @@ export default function TrustBadgeGrid({ service }: TrustBadgeGridProps) {
       description: "Telefonverifizierung ist ein optionaler zusaetzlicher Vertrauensanker.",
     },
     {
-      label: "Ausweis geprueft",
+      label: "Ausweis geprüft",
       checked: Boolean(service.identity_verified),
-      pendingText: "Ausweispruefung ausstehend",
+      pendingText: "Ausweisprüfung ausstehend",
       description: "Ausweisdaten werden nicht oeffentlich angezeigt.",
     },
     {
-      label: "Gewerbe geprueft",
+      label: "Gewerbe geprüft",
       checked: Boolean(service.business_verified),
       pendingText: "Gewerbenachweis ausstehend",
-      description: "Relevant fuer professionelle Anbieter und Firmen.",
+      description: "Relevant für professionelle Anbieter und Firmen.",
     },
     {
       label: "Top Rated",

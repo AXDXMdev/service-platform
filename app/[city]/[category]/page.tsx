@@ -34,7 +34,7 @@ function resolveLanding(city: string, category: string) {
     category: categoryLabel,
     path: `/${normalizedCity}/${normalizedCategory}`,
     title: `${categoryLabel} in ${cityLabel} finden`,
-    description: `Finde vertrauenswuerdige Anbieter fuer ${categoryLabel} in ${cityLabel}. Vergleiche Profile, Bewertungen, Verifizierung und stelle sichere Anfragen ueber Hilfinio.`,
+    description: `Finde vertrauenswuerdige Anbieter für ${categoryLabel} in ${cityLabel}. Vergleiche Profile, Bewertungen, Verifizierung und stelle sichere Anfragen über Hilfinio.`,
   }
 }
 

@@ -10,11 +10,11 @@ import {
 
 function retentionList() {
   return [
-    "Kontodaten und Profildaten: bis zur Loeschung des Kontos, soweit keine gesetzlichen Aufbewahrungspflichten entgegenstehen.",
-    "Anfragen, Chat-Nachrichten und Statushistorien: grundsaetzlich bis zu 3 Jahre nach Abschluss der letzten Anfrage, sofern keine laengere Aufbewahrung zur Rechtsverteidigung oder aus gesetzlichen Gruenden erforderlich ist.",
-    "Wartelisten-Eintraege: bis zum Start in der jeweiligen Region, bis zum Widerruf oder spaetestens 24 Monate nach dem letzten nachweisbaren Kontakt.",
-    "Verifizierungsanfragen und Nachweise: bis zum Abschluss des Verifizierungsverfahrens und danach grundsaetzlich bis zu 3 Jahre zur Missbrauchsabwehr und Nachweisfuehrung.",
-    "Server- und Sicherheitslogs: in der Regel 7 bis 30 Tage, laenger nur bei Sicherheitsvorfaellen oder gesetzlichen Pflichten.",
+    "Kontodaten und Profildaten: bis zur Löschung des Kontos, soweit keine gesetzlichen Aufbewahrungspflichten entgegenstehen.",
+    "Anfragen, Chat-Nachrichten und Statushistorien: grundsätzlich bis zu 3 Jahre nach Abschluss der letzten Anfrage, sofern keine längere Aufbewahrung zur Rechtsverteidigung oder aus gesetzlichen Gründen erforderlich ist.",
+    "Wartelisten-Einträge: bis zum Start in der jeweiligen Region, bis zum Widerruf oder spätestens 24 Monate nach dem letzten nachweisbaren Kontakt.",
+    "Verifizierungsanfragen und Nachweise: bis zum Abschluss des Verifizierungsverfahrens und danach grundsätzlich bis zu 3 Jahre zur Missbrauchsabwehr und Nachweisführung.",
+    "Server- und Sicherheitslogs: in der Regel 7 bis 30 Tage, länger nur bei Sicherheitsvorfällen oder gesetzlichen Pflichten.",
   ]
 }
 
@@ -28,32 +28,37 @@ export default function DatenschutzPage() {
         <section className="card-surface rounded-[14px] p-7">
           <PageContentHeader
             slug="datenschutz"
-            fallbackTitle="Datenschutzerklaerung"
-            fallbackSubtitle={`Stand: ${LEGAL_LAST_UPDATED}. Diese Datenschutzerklaerung beschreibt die Verarbeitung personenbezogener Daten bei Hilfinio.`}
+            fallbackTitle="Datenschutzerklärung"
+            fallbackSubtitle={`Stand: ${LEGAL_LAST_UPDATED}. Diese Datenschutzerklärung beschreibt die Verarbeitung personenbezogener Daten bei Hilfinio.`}
           />
         </section>
 
         <section className="card-surface mt-6 rounded-[14px] p-7 text-sm leading-7 text-slate-800 dark:text-slate-200">
           {!hasPostalAddress ? (
             <div className="rounded-[12px] border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-200">
-              <p className="font-semibold">Pflichtangabe vor Livegang ergaenzen</p>
+              <p className="font-semibold">TODO_LEGAL_REVIEW</p>
               <p>{LEGAL_NOTES.missingPostalAddress}</p>
             </div>
           ) : null}
           {!resolvedHostingProvider ? (
             <div className="mt-4 rounded-[12px] border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-200">
-              <p className="font-semibold">Pflichtangabe vor Livegang ergaenzen</p>
+              <p className="font-semibold">TODO_LEGAL_REVIEW</p>
               <p>{LEGAL_NOTES.missingHostingProvider}</p>
             </div>
           ) : null}
 
           <div className="mt-6 space-y-6">
             <section>
+              <div className="mb-6 rounded-[12px] border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-200">
+                <p className="font-semibold">TODO_LEGAL_REVIEW</p>
+                <p>{LEGAL_NOTES.legalReview}</p>
+              </div>
+
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
                 1. Verantwortlicher
               </h2>
               <p className="mt-2">
-                Verantwortlich fuer die Datenverarbeitung auf dieser Website und in der
+                Verantwortlich für die Datenverarbeitung auf dieser Website und in der
                 Hilfinio-Plattform ist {LEGAL_OPERATOR.name}.
               </p>
               <p>E-Mail: {LEGAL_OPERATOR.email}</p>
@@ -61,7 +66,7 @@ export default function DatenschutzPage() {
                 LEGAL_OPERATOR.addressMultiline.map((line) => <p key={line}>{line}</p>)
               ) : (
                 <p className="text-amber-700 dark:text-amber-300">
-                  Die ladungsfaehige Anschrift wird aus den zentralen Legal-Konstanten
+                  Die ladungsfähige Anschrift wird aus den zentralen Legal-Konstanten
                   geladen.
                 </p>
               )}
@@ -75,7 +80,7 @@ export default function DatenschutzPage() {
                 <p>
                   <span className="font-semibold">Bereitstellung der Website:</span> Wir
                   verarbeiten technische Zugriffsdaten, um die Website auszuliefern, die
-                  Stabilitaet zu sichern und Angriffe abzuwehren. Rechtsgrundlage ist Art. 6
+                  Stabilität zu sichern und Angriffe abzuwehren. Rechtsgrundlage ist Art. 6
                   Abs. 1 lit. f DSGVO.
                 </p>
                 <p>
@@ -86,16 +91,16 @@ export default function DatenschutzPage() {
                 </p>
                 <p>
                   <span className="font-semibold">Anbieterprofile und Dienstleistungen:</span>{" "}
-                  Angaben zu Anbietername, Beschreibung, Stadt, Verfuegbarkeit, optionalen
+                  Angaben zu Anbietername, Beschreibung, Stadt, Verfügbarkeit, optionalen
                   Medien und vertrauensrelevanten Profilfeldern werden verarbeitet, um
-                  Anbieterprofile zu veroeffentlichen und Anfragen zu vermitteln.
+                  Anbieterprofile zu veröffentlichen und Anfragen zu vermitteln.
                   Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.
                 </p>
                 <p>
                   <span className="font-semibold">Anfragen, Buchungen und Chat:</span>{" "}
-                  Inhaltsdaten, Statusaenderungen und Kommunikationsinhalte werden
-                  verarbeitet, um Anfragen zwischen Kunden und Anbietern zu uebermitteln,
-                  Missbrauch zu verhindern und Supportfaelle nachvollziehen zu koennen.
+                  Inhaltsdaten, Statusänderungen und Kommunikationsinhalte werden
+                  verarbeitet, um Anfragen zwischen Kunden und Anbietern zu übermitteln,
+                  Missbrauch zu verhindern und Supportfälle nachvollziehen zu können.
                   Rechtsgrundlagen sind Art. 6 Abs. 1 lit. b und lit. f DSGVO.
                 </p>
                 <p>
@@ -103,18 +108,18 @@ export default function DatenschutzPage() {
                   Warteliste verarbeiten wir Name, E-Mail, Stadt, Rolle und freiwillige
                   Nachricht, um den Markteintritt in deiner Region vorzubereiten und dich
                   hierzu zu informieren. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO;
-                  fuer optionale Marketing-Nachrichten Art. 6 Abs. 1 lit. a DSGVO.
+                  für optionale Marketing-Nachrichten Art. 6 Abs. 1 lit. a DSGVO.
                 </p>
                 <p>
                   <span className="font-semibold">Anbieter-Verifizierung:</span> Bei
                   Verifizierungsanfragen verarbeiten wir Kontaktangaben, Nachweislinks und
-                  Verfahrensmetadaten, um Angaben zu pruefen, Missbrauch zu verhindern und
+                  Verfahrensmetadaten, um Angaben zu prüfen, Missbrauch zu verhindern und
                   den Verifizierungsstatus zu dokumentieren. Rechtsgrundlagen sind Art. 6
                   Abs. 1 lit. b und lit. f DSGVO.
                 </p>
                 <p>
                   <span className="font-semibold">Kontakt und Support:</span> Nachrichten
-                  ueber Formulare oder Supportkanaele werden zur Bearbeitung deiner Anfrage
+                  über Formulare oder Supportkanäle werden zur Bearbeitung deiner Anfrage
                   verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b oder lit. f DSGVO.
                 </p>
               </div>
@@ -126,27 +131,26 @@ export default function DatenschutzPage() {
               </h2>
               <div className="mt-2 space-y-3">
                 <p>
-                  <span className="font-semibold">Hosting:</span> Hilfinio wird ueber{" "}
+                  <span className="font-semibold">Hosting:</span> Hilfinio wird über{" "}
                   {LEGAL_HOSTING_PROVIDER} technisch bereitgestellt. Der Dienst dient dem
                   Hosting, der Auslieferung, dem Deployment und sicherheitsrelevanten
                   Plattformfunktionen.
                 </p>
                 <p>
-                  Fuer Datenbank, Authentifizierung, Storage und API-Funktionen nutzt
-                  Hilfinio Supabase als technischen Auftragsverarbeiter. Vor Livegang ist
-                  sicherzustellen, dass mit Supabase ein gueltiger Auftragsverarbeitungsvertrag
-                  besteht und die eingesetzten Regionen sowie Unterauftragsverarbeiter in das
-                  Verzeichnis der Verarbeitungstaetigkeiten uebernommen werden.
+                  Für Datenbank, Authentifizierung, Storage und API-Funktionen nutzt
+                  Hilfinio Supabase als technischen Dienstleister. TODO_LEGAL_REVIEW: Der
+                  Auftragsverarbeitungsvertrag, eingesetzte Regionen und Unterauftragsverarbeiter
+                  müssen im Verzeichnis der Verarbeitungstätigkeiten final dokumentiert werden.
                 </p>
                 <p>
-                  Fuer Hosting, CDN, Build- und Performance-Funktionen wird ein externer
-                  Infrastruktur-Anbieter eingesetzt. Vor Livegang muss der konkret genutzte
-                  Hosting-Anbieter mit Rechtsgrundlage, Sitz und DPA in diese
-                  Datenschutzerklaerung eingetragen werden.
+                  Für Hosting, CDN, Build- und Performance-Funktionen wird Vercel als
+                  Infrastruktur-Anbieter eingesetzt. TODO_LEGAL_REVIEW: Rechtsgrundlage,
+                  Sitz, DPA und Drittlandtransfer müssen vor öffentlicher Skalierung final
+                  juristisch bestätigt werden.
                 </p>
                 <p>
-                  Daten werden im Uebrigen nur offengelegt, wenn dies fuer die
-                  Vertragserfuellung erforderlich ist, eine Einwilligung vorliegt, eine
+                  Daten werden im Übrigen nur offengelegt, wenn dies für die
+                  Vertragserfüllung erforderlich ist, eine Einwilligung vorliegt, eine
                   gesetzliche Pflicht besteht oder dies zur Rechtsdurchsetzung erforderlich
                   ist.
                 </p>
@@ -158,11 +162,11 @@ export default function DatenschutzPage() {
                 4. Internationale Datentransfers
               </h2>
               <p className="mt-2">
-                Sofern Dienstleister oder Unterauftragsverarbeiter Daten ausserhalb der EU/des
-                EWR verarbeiten oder von dort aus darauf zugreifen koennen, erfolgt dies nur
+                Sofern Dienstleister oder Unterauftragsverarbeiter Daten außerhalb der EU/des
+                EWR verarbeiten oder von dort aus darauf zugreifen können, erfolgt dies nur
                 auf Grundlage eines Angemessenheitsbeschlusses oder geeigneter Garantien, etwa
-                Standardvertragsklauseln. Vor Livegang ist der tatsaechliche Transferpfad fuer
-                Hosting, Support und Analyse-Tools zu dokumentieren.
+                Standardvertragsklauseln. TODO_LEGAL_REVIEW: Der tatsächliche Transferpfad für
+                Hosting, Support, Supabase und optionale Analyse-Tools muss final dokumentiert werden.
               </p>
             </section>
 
@@ -172,15 +176,15 @@ export default function DatenschutzPage() {
               </h2>
               <div className="mt-2 space-y-3">
                 <p>
-                  Hilfinio verwendet technisch notwendige Speicherungen, insbesondere fuer
+                  Hilfinio verwendet technisch notwendige Speicherungen, insbesondere für
                   Spracheinstellungen, Barrierefreiheitsoptionen, Theme-Modus und
                   Sitzungsfunktionen. Rechtsgrundlagen sind Art. 6 Abs. 1 lit. f DSGVO sowie
                   bei vertraglich erforderlichen Funktionen Art. 6 Abs. 1 lit. b DSGVO.
                 </p>
                 <p>
                   Marketing- oder Werbeskripte, insbesondere Google AdSense, werden nur nach
-                  ausdruecklicher Einwilligung geladen. Rechtsgrundlage ist Art. 6 Abs. 1 lit.
-                  a DSGVO. Eine erteilte Einwilligung kann jederzeit mit Wirkung fuer die
+                  ausdrücklicher Einwilligung geladen. Rechtsgrundlage ist Art. 6 Abs. 1 lit.
+                  a DSGVO. Eine erteilte Einwilligung kann jederzeit mit Wirkung für die
                   Zukunft widerrufen werden.
                 </p>
               </div>
@@ -192,10 +196,10 @@ export default function DatenschutzPage() {
               </h2>
               <p className="mt-2">
                 Wenn du auf Hilfinio freiwillig einen groben Standort freigibst, wird dieser
-                nur fuer die jeweilige Funktion, etwa zur regionalen Einordnung eines
+                nur für die jeweilige Funktion, etwa zur regionalen Einordnung eines
                 Angebots, verarbeitet. Die Standortnutzung ist optional. Rechtsgrundlage ist
                 Art. 6 Abs. 1 lit. a DSGVO beziehungsweise Art. 6 Abs. 1 lit. b DSGVO, wenn
-                die Angabe fuer deine Anfrage oder dein Angebot erforderlich ist.
+                die Angabe für deine Anfrage oder dein Angebot erforderlich ist.
               </p>
             </section>
 
@@ -215,13 +219,13 @@ export default function DatenschutzPage() {
                 8. Deine Rechte
               </h2>
               <p className="mt-2">
-                Du hast nach Massgabe der gesetzlichen Voraussetzungen Rechte auf Auskunft,
-                Berichtigung, Loeschung, Einschraenkung der Verarbeitung, Widerspruch,
-                Datenuebertragbarkeit sowie auf Widerruf erteilter Einwilligungen mit Wirkung
-                fuer die Zukunft.
+                Du hast nach Maßgabe der gesetzlichen Voraussetzungen Rechte auf Auskunft,
+                Berichtigung, Löschung, Einschränkung der Verarbeitung, Widerspruch,
+                Datenübertragbarkeit sowie auf Widerruf erteilter Einwilligungen mit Wirkung
+                für die Zukunft.
               </p>
               <p className="mt-2">
-                Zur Ausuebung deiner Rechte genuegt eine Nachricht an {LEGAL_OPERATOR.email}.
+                Zur Ausübung deiner Rechte genügt eine Nachricht an {LEGAL_OPERATOR.email}.
               </p>
             </section>
 
@@ -230,9 +234,9 @@ export default function DatenschutzPage() {
                 9. Beschwerderecht
               </h2>
               <p className="mt-2">
-                Du hast das Recht, dich bei einer Datenschutzaufsichtsbehoerde zu
-                beschweren, insbesondere in dem Mitgliedstaat deines gewoehnlichen
-                Aufenthalts, deines Arbeitsplatzes oder des Orts des mutmasslichen Verstosses.
+                Du hast das Recht, dich bei einer Datenschutzaufsichtsbehörde zu
+                beschweren, insbesondere in dem Mitgliedstaat deines gewöhnlichen
+                Aufenthalts, deines Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes.
               </p>
             </section>
 
@@ -241,19 +245,19 @@ export default function DatenschutzPage() {
                 10. Pflicht zur Bereitstellung von Daten
               </h2>
               <p className="mt-2">
-                Bestimmte Daten sind fuer Registrierung, Anfrage, Verifizierung oder
-                Wartelistenverwaltung erforderlich. Ohne diese Daten koennen einzelne
+                Bestimmte Daten sind für Registrierung, Anfrage, Verifizierung oder
+                Wartelistenverwaltung erforderlich. Ohne diese Daten können einzelne
                 Plattformfunktionen nicht genutzt werden.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                11. Aenderungen dieser Datenschutzerklaerung
+                11. Änderungen dieser Datenschutzerklärung
               </h2>
               <p className="mt-2">
-                Wir passen diese Datenschutzerklaerung an, wenn sich Funktionen, eingesetzte
-                Dienstleister oder die Rechtslage wesentlich aendern.
+                Wir passen diese Datenschutzerklärung an, wenn sich Funktionen, eingesetzte
+                Dienstleister oder die Rechtslage wesentlich ändern.
               </p>
             </section>
           </div>

@@ -20,14 +20,14 @@ export default function ConsentBanner({ enabled }: { enabled: boolean }) {
           Datenschutz-Einstellungen
         </p>
         <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-          Wir verwenden technisch notwendige Speicherungen fuer Sprache, Barrierefreiheit und
+          Wir verwenden technisch notwendige Speicherungen für Sprache, Barrierefreiheit und
           Darstellung. Marketing- und Werbeskripte werden erst geladen, wenn du zustimmst.
           Details findest du in der{" "}
           <Link
             href="/datenschutz"
             className="font-semibold text-[var(--brand)] underline-offset-4 hover:underline"
           >
-            Datenschutzerklaerung
+            Datenschutzerklärung
           </Link>
           .
         </p>

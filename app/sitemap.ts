@@ -9,17 +9,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/",
     "/services",
     "/create-service",
-    "/dashboard",
-    "/my-requests",
-    "/favorites",
     "/provider-verification",
     "/waitlist",
     "/apps",
     "/impressum",
     "/datenschutz",
     "/agb",
-    "/login",
-    "/register",
+    "/cookie-einstellungen",
+    "/plattform-beschwerden",
   ]
 
   const localSeoRoutes = seoCities.flatMap((city) =>

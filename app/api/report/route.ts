@@ -21,7 +21,7 @@ const ALLOWED_CATEGORIES = new Set([
 export async function POST(request: Request) {
   const ip = getRequestIp(request)
   if (await isRateLimitedAsync(buildRateLimitKey(["abuse-report", ip]), 8, 10 * 60 * 1000)) {
-    return apiError(429, "rate_limited", "Zu viele Meldungen in kurzer Zeit. Bitte spaeter erneut.")
+    return apiError(429, "rate_limited", "Zu viele Meldungen in kurzer Zeit. Bitte später erneut.")
   }
 
   if (!getSupabaseServiceRoleEnv()) {
@@ -67,11 +67,11 @@ export async function POST(request: Request) {
   }
 
   if (!ALLOWED_CATEGORIES.has(category) || !description) {
-    return apiError(400, "bad_request", "Bitte Kategorie und Beschreibung ausfuellen.")
+    return apiError(400, "bad_request", "Bitte Kategorie und Beschreibung ausfüllen.")
   }
 
   if (contactEmail && !isValidEmail(contactEmail)) {
-    return apiError(400, "bad_request", "Bitte eine gueltige Kontakt-E-Mail eingeben.")
+    return apiError(400, "bad_request", "Bitte eine gültige Kontakt-E-Mail eingeben.")
   }
 
   let reporterUserId: string | null = null
@@ -127,6 +127,6 @@ export async function POST(request: Request) {
 
   return apiOk({
     status: "open",
-    message: "Danke. Deine Meldung wurde gespeichert und wird intern geprueft.",
+    message: "Danke. Deine Meldung wurde gespeichert und wird intern geprüft.",
   })
 }

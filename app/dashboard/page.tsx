@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import type { Service, ServiceRequest } from "@/app/types"
 import { getProviderDashboardData } from "@/lib/dashboardApi"
 import {
@@ -33,6 +34,7 @@ const statusProgress = (status: ServiceRequest["status"]) => {
 }
 
 export default function Dashboard() {
+  const router = useRouter()
   const [services, setServices] = useState<Service[]>([])
   const [requests, setRequests] = useState<ServiceRequest[]>([])
   const [loading, setLoading] = useState(true)
@@ -139,8 +141,14 @@ export default function Dashboard() {
         setServices(data.services)
         setRequests(data.requests)
       } catch (error) {
-        setActionMessage(
+        const message =
           error instanceof Error ? error.message : "Dashboard konnte nicht geladen werden."
+        if (/authorization|nicht eingeloggt|unauthorized/i.test(message)) {
+          router.push("/login?redirect=/dashboard")
+          return
+        }
+        setActionMessage(
+          message
         )
       } finally {
         setLoading(false)
@@ -148,7 +156,7 @@ export default function Dashboard() {
     }
 
     void loadData()
-  }, [])
+  }, [router])
 
   return (
     <main className="readable-page min-h-screen px-6 py-10 sm:px-10 lg:px-12">
@@ -248,7 +256,7 @@ export default function Dashboard() {
                     Datenschutz und Support
                   </p>
                   <p className="mt-1 text-sm text-slate-700 dark:text-slate-300">
-                    Daten exportieren, Konto loeschen oder einen problematischen Inhalt melden.
+                    Daten exportieren, Konto löschen oder einen problematischen Inhalt melden.
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 sm:flex-row">
@@ -409,7 +417,7 @@ export default function Dashboard() {
                             if (!raw) return
                             const amount = Number(raw.replace(",", "."))
                             if (!Number.isFinite(amount) || amount <= 0) {
-                              setActionMessage("Bitte ein gueltiges Preisangebot eingeben.")
+                              setActionMessage("Bitte ein gültiges Preisangebot eingeben.")
                               return
                             }
                             try {
