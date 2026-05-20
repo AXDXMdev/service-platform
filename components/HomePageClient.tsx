@@ -12,18 +12,30 @@ import { useSiteSettings } from "@/components/SiteSettingsProvider"
 import { getHomeFeaturedData } from "@/lib/publicCatalogApi"
 import { pilotCityLabel } from "@/lib/pilotMode"
 
-export default function Home() {
+type HomePageClientProps = {
+  initialFeaturedServices: Service[]
+  initialRatingsByService: Record<string, { average: number; count: number }>
+  initialLoaded?: boolean
+}
+
+export default function Home({
+  initialFeaturedServices,
+  initialRatingsByService,
+  initialLoaded = false,
+}: HomePageClientProps) {
   const { t } = useLanguage()
   const { site, sections, content } = useSiteSettings()
   const pageContent = content["page:home"] as { title?: string; subtitle?: string; is_active?: boolean } | undefined
-  const [featuredServices, setFeaturedServices] = useState<Service[]>([])
-  const [featuredLoading, setFeaturedLoading] = useState(true)
+  const [featuredServices, setFeaturedServices] = useState<Service[]>(initialFeaturedServices)
+  const [featuredLoading, setFeaturedLoading] = useState(false)
   const [ratingsByService, setRatingsByService] = useState<
     Record<string, { average: number; count: number }>
-  >({})
+  >(initialRatingsByService)
 
   useEffect(() => {
     const loadFeatured = async () => {
+      if (initialLoaded) return
+
       const cachedServices = getCached<Service[]>("hilfino:home:featured")
       const cachedRatings = getCached<Record<string, { average: number; count: number }>>("hilfino:home:ratings")
 
@@ -46,7 +58,7 @@ export default function Home() {
     }
 
     void loadFeatured()
-  }, [])
+  }, [initialLoaded])
 
   const trustBadges = useMemo(
     () =>

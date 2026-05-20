@@ -17,6 +17,7 @@ import {
   type SiteSettings,
   type ThemeSettings,
 } from "@/lib/siteSettings"
+import type { SiteSettingsPayload } from "@/services/siteSettingsReadService"
 
 type SiteSettingsContextValue = {
   loading: boolean
@@ -99,12 +100,20 @@ function applyThemeVariables(theme: ThemeSettings) {
   root.style.setProperty("--radius-md", `${Math.max(0, Math.min(30, readableTheme.border_radius))}px`)
 }
 
-export function SiteSettingsProvider({ children }: { children: ReactNode }) {
-  const [loading, setLoading] = useState(true)
-  const [theme, setTheme] = useState<ThemeSettings>(defaultThemeSettings)
-  const [site, setSite] = useState<SiteSettings>(defaultSiteSettings)
-  const [sections, setSections] = useState<HomepageSection[]>([])
-  const [content, setContent] = useState<Record<string, Record<string, unknown>>>(buildDefaultContentMap)
+export function SiteSettingsProvider({
+  children,
+  initialSettings,
+}: {
+  children: ReactNode
+  initialSettings?: SiteSettingsPayload
+}) {
+  const [loading, setLoading] = useState(!initialSettings)
+  const [theme, setTheme] = useState<ThemeSettings>(initialSettings?.theme ?? defaultThemeSettings)
+  const [site, setSite] = useState<SiteSettings>(initialSettings?.site ?? defaultSiteSettings)
+  const [sections, setSections] = useState<HomepageSection[]>(initialSettings?.sections ?? [])
+  const [content, setContent] = useState<Record<string, Record<string, unknown>>>(
+    initialSettings?.content ?? buildDefaultContentMap
+  )
 
   const refresh = async () => {
     const cachedTheme = getCached<ThemeSettings>("hilfino:cms:theme")
@@ -151,11 +160,13 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
+    if (initialSettings) return
+
     const frame = window.requestAnimationFrame(() => {
       void refresh()
     })
     return () => window.cancelAnimationFrame(frame)
-  }, [])
+  }, [initialSettings])
 
   useEffect(() => {
     applyThemeVariables(theme)

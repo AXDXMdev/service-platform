@@ -12,6 +12,8 @@ import Navigation from "@/components/Navigation";
 import SiteFooter from "@/components/SiteFooter";
 import JsonLd from "@/components/JsonLd";
 import { localMarketplaceJsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
+import { createServerSupabasePublicClient } from "@/lib/serverSupabase";
+import { loadSiteSettingsPayload } from "@/services/siteSettingsReadService";
 import "./globals.css";
 
 const uiSans = Nunito_Sans({
@@ -65,12 +67,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export const revalidate = 300;
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const adsClient = process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT;
+  const siteSettings = await loadSiteSettingsPayload(createServerSupabasePublicClient());
 
   return (
     <html
@@ -83,7 +88,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AccessibilityProvider>
             <LanguageProvider>
-              <SiteSettingsProvider>
+              <SiteSettingsProvider initialSettings={siteSettings}>
                 <Navigation />
                 <ClientErrorReporter />
                 {children}

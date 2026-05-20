@@ -64,7 +64,7 @@ test("frontend forms expose accessible input names and mobile-safe submit flow",
 })
 
 test("service discovery includes trust, empty state, and filter reset affordances", () => {
-  const servicesPage = read("app/services/page.tsx")
+  const servicesPage = read("components/ServicesPageClient.tsx")
   const providerPage = read("app/provider/[id]/page.tsx")
 
   assert.match(servicesPage, /MarketplaceTrustBar/)

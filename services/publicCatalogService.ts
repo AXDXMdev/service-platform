@@ -27,11 +27,15 @@ function mapRatings(rows: Pick<Review, "service_id" | "rating" | "proof_validate
 }
 
 async function loadRatings(
-  supabase: SupabasePublicClient
+  supabase: SupabasePublicClient,
+  serviceIds: string[]
 ) {
+  if (serviceIds.length === 0) return {}
+
   const query = await supabase
     .from("reviews")
     .select("service_id,rating,proof_validated")
+    .in("service_id", serviceIds)
     .returns<Pick<Review, "service_id" | "rating" | "proof_validated">[]>()
 
   if (!query.data) {
@@ -86,7 +90,10 @@ export async function loadHomeFeaturedData(supabase: SupabasePublicClient) {
     return { ok: false as const, status: 500, message: "Startseiten-Services konnten nicht geladen werden." }
   }
 
-  const ratingsByService = await loadRatings(supabase)
+  const ratingsByService = await loadRatings(
+    supabase,
+    featuredServices.map((service) => service.id)
+  )
 
   return {
     ok: true as const,
@@ -120,7 +127,10 @@ export async function loadServicesCatalogData(supabase: SupabasePublicClient) {
     return { ok: false as const, status: 500, message: "Services konnten nicht geladen werden." }
   }
 
-  const ratingsByService = await loadRatings(supabase)
+  const ratingsByService = await loadRatings(
+    supabase,
+    services.map((service) => service.id)
+  )
 
   return {
     ok: true as const,

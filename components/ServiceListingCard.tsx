@@ -1,5 +1,6 @@
 "use client"
 
+import { memo } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import type { Service } from "@/app/types"
@@ -19,7 +20,7 @@ function isVideoMedia(url: string) {
   return /\.(mp4|webm|mov|m4v|ogg)$/i.test(url)
 }
 
-export default function ServiceListingCard({
+function ServiceListingCard({
   service,
   categoryLabel,
   distanceLabel,
@@ -123,3 +124,5 @@ export default function ServiceListingCard({
     </article>
   )
 }
+
+export default memo(ServiceListingCard)

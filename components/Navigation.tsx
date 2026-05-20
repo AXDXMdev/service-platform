@@ -1,5 +1,6 @@
 "use client"
 
+import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -7,9 +8,13 @@ import AuthButton from "@/components/AuthButton"
 import AccessibilityControls from "@/components/AccessibilityControls"
 import LanguageSwitcher from "@/components/LanguageSwitcher"
 import ThemeToggle from "@/components/ThemeToggle"
-import NotificationBell from "@/components/NotificationBell"
 import { useLanguage } from "@/components/LanguageProvider"
 import { useSiteSettings } from "@/components/SiteSettingsProvider"
+
+const NotificationBell = dynamic(() => import("@/components/NotificationBell"), {
+  ssr: false,
+  loading: () => null,
+})
 
 export default function Navigation() {
   const { t } = useLanguage()

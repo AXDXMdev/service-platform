@@ -20,7 +20,7 @@ export default function manifest(): MetadataRoute.Manifest {
         purpose: "maskable",
       },
       {
-        src: "/hilfino-logo.png",
+        src: "/hilfino-mark.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "any",
