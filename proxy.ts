@@ -8,23 +8,38 @@ function createNonce() {
   return value.replace(/-/g, "")
 }
 
-function buildCsp(nonce: string) {
+function buildCsp(nonce: string, mode: "strict" | "public" = "strict") {
   const isDev = process.env.NODE_ENV !== "production"
-  const scriptSrc = [
-    "'self'",
-    `'nonce-${nonce}'`,
-    "'strict-dynamic'",
-    "https://pagead2.googlesyndication.com",
-    "https://va.vercel-scripts.com",
-    isDev ? "'unsafe-eval'" : null,
-  ]
-    .filter(Boolean)
-    .join(" ")
+  const scriptSrc =
+    mode === "strict"
+      ? [
+          "'self'",
+          `'nonce-${nonce}'`,
+          "'strict-dynamic'",
+          "https://pagead2.googlesyndication.com",
+          "https://va.vercel-scripts.com",
+          isDev ? "'unsafe-eval'" : null,
+        ]
+          .filter(Boolean)
+          .join(" ")
+      : [
+          "'self'",
+          "'unsafe-inline'",
+          "https://pagead2.googlesyndication.com",
+          "https://va.vercel-scripts.com",
+          isDev ? "'unsafe-eval'" : null,
+        ]
+          .filter(Boolean)
+          .join(" ")
+  const styleSrc =
+    mode === "strict"
+      ? `'self' 'nonce-${nonce}'`
+      : "'self' 'unsafe-inline'"
 
   return [
     "default-src 'self'",
     `script-src ${scriptSrc}`,
-    `style-src 'self' 'nonce-${nonce}'`,
+    `style-src ${styleSrc}`,
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
     "media-src 'self' blob: https:",
@@ -38,9 +53,13 @@ function buildCsp(nonce: string) {
   ].join("; ")
 }
 
-function withCsp(request: NextRequest, response?: NextResponse) {
+function withCsp(
+  request: NextRequest,
+  response?: NextResponse,
+  mode: "strict" | "public" = "strict"
+) {
   const nonce = createNonce()
-  const csp = buildCsp(nonce)
+  const csp = buildCsp(nonce, mode)
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set("x-nonce", nonce)
   requestHeaders.set("Content-Security-Policy", csp)
@@ -61,37 +80,37 @@ function withCsp(request: NextRequest, response?: NextResponse) {
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const host = request.headers.get("host")?.toLowerCase()
+  const isAdminPath =
+    pathname.startsWith("/admin") || pathname.startsWith("/dashboard/admin")
+  const cspMode = isAdminPath ? "strict" : "public"
 
   if (host === "www.hilfinio.de") {
     const canonicalUrl = request.nextUrl.clone()
     canonicalUrl.hostname = "hilfinio.de"
-    return withCsp(request, NextResponse.redirect(canonicalUrl, 308))
+    return withCsp(request, NextResponse.redirect(canonicalUrl, 308), cspMode)
   }
-
-  const isAdminPath =
-    pathname.startsWith("/admin") || pathname.startsWith("/dashboard/admin")
 
   if (
     !isAdminPath ||
     pathname.startsWith("/admin/login") ||
     pathname.startsWith("/admin/session")
   ) {
-    return withCsp(request)
+    return withCsp(request, undefined, cspMode)
   }
 
   if (!isAdminConfigured()) {
     const loginUrl = new URL("/admin/login", request.url)
     loginUrl.searchParams.set("error", "not-configured")
-    return withCsp(request, NextResponse.redirect(loginUrl))
+    return withCsp(request, NextResponse.redirect(loginUrl), cspMode)
   }
 
   const cookieValue = request.cookies.get(ADMIN_COOKIE)?.value
   if (hasValidAdminCookie(cookieValue)) {
-    return withCsp(request)
+    return withCsp(request, undefined, cspMode)
   }
 
   const loginUrl = new URL("/admin/login", request.url)
-  return withCsp(request, NextResponse.redirect(loginUrl))
+  return withCsp(request, NextResponse.redirect(loginUrl), cspMode)
 }
 
 export const config = {
