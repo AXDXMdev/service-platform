@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: ["/", "/services", "/impressum", "/datenschutz", "/agb", "/stuttgart"],
+        allow: ["/", "/services", "/links", "/impressum", "/datenschutz", "/agb", "/stuttgart"],
         disallow: ["/admin", "/dashboard", "/my-requests", "/favorites", "/chat"],
       },
     ],

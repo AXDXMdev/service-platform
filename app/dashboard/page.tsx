@@ -242,12 +242,12 @@ export default function Dashboard() {
                     Referral-Link für neue Anbieter, ideal für lokale Partner und Teams.
                   </p>
                   <p className="mt-1 break-all text-sm font-semibold text-[var(--brand)]">
-                    {(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000")}/register?ref=
+                    {(process.env.NEXT_PUBLIC_SITE_URL || "https://hilfinio.de")}/register?ref=
                     {providerUserId.slice(0, 8)}
                   </p>
                 </div>
                 <Link href="/apps" className="action-ghost justify-center">
-                  App-Slot ansehen
+                  Mobile Nutzung ansehen
                 </Link>
               </div>
               <div className="panel-muted mb-5 grid gap-3 rounded-[14px] p-4 md:grid-cols-[1fr_auto] md:items-center">

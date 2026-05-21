@@ -199,7 +199,7 @@ export async function updateRequestStatus(
   const isProvider = request.provider_id === user.id || providerLookup.providerUserId === user.id
 
   if (!isCustomer && !isProvider) {
-    return { ok: false as const, status: 403, message: "Keine Berechtigung fuer diese Anfrage." }
+    return { ok: false as const, status: 403, message: "Keine Berechtigung für diese Anfrage." }
   }
 
   const allowed = isProvider

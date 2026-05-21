@@ -286,7 +286,7 @@ export async function aggregateTrustMetrics(
   })
 
   if (reviewsResult.available && !requestsResult.available) {
-    warnings.push("Reviews wurden nicht in Trust-Metriken gezaehlt, weil abgeschlossene Requests nicht pruefbar sind.")
+    warnings.push("Reviews wurden nicht in Trust-Metriken gezählt, weil abgeschlossene Requests nicht prüfbar sind.")
   }
 
   const reviewsByService = groupBy(validatedReviews, (row) => row.service_id)
@@ -344,7 +344,7 @@ export async function aggregateTrustMetrics(
         warnings.push("service_engagement_metrics ist nicht migriert; Service-Metriken wurden uebersprungen.")
         break
       }
-      warnings.push(`Service-Metriken konnten fuer ${service.id} nicht gespeichert werden.`)
+      warnings.push(`Service-Metriken konnten für ${service.id} nicht gespeichert werden.`)
       skipped += 1
       continue
     }
@@ -430,7 +430,7 @@ export async function aggregateTrustMetrics(
         warnings.push("provider_trust_profiles ist nicht migriert; Provider-Metriken wurden uebersprungen.")
         break
       }
-      warnings.push(`Provider-Metriken konnten fuer ${providerId} nicht gespeichert werden.`)
+      warnings.push(`Provider-Metriken konnten für ${providerId} nicht gespeichert werden.`)
       skipped += 1
       continue
     }

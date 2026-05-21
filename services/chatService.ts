@@ -55,7 +55,7 @@ export async function createChatMessage(
   const isProvider = providerId === user.id || serviceQuery.data.user_id === user.id
 
   if (!isCustomer && !isProvider) {
-    return { ok: false as const, status: 403, message: "Keine Berechtigung fuer diesen Chat." }
+    return { ok: false as const, status: 403, message: "Keine Berechtigung für diesen Chat." }
   }
 
   const receiverId = isProvider ? customerId : providerId

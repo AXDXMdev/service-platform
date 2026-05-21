@@ -1,5 +1,13 @@
 import PageContentHeader from "@/components/PageContentHeader"
 import { LEGAL_LAST_UPDATED, LEGAL_NOTES, hasVsbgStatus } from "@/lib/legal"
+import { buildDefaultMetadata } from "@/lib/seo"
+
+export const metadata = buildDefaultMetadata({
+  title: "AGB",
+  description:
+    "Allgemeine Geschäftsbedingungen für die Nutzung von Hilfinio als Vermittlungs- und Kommunikationsplattform.",
+  path: "/agb",
+})
 
 export default function AgbPage() {
   const resolvedVsbgStatus = hasVsbgStatus()

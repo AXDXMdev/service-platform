@@ -18,7 +18,7 @@ export async function loadFavoritesData(
   if (favoriteQuery.error) {
     const message =
       /favorites|relation|schema|table|column/i.test(favoriteQuery.error.message)
-        ? "Favoriten werden aktiv, sobald die Datenbank-Migration live ist."
+        ? "Favoriten sind gerade nicht erreichbar. Bitte versuche es später erneut."
         : "Favoriten konnten nicht geladen werden."
     return { ok: false as const, status: 500, message }
   }

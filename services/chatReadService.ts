@@ -59,7 +59,7 @@ export async function loadChatMessages(
   if (messageResult.error) {
     const message =
       /chat_messages|relation|schema|table|column/i.test(messageResult.error.message)
-        ? "Chat wird aktiv, sobald die neue DB-Migration ausgefuehrt ist."
+        ? "Chat ist gerade nicht erreichbar. Bitte versuche es später erneut."
         : "Chat-Nachrichten konnten nicht geladen werden."
     return { ok: false as const, status: 500, message }
   }

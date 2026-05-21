@@ -48,7 +48,7 @@ export function validateUploadGrantInput(input: unknown) {
     .safeParse(input ?? {})
 
   if (!parsed.success) {
-    return invalid("Ungueltiger Upload-Typ.")
+    return invalid("Ungültiger Upload-Typ.")
   }
 
   const preset = UPLOAD_PRESET_CONFIG[parsed.data.kind]
@@ -84,7 +84,7 @@ async function requireSiteAssetAccess(admin: StorageAdminClient, user: User) {
     .maybeSingle()
 
   if (profile.error) {
-    return { ok: false as const, status: 500, message: "Admin-Rolle konnte nicht geprueft werden." }
+    return { ok: false as const, status: 500, message: "Admin-Rolle konnte nicht geprüft werden." }
   }
 
   if (profile.data?.role !== "admin") {

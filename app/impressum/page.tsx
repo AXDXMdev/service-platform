@@ -1,5 +1,12 @@
 import PageContentHeader from "@/components/PageContentHeader"
 import { LEGAL_NOTES, LEGAL_OPERATOR, hasOperatorAddress, hasVsbgStatus } from "@/lib/legal"
+import { buildDefaultMetadata } from "@/lib/seo"
+
+export const metadata = buildDefaultMetadata({
+  title: "Impressum",
+  description: "Impressum und Anbieterkennzeichnung von Hilfinio.",
+  path: "/impressum",
+})
 
 export default function ImpressumPage() {
   const hasPostalAddress = hasOperatorAddress()

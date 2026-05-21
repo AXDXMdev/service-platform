@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/provider-verification",
     "/waitlist",
     "/apps",
+    "/links",
     "/impressum",
     "/datenschutz",
     "/agb",

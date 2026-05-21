@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useLanguage } from "@/components/LanguageProvider"
 
 export default function AppsPage() {
@@ -31,13 +32,12 @@ export default function AppsPage() {
             <p className="mt-3 leading-7 text-slate-800 dark:text-slate-300">
               {t("appsIosText")}
             </p>
-            <button
-              type="button"
-              disabled
-              className="mt-5 rounded-[10px] border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 dark:border-slate-700 dark:text-slate-400"
+            <Link
+              href="/services?utm_source=apps-page&utm_medium=web&utm_campaign=open-launch"
+              className="btn-secondary mt-5 min-h-11 justify-center px-4 py-2 text-sm font-semibold"
             >
-              {t("appsIosCta")}
-            </button>
+              Mobile Web-App nutzen
+            </Link>
           </article>
 
           <article className="card-surface interactive-card rounded-[14px] p-6">
@@ -54,13 +54,12 @@ export default function AppsPage() {
             <p className="mt-3 leading-7 text-slate-800 dark:text-slate-300">
               {t("appsAndroidText")}
             </p>
-            <button
-              type="button"
-              disabled
-              className="mt-5 rounded-[10px] border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 dark:border-slate-700 dark:text-slate-400"
+            <Link
+              href="/waitlist?utm_source=apps-page&utm_medium=web&utm_campaign=mobile-apps"
+              className="btn-secondary mt-5 min-h-11 justify-center px-4 py-2 text-sm font-semibold"
             >
-              {t("appsAndroidCta")}
-            </button>
+              App-Updates erhalten
+            </Link>
           </article>
         </section>
       </div>

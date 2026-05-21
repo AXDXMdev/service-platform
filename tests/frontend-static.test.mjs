@@ -25,6 +25,7 @@ test("launch-critical frontend routes and boundaries exist", () => {
     "app/account/delete/page.tsx",
     "app/report/page.tsx",
     "app/plattform-beschwerden/page.tsx",
+    "app/links/page.tsx",
     "app/error.tsx",
     "app/loading.tsx",
     "app/not-found.tsx",
@@ -42,7 +43,7 @@ test("marketplace navigation exposes launch-critical user journeys", () => {
   for (const href of ["/services", "/create-service", "/dashboard"]) {
     assert.match(navigation, new RegExp(`href=["']${href}["']`), `${href} missing from navigation`)
   }
-  for (const href of ["/plattform-beschwerden", "/cookie-einstellungen"]) {
+  for (const href of ["/plattform-beschwerden", "/cookie-einstellungen", "/links"]) {
     assert.match(footer, new RegExp(`href=["']${href}["']`), `${href} missing from footer`)
   }
   assert.match(trustBar, /href:\s*"\/report"/, "/report missing from marketplace trust surface")

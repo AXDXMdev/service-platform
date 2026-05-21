@@ -36,7 +36,7 @@ test("client error messages stay user-friendly", () => {
   )
   assert.equal(
     clientErrors.humanizeWaitlistError('relation "waitlist_entries" does not exist'),
-    "Warteliste wird aktiv, sobald die Datenbank-Migration live ist."
+    "Warteliste ist gerade nicht erreichbar. Bitte versuche es später erneut oder schreibe uns direkt per E-Mail."
   )
   assert.equal(
     clientErrors.humanizeWaitlistError("permission denied"),

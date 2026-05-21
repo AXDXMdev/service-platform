@@ -77,24 +77,8 @@ export default function Home({
   const sectionEnabled = (key: string) =>
     sections.length === 0 || sections.some((section) => section.key === key && section.enabled)
 
-  const schemaData = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "Hilfinio",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/services?q={search_term_string}`,
-      "query-input": "required name=search_term_string",
-    },
-  }
-
   return (
     <main className="home-with-sticky-cta readable-page text-slate-950 dark:text-slate-100">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
-      />
       {sectionEnabled("hero") && (
         <section className="home-hero relative isolate overflow-hidden border-b border-slate-200/80 bg-[linear-gradient(135deg,#fbfdff_0%,#f3f7ff_52%,#eef3ff_100%)] dark:border-slate-800/80 dark:bg-[linear-gradient(135deg,#0b1220_0%,#111c2d_54%,#182344_100%)]">
           <div className="absolute inset-x-0 top-0 h-80 bg-[radial-gradient(circle_at_76%_12%,rgba(91,75,255,0.16),transparent_34%),radial-gradient(circle_at_18%_8%,rgba(56,189,248,0.12),transparent_30%)] dark:bg-[radial-gradient(circle_at_76%_12%,rgba(96,165,250,0.2),transparent_34%),radial-gradient(circle_at_18%_8%,rgba(91,75,255,0.18),transparent_30%)]" />

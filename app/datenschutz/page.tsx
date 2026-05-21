@@ -7,6 +7,14 @@ import {
   hasHostingProvider,
   hasOperatorAddress,
 } from "@/lib/legal"
+import { buildDefaultMetadata } from "@/lib/seo"
+
+export const metadata = buildDefaultMetadata({
+  title: "Datenschutzerklärung",
+  description:
+    "Datenschutzerklärung von Hilfinio mit Informationen zu Konten, Anfragen, Cookies, Consent, Hosting und Nutzerrechten.",
+  path: "/datenschutz",
+})
 
 function retentionList() {
   return [
@@ -127,7 +135,7 @@ export default function DatenschutzPage() {
 
             <section>
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                3. Empfaenger und Dienstleister
+                3. Empfänger und Dienstleister
               </h2>
               <div className="mt-2 space-y-3">
                 <p>

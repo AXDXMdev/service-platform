@@ -47,6 +47,9 @@ export default function SiteFooter() {
           <Link href="/waitlist" className="font-semibold transition hover:text-[var(--brand)]">
             {waitlistLabel}
           </Link>
+          <Link href="/links" className="font-semibold transition hover:text-[var(--brand)]">
+            Links
+          </Link>
           <Link href="/cookie-einstellungen" className="font-semibold transition hover:text-[var(--brand)]">
             Cookie-Einstellungen
           </Link>

@@ -42,7 +42,7 @@ export const LEGAL_NOTES = {
   missingVsbgStatus:
     "TODO_LEGAL_REVIEW: Der Status zur Verbraucherstreitbeilegung muss juristisch bestätigt werden.",
   disputeResolution:
-    `Hilfinio ist ${LEGAL_VSBG_STATUS} an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.`,
+    `Hilfinio ist ${LEGAL_VSBG_STATUS}, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.`,
   germanVersionAuthoritative:
     "Maßgeblich ist die deutsche Fassung dieser Rechtstexte.",
   odrDiscontinued:

@@ -3,7 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --font-ui: var(--font-ui-sans), "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-ui: "Segoe UI", Inter, Helvetica, Arial, sans-serif;
   --radius-sm: 8px;
   --radius-md: 10px;
   --radius-lg: 12px;
@@ -69,8 +69,8 @@ html.dark {
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-ui-sans);
-  --font-mono: var(--font-ui-mono);
+  --font-sans: var(--font-ui);
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
 }
 
 body {

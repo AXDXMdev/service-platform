@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Nunito_Sans, JetBrains_Mono } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -11,25 +10,13 @@ import ClientErrorReporter from "@/components/ClientErrorReporter";
 import Navigation from "@/components/Navigation";
 import SiteFooter from "@/components/SiteFooter";
 import JsonLd from "@/components/JsonLd";
-import { localMarketplaceJsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
+import { getBaseUrl, localMarketplaceJsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import { createServerSupabasePublicClient } from "@/lib/serverSupabase";
 import { loadSiteSettingsPayload } from "@/services/siteSettingsReadService";
 import "./globals.css";
 
-const uiSans = Nunito_Sans({
-  variable: "--font-ui-sans",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
-});
-
-const uiMono = JetBrains_Mono({
-  variable: "--font-ui-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  metadataBase: new URL(getBaseUrl()),
   applicationName: "Hilfinio",
   manifest: "/manifest.webmanifest",
   title: {
@@ -80,7 +67,7 @@ export default async function RootLayout({
   return (
     <html
       lang="de"
-      className={`${uiSans.variable} ${uiMono.variable} h-full antialiased`}
+      className="h-full antialiased"
     >
       <body className="min-h-full flex flex-col">
         <JsonLd data={[organizationJsonLd(), websiteJsonLd(), localMarketplaceJsonLd()]} />

@@ -30,7 +30,7 @@ export function humanizeAuthError(raw: string) {
 
 export function humanizeWaitlistError(raw: string) {
   if (/waitlist_entries|relation|schema|table|column/i.test(raw)) {
-    return "Warteliste wird aktiv, sobald die Datenbank-Migration live ist."
+    return "Warteliste ist gerade nicht erreichbar. Bitte versuche es später erneut oder schreibe uns direkt per E-Mail."
   }
 
   return "Eintrag konnte gerade nicht gespeichert werden. Bitte später erneut versuchen."

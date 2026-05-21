@@ -5,7 +5,13 @@ import type { Service } from "@/app/types"
 export const seoCities = ["stuttgart", "esslingen", "ludwigsburg", "fellbach", "waiblingen"] as const
 
 export function getBaseUrl() {
-  return process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim()
+  if (configuredUrl) return configuredUrl.replace(/\/$/, "")
+
+  const vercelUrl = process.env.VERCEL_URL?.trim()
+  if (vercelUrl) return `https://${vercelUrl}`.replace(/\/$/, "")
+
+  return process.env.NODE_ENV === "production" ? "https://hilfinio.de" : "http://localhost:3000"
 }
 
 export function canonicalUrl(path = "/") {

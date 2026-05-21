@@ -147,7 +147,7 @@ export async function loadProviderProfileData(
 ) {
   const normalizedProviderId = normalizeText(providerId, 80)
   if (!normalizedProviderId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(normalizedProviderId)) {
-    return { ok: false as const, status: 400, message: "Anbieter-ID ist ungueltig." }
+    return { ok: false as const, status: 400, message: "Anbieter-ID ist ungültig." }
   }
 
   const query = await selectFirstAvailable(

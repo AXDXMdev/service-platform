@@ -217,7 +217,7 @@ export default function ServicesPageClient({
   return (
     <main className="readable-page min-h-screen text-slate-950 dark:text-slate-100">
       <section className="border-b border-slate-200/80 bg-white/85 px-6 py-12 backdrop-blur-sm dark:border-slate-700/60 dark:bg-slate-900/70 sm:px-10 lg:px-12">
-        <div className="mx-auto max-w-7xl animate-float-up">
+        <div className="mx-auto max-w-7xl">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--brand)]">
             {t("servicesEyebrow")}
           </p>

@@ -77,7 +77,7 @@ export function validateRequestStatusInput(input: unknown) {
     })
     .safeParse(input ?? {})
 
-  if (!parsed.success) return invalid("Ungueltiger Zielstatus.")
+  if (!parsed.success) return invalid("Ungültiger Zielstatus.")
 
   return valid({
     nextStatus: parsed.data.nextStatus as RequestStatus,
@@ -87,7 +87,7 @@ export function validateRequestStatusInput(input: unknown) {
 
 export function validateProviderOfferInput(input: unknown) {
   const parsed = z.object({ providerOfferEur: requiredMoneyField }).safeParse(input ?? {})
-  if (!parsed.success) return invalid("Bitte ein gueltiges Preisangebot eingeben.")
+  if (!parsed.success) return invalid("Bitte ein gültiges Preisangebot eingeben.")
 
   return valid({ providerOfferEur: Number(parsed.data.providerOfferEur.toFixed(2)) })
 }
@@ -125,17 +125,17 @@ export function validateProviderVerificationInput(input: unknown, fallbackEmail?
     .safeParse(input ?? {})
 
   if (!parsed.success) {
-    return invalid("Bitte Name, Stadt und mindestens einen gueltigen Nachweis-Link ausfuellen.")
+    return invalid("Bitte Name, Stadt und mindestens einen gültigen Nachweis-Link ausfüllen.")
   }
 
   const proofs = toValidHttpUrls(parsed.data.proofLinks)
   if (proofs.length === 0) {
-    return invalid("Bitte Name, Stadt und mindestens einen gueltigen Nachweis-Link ausfuellen.")
+    return invalid("Bitte Name, Stadt und mindestens einen gültigen Nachweis-Link ausfüllen.")
   }
 
   const contactEmail = (parsed.data.contactEmail?.toLowerCase() || fallbackEmail || null)
   if (contactEmail && !z.string().email().safeParse(contactEmail).success) {
-    return invalid("Bitte eine gueltige Kontakt-E-Mail eingeben.")
+    return invalid("Bitte eine gültige Kontakt-E-Mail eingeben.")
   }
 
   return valid({
@@ -162,11 +162,11 @@ export function validateWaitlistInput(input: unknown) {
     .safeParse(input ?? {})
 
   if (!parsed.success) {
-    return invalid("Bitte Name, E-Mail und Stadt ausfuellen.")
+    return invalid("Bitte Name, E-Mail und Stadt ausfüllen.")
   }
 
   if (!ALLOWED_WAITLIST_ROLES.has(parsed.data.role)) {
-    return invalid("Bitte eine gueltige Rolle fuer die Warteliste waehlen.")
+    return invalid("Bitte eine gültige Rolle für die Warteliste wählen.")
   }
 
   return valid({
@@ -201,7 +201,7 @@ export function validateReviewCreateInput(input: unknown) {
     : toValidHttpUrls(parsed.data.proofLinks)
 
   if (proofUrls.length === 0) {
-    return invalid("Bitte mindestens einen gueltigen Foto-Link als Beweis angeben.")
+    return invalid("Bitte mindestens einen gültigen Foto-Link als Beweis angeben.")
   }
 
   return valid({
@@ -249,7 +249,7 @@ export function validateServiceCreateInput(input: unknown) {
     .safeParse(input ?? {})
 
   if (!parsed.success) {
-    return invalid("Bitte Titel, Beschreibung, Anbietername und Stadt ausfuellen.")
+    return invalid("Bitte Titel, Beschreibung, Anbietername und Stadt ausfüllen.")
   }
 
   const mediaUrls = parsed.data.mediaUrls
