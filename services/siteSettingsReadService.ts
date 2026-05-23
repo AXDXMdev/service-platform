@@ -34,6 +34,53 @@ function defaultContentMap() {
   )
 }
 
+const publicCopyReplacements: Array<[RegExp, string]> = [
+  [/\bTaskora\b/g, "Hilfinio"],
+  [/\bHilfino\b/g, "Hilfinio"],
+  [/\bfuer\b/g, "für"],
+  [/\bFuer\b/g, "Für"],
+  [/\bgepruefte\b/g, "geprüfte"],
+  [/\bGepruefte\b/g, "Geprüfte"],
+  [/\bNotfaelle\b/g, "Notfälle"],
+  [/\bverstaendlich\b/g, "verständlich"],
+  [/\bPilotstaedten\b/g, "Pilotstädten"],
+  [/\bNaehe\b/g, "Nähe"],
+  [/\bUebersicht\b/g, "Übersicht"],
+  [/\bkoennen\b/g, "können"],
+  [/\bKoennen\b/g, "Können"],
+  [/\bstaerkt\b/g, "stärkt"],
+  [/\bstaerken\b/g, "stärken"],
+  [/\bMuenchen\b/g, "Esslingen"],
+]
+
+function sanitizePublicCopy(value: string) {
+  return publicCopyReplacements.reduce(
+    (current, [pattern, replacement]) => current.replace(pattern, replacement),
+    value
+  )
+}
+
+function sanitizePublicValue(value: unknown): unknown {
+  if (typeof value === "string") return sanitizePublicCopy(value)
+  if (Array.isArray(value)) return value.map(sanitizePublicValue)
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [key, sanitizePublicValue(entry)])
+    )
+  }
+  return value
+}
+
+function sanitizeSiteSettings(site: SiteSettings): SiteSettings {
+  const rawCities = Array.isArray(site.pilot_cities) ? site.pilot_cities : []
+  const hasLegacyCities = rawCities.some((city) => /berlin|hamburg|muenchen|münchen/i.test(city))
+
+  return sanitizePublicValue({
+    ...site,
+    pilot_cities: hasLegacyCities || rawCities.length === 0 ? defaultSiteSettings.pilot_cities : rawCities,
+  }) as SiteSettings
+}
+
 export async function loadSiteSettingsPayload(
   supabase: SupabasePublicClient | null
 ): Promise<SiteSettingsPayload> {
@@ -67,13 +114,13 @@ export async function loadSiteSettingsPayload(
     ...(themeQuery?.data ?? {}),
   } as ThemeSettings
 
-  const site = {
+  const site = sanitizeSiteSettings({
     ...defaultSiteSettings,
     ...(siteQuery?.data ?? {}),
     trust_badges: siteQuery?.data?.trust_badges ?? defaultSiteSettings.trust_badges,
     pilot_cities: siteQuery?.data?.pilot_cities ?? defaultSiteSettings.pilot_cities,
     notice_boxes: siteQuery?.data?.notice_boxes ?? defaultSiteSettings.notice_boxes,
-  } as SiteSettings
+  } as SiteSettings)
 
   const baseContent =
     contentQuery?.data && !contentQuery.error
@@ -92,10 +139,10 @@ export async function loadSiteSettingsPayload(
   const pageContent = Object.fromEntries(
     pageRows.map((page) => [
       `page:${page.slug}`,
-      {
+      sanitizePublicValue({
         ...fallbackBySlug.get(page.slug),
         ...page,
-      },
+      }) as Record<string, unknown>,
     ])
   )
 
@@ -114,7 +161,7 @@ export async function loadSiteSettingsPayload(
     site,
     sections: (sectionsQuery?.data ?? []) as HomepageSection[],
     content: {
-      ...baseContent,
+      ...(sanitizePublicValue(baseContent) as Record<string, Record<string, unknown>>),
       ...pageContent,
     },
     warnings,

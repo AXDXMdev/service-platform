@@ -96,6 +96,17 @@ test("marketplace pages expose server-side SEO metadata and JSON-LD", () => {
   assert.match(seo, /"@type": "ProfilePage"/)
 })
 
+test("public site settings defaults avoid legacy branding and old pilot cities", () => {
+  const settings = read("lib/siteSettings.ts")
+  const readService = read("services/siteSettingsReadService.ts")
+
+  assert.match(settings, /Stuttgart/)
+  assert.match(settings, /Esslingen/)
+  assert.doesNotMatch(settings, /pilot_cities:\s*\["Berlin", "Hamburg", "München"/)
+  assert.match(readService, /Taskora/)
+  assert.match(readService, /sanitizePublicCopy/)
+})
+
 test("open launch social and operations documents exist", () => {
   const requiredFiles = [
     "docs/open-launch-checklist.md",

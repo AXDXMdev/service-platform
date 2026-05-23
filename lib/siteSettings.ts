@@ -89,7 +89,7 @@ export const defaultSiteSettings: SiteSettings = {
   hero_cta_find: null,
   hero_cta_offer: null,
   trust_badges: [],
-  pilot_cities: ["Berlin", "Hamburg", "München", "Stuttgart"],
+  pilot_cities: ["Stuttgart", "Esslingen", "Ludwigsburg", "Fellbach", "Waiblingen"],
   notice_boxes: [],
   default_theme_mode: "dark",
 }
