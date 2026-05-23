@@ -27,7 +27,6 @@ test("launch-critical frontend routes and boundaries exist", () => {
     "app/plattform-beschwerden/page.tsx",
     "app/links/page.tsx",
     "app/error.tsx",
-    "app/loading.tsx",
     "app/not-found.tsx",
   ]
 

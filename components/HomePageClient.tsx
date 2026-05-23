@@ -27,7 +27,7 @@ export default function Home({
   const { site, sections, content } = useSiteSettings()
   const pageContent = content["page:home"] as { title?: string; subtitle?: string; is_active?: boolean } | undefined
   const [featuredServices, setFeaturedServices] = useState<Service[]>(initialFeaturedServices)
-  const [featuredLoading, setFeaturedLoading] = useState(false)
+  const [featuredLoading, setFeaturedLoading] = useState(!initialLoaded)
   const [ratingsByService, setRatingsByService] = useState<
     Record<string, { average: number; count: number }>
   >(initialRatingsByService)
@@ -35,6 +35,7 @@ export default function Home({
   useEffect(() => {
     const loadFeatured = async () => {
       if (initialLoaded) return
+      setFeaturedLoading(true)
 
       const cachedServices = getCached<Service[]>("hilfino:home:featured")
       const cachedRatings = getCached<Record<string, { average: number; count: number }>>("hilfino:home:ratings")
