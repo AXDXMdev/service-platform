@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useLanguage } from "@/components/LanguageProvider"
+import { getAuthRedirectUrl } from "@/lib/authRedirects"
 import { humanizeAuthError } from "@/lib/clientErrors"
 import { supabase } from "@/lib/supabaseClient"
 import {
@@ -39,6 +40,9 @@ export default function Register() {
     const { error } = await supabase.auth.signUp({
       email: email.trim().toLowerCase(),
       password,
+      options: {
+        emailRedirectTo: getAuthRedirectUrl("/auth/callback?next=/dashboard"),
+      },
     })
     setLoading(false)
 

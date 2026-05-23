@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useLanguage } from "@/components/LanguageProvider"
+import { getAuthRedirectUrl } from "@/lib/authRedirects"
 import { humanizeAuthError } from "@/lib/clientErrors"
 import { supabase } from "@/lib/supabaseClient"
 import { isValidEmail } from "@/lib/validation"
@@ -21,7 +22,7 @@ export default function ResetPassword() {
     setSending(true)
     setMessage("")
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/update-password`,
+      redirectTo: getAuthRedirectUrl("/update-password"),
     })
     setSending(false)
 

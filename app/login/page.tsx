@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useLanguage } from "@/components/LanguageProvider"
 import { humanizeAuthError } from "@/lib/clientErrors"
+import { getAuthRedirectUrl, sanitizeAuthNextPath } from "@/lib/authRedirects"
 import { supabase } from "@/lib/supabaseClient"
 import {
   isLikelySpamTrapFilled,
@@ -23,8 +24,7 @@ export default function Login() {
 
   const getSafeRedirectTarget = () => {
     const target = new URLSearchParams(window.location.search).get("redirect")
-    if (!target || !target.startsWith("/") || target.startsWith("//")) return "/dashboard"
-    return target
+    return sanitizeAuthNextPath(target, "/dashboard")
   }
 
   const login = async () => {
@@ -63,6 +63,9 @@ export default function Login() {
     const { error } = await supabase.auth.signUp({
       email: email.trim().toLowerCase(),
       password,
+      options: {
+        emailRedirectTo: getAuthRedirectUrl("/auth/callback?next=/dashboard"),
+      },
     })
     setLoading(false)
 

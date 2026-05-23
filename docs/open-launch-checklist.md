@@ -11,6 +11,7 @@ Diese Checkliste ist der operative Rahmen für einen seriösen öffentlichen Lau
 - [ ] Alle Supabase-Migrationen im Live-Projekt ausführen und RLS für `services`, `requests`, `messages`, `reviews`, `notifications`, `reports` und Storage prüfen.
 - [ ] Vercel Production Env Vars vollständig setzen: Supabase, Upstash, Sentry, `CRON_SECRET`, Site URL und Admin-Secrets.
 - [ ] Google Search Console für `hilfinio.de` und `www.hilfinio.de` verifizieren.
+- [ ] Supabase Auth konfigurieren: Site URL `https://hilfinio.de`; Allowed Redirect URLs `https://hilfinio.de/**`, `https://www.hilfinio.de/**`, `http://localhost:3000/**`.
 - [ ] Domains und Redirects prüfen: Apex, `www`, HTTPS, Canonical, Sitemap, robots.txt.
 - [ ] Smoke-Test durchführen: Registrierung, Login, Service erstellen, Anfrage senden, Inbox, Meldung, Cookie-Auswahl, Account-Löschung.
 - [ ] TODO_SECURITY_HARDENING: CSP ohne `unsafe-inline` mit Nonce/strict-dynamic planen, sobald alle Inline-Skripte sauber migriert sind.
@@ -57,4 +58,3 @@ Diese Checkliste ist der operative Rahmen für einen seriösen öffentlichen Lau
 - Abuse-Welle: Rate Limits verschärfen, auffällige IPs/Accounts blockieren, Reports priorisieren.
 - Rechtliches Risiko: betroffene Inhalte entfernen oder temporär ausblenden, Betreiber und juristische Prüfung einbeziehen.
 - Supabase-Ausfall: Status prüfen, Nutzer mit ehrlicher Fehlermeldung informieren, keine Datenverluste durch Retry-Schleifen riskieren.
-
