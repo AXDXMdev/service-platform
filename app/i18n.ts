@@ -30,7 +30,7 @@ export const translations = {
     heroCtaFind: "Anbieter finden",
     heroCtaOffer: "Service anbieten",
     heroSearchLabel: "Dienstleistungen suchen",
-    heroSearchPlaceholder: "Was brauchst du? Reinigung, Reparatur, Nachhilfe...",
+    heroSearchPlaceholder: "Was brauchst du?",
     heroSearchButton: "Anbieter finden",
     confidenceEyebrow: "Für Vertrauen gebaut",
     confidenceTitle:
@@ -261,7 +261,7 @@ export const translations = {
     heroCtaFind: "Find providers",
     heroCtaOffer: "Offer a service",
     heroSearchLabel: "Search services",
-    heroSearchPlaceholder: "What do you need? Cleaning, repair, tutoring...",
+    heroSearchPlaceholder: "What do you need?",
     heroSearchButton: "Search services",
     confidenceEyebrow: "Built for confidence",
     confidenceTitle:
@@ -280,7 +280,7 @@ export const translations = {
     trustBadgeVerified: "Verified providers",
     trustBadgeSecure: "Secure requests",
     trustBadgeRatings: "Ratings",
-    trustBadgePilot: "Pilot: Berlin, Hamburg, Munich, Stuttgart",
+    trustBadgePilot: "Pilot: Stuttgart, Esslingen, Ludwigsburg",
     trustBadgePrivacy: "Privacy-friendly",
     providerCtaTitle: "Ready to offer your service?",
     providerCtaText:
@@ -489,7 +489,7 @@ export const translations = {
     heroCtaFind: "Sağlayıcı bul",
     heroCtaOffer: "Hizmet sun",
     heroSearchLabel: "Hizmet ara",
-    heroSearchPlaceholder: "Neye ihtiyacın var? Temizlik, tamir, özel ders...",
+    heroSearchPlaceholder: "Neye ihtiyacın var?",
     heroSearchButton: "Hizmet ara",
     confidenceEyebrow: "Güven için tasarlandı",
     confidenceTitle:
@@ -508,7 +508,7 @@ export const translations = {
     trustBadgeVerified: "Doğrulanmış sağlayıcılar",
     trustBadgeSecure: "Güvenli talepler",
     trustBadgeRatings: "Değerlendirmeler",
-    trustBadgePilot: "Pilot: Berlin, Hamburg, Münih, Stuttgart",
+    trustBadgePilot: "Pilot: Stuttgart, Esslingen, Ludwigsburg",
     trustBadgePrivacy: "Gizlilik dostu",
     providerCtaTitle: "Hizmetini sunmaya hazır mısın?",
     providerCtaText:

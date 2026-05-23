@@ -83,17 +83,17 @@ export default function Home({
       {sectionEnabled("hero") && (
         <section className="home-hero relative isolate overflow-hidden border-b border-slate-200/80 bg-[linear-gradient(135deg,#fbfdff_0%,#f3f7ff_52%,#eef3ff_100%)] dark:border-slate-800/80 dark:bg-[linear-gradient(135deg,#0b1220_0%,#111c2d_54%,#182344_100%)]">
           <div className="absolute inset-x-0 top-0 h-80 bg-[radial-gradient(circle_at_76%_12%,rgba(91,75,255,0.16),transparent_34%),radial-gradient(circle_at_18%_8%,rgba(56,189,248,0.12),transparent_30%)] dark:bg-[radial-gradient(circle_at_76%_12%,rgba(96,165,250,0.2),transparent_34%),radial-gradient(circle_at_18%_8%,rgba(91,75,255,0.18),transparent_30%)]" />
-          <div className="relative mx-auto max-w-7xl px-6 py-14 sm:px-10 lg:px-12 lg:py-20">
+          <div className="relative mx-auto max-w-7xl px-4 py-9 sm:px-10 sm:py-14 lg:px-12 lg:py-20">
             <div className="max-w-4xl opacity-100">
               <p
-                className="mb-5 w-fit rounded-full bg-white/80 px-4 py-2 text-sm font-semibold shadow-sm ring-1 ring-[var(--brand)]/12 dark:bg-white/8 dark:ring-white/10"
+                className="mb-4 max-w-full rounded-[14px] bg-white/80 px-3 py-2 text-xs font-semibold leading-5 shadow-sm ring-1 ring-[var(--brand)]/12 dark:bg-white/8 dark:ring-white/10 sm:mb-5 sm:w-fit sm:rounded-full sm:px-4 sm:text-sm"
                 style={{ color: "var(--hero-eyebrow)" }}
               >
                 {t("heroBadge")}
               </p>
 
               <h1
-                className="max-w-4xl text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-[4.35rem]"
+                className="max-w-4xl text-[2.35rem] font-extrabold leading-[1.06] tracking-tight sm:text-5xl sm:leading-[1.08] lg:text-[4.35rem]"
                 style={{ color: "var(--hero-title)" }}
               >
                 {site.hero_title ||
@@ -102,7 +102,7 @@ export default function Home({
               </h1>
 
               <p
-                className="mt-5 max-w-3xl text-base font-medium leading-8 sm:text-lg"
+                className="mt-4 max-w-3xl text-base font-medium leading-7 sm:mt-5 sm:text-lg sm:leading-8"
                 style={{ color: "var(--hero-subtitle)" }}
               >
                 {site.hero_subheadline ||
@@ -111,22 +111,22 @@ export default function Home({
               </p>
 
               <p
-                className="mt-4 max-w-3xl text-base leading-7"
+                className="mt-4 hidden max-w-3xl text-base leading-7 sm:block"
                 style={{ color: "var(--hero-body)" }}
               >
                 {t("heroText")}
               </p>
 
-              <div className="mt-7 flex flex-wrap gap-3">
+              <div className="mt-6 grid grid-cols-2 gap-2 sm:mt-7 sm:flex sm:flex-wrap sm:gap-3">
                 <Link
                   href="/services"
-                  className="btn-primary min-h-12 rounded-[10px] px-5 py-3 text-sm font-semibold text-white sm:text-base"
+                  className="btn-primary min-h-12 justify-center rounded-[10px] px-4 py-3 text-sm font-semibold text-white sm:px-5 sm:text-base"
                 >
                   {site.hero_cta_find || t("heroCtaFind")}
                 </Link>
                 <Link
                   href="/create-service"
-                  className="btn-secondary min-h-12 rounded-[10px] px-5 py-3 text-sm font-semibold sm:text-base"
+                  className="btn-secondary min-h-12 justify-center rounded-[10px] px-4 py-3 text-sm font-semibold sm:px-5 sm:text-base"
                 >
                   {site.hero_cta_offer || t("heroCtaOffer")}
                 </Link>
@@ -134,7 +134,7 @@ export default function Home({
 
               <form
                 action="/services"
-                className="mt-8 flex w-full max-w-3xl flex-col gap-3 rounded-[16px] border border-slate-200 bg-white/92 p-2 shadow-[0_22px_55px_-40px_rgba(35,45,100,0.5)] dark:border-slate-700 dark:bg-slate-950/86 sm:flex-row"
+                className="mt-7 flex w-full max-w-3xl flex-col gap-3 rounded-[14px] border border-slate-200 bg-white/92 p-2 shadow-[0_22px_55px_-40px_rgba(35,45,100,0.5)] dark:border-slate-700 dark:bg-slate-950/86 sm:mt-8 sm:flex-row sm:rounded-[16px]"
               >
                 <input
                   name="q"
@@ -150,7 +150,7 @@ export default function Home({
                 </button>
               </form>
 
-              <div className="mt-6 flex max-w-4xl flex-wrap gap-x-5 gap-y-3 text-sm text-slate-600 dark:text-slate-300">
+              <div className="mt-5 flex max-w-4xl flex-wrap gap-x-4 gap-y-2 text-xs text-slate-600 dark:text-slate-300 sm:mt-6 sm:gap-x-5 sm:gap-y-3 sm:text-sm">
                 {trustBadges.slice(0, 5).map((badge) => (
                   <span key={badge} className="inline-flex items-center gap-2 font-semibold">
                     <span className="h-2 w-2 rounded-full bg-[var(--brand)]" />
@@ -159,7 +159,7 @@ export default function Home({
                 ))}
               </div>
 
-              <div className="mt-6 grid max-w-4xl gap-3 rounded-[14px] border border-white/70 bg-white/82 p-4 shadow-[0_18px_45px_-35px_rgba(15,23,42,0.5)] dark:border-slate-700 dark:bg-slate-950/72 sm:grid-cols-3">
+              <div className="mt-5 grid max-w-4xl gap-3 rounded-[14px] border border-white/70 bg-white/82 p-4 shadow-[0_18px_45px_-35px_rgba(15,23,42,0.5)] dark:border-slate-700 dark:bg-slate-950/72 sm:mt-6 sm:grid-cols-3">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--brand)]">
                     Pilotstädte
@@ -320,20 +320,6 @@ export default function Home({
       </section>
       )}
 
-      <div className="fixed inset-x-4 bottom-4 z-40 grid grid-cols-2 gap-2 md:hidden">
-        <Link
-          href="/services"
-          className="btn-primary min-h-12 justify-center rounded-[10px] px-3 py-2 text-sm font-semibold text-white shadow-lg"
-        >
-          {site.hero_cta_find || t("heroCtaFind")}
-        </Link>
-        <Link
-          href="/create-service"
-          className="btn-secondary min-h-12 justify-center rounded-[10px] px-3 py-2 text-sm font-semibold shadow-lg"
-        >
-          {site.hero_cta_offer || t("heroCtaOffer")}
-        </Link>
-      </div>
     </main>
   )
 }

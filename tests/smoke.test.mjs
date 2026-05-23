@@ -21,8 +21,9 @@ test("validation helpers cover common launch-critical inputs", () => {
 test("pilot mode helpers normalize umlauts and city names", () => {
   assert.equal(pilotMode.normalizeCityName(" München "), "munchen")
   assert.equal(pilotMode.isPilotCity("Muenchen"), false)
-  assert.equal(pilotMode.isPilotCity("München"), true)
-  assert.match(pilotMode.pilotCityLabel(), /Berlin/)
+  assert.equal(pilotMode.isPilotCity("München"), false)
+  assert.equal(pilotMode.isPilotCity("Esslingen"), true)
+  assert.match(pilotMode.pilotCityLabel(), /Stuttgart/)
 })
 
 test("client error messages stay user-friendly", () => {

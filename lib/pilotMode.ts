@@ -1,6 +1,6 @@
 export const PILOT_MODE_ENABLED = true
 
-export const PILOT_CITIES = ["Berlin", "Hamburg", "München", "Stuttgart"] as const
+export const PILOT_CITIES = ["Stuttgart", "Esslingen", "Ludwigsburg", "Fellbach", "Waiblingen"] as const
 
 export function normalizeCityName(value: string) {
   return value

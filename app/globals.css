@@ -667,11 +667,15 @@ html.a11y-reduced-motion *::after {
   }
 
   .home-with-sticky-cta {
-    padding-bottom: calc(6.75rem + env(safe-area-inset-bottom));
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
   }
 
   .nav-link {
-    padding-inline: 0.7rem;
+    justify-content: center;
+    padding: 0.62rem 0.55rem;
+    font-size: 0.82rem;
+    line-height: 1.1;
+    text-align: center;
   }
 }
 
