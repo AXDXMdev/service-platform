@@ -19,11 +19,11 @@ export async function POST(request: Request) {
       10 * 60 * 1000
     )
   ) {
-    return apiError(429, "rate_limited", "Zu viele Upload-Pruefungen in kurzer Zeit.")
+    return apiError(429, "rate_limited", "Zu viele Upload-Prüfungen in kurzer Zeit.")
   }
 
   if (!getSupabaseServiceRoleEnv()) {
-    return apiError(503, "configuration_error", "Upload-Pruefung benoetigt SUPABASE_SERVICE_ROLE_KEY.")
+    return apiError(503, "configuration_error", "Upload-Prüfung ist gerade nicht verfügbar.")
   }
 
   const json = await readJsonBody(request)

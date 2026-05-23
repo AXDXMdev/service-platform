@@ -195,7 +195,7 @@ export default function CreateService() {
       }
       if (/bucket|storage|service-media|permission|policy|row-level|RLS/i.test(errorMessage)) {
         setMessage(
-          "Medien-Upload ist noch nicht aktiv. Bitte Supabase-Migration für Storage ausführen."
+          "Medien-Upload ist gerade nicht verfügbar. Bitte versuche es später erneut oder speichere den Service zunächst ohne Medien."
         )
       } else {
         setMessage(`Upload fehlgeschlagen: ${errorMessage}`)

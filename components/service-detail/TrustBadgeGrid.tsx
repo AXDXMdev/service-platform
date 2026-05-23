@@ -23,19 +23,19 @@ export default function TrustBadgeGrid({ service }: TrustBadgeGridProps) {
       label: "E-Mail verifiziert",
       checked: Boolean(service.email_verified),
       pendingText: "E-Mail nicht sichtbar verifiziert",
-      description: "Bestaetigte E-Mail reduziert Spam- und Wegwerfprofile.",
+      description: "Bestätigte E-Mail reduziert Spam- und Wegwerfprofile.",
     },
     {
       label: "Telefon verifiziert",
       checked: Boolean(service.phone_verified),
       pendingText: "Telefon nicht sichtbar verifiziert",
-      description: "Telefonverifizierung ist ein optionaler zusaetzlicher Vertrauensanker.",
+      description: "Telefonverifizierung ist ein optionaler zusätzlicher Vertrauensanker.",
     },
     {
       label: "Ausweis geprüft",
       checked: Boolean(service.identity_verified),
       pendingText: "Ausweisprüfung ausstehend",
-      description: "Ausweisdaten werden nicht oeffentlich angezeigt.",
+      description: "Ausweisdaten werden nicht öffentlich angezeigt.",
     },
     {
       label: "Gewerbe geprüft",

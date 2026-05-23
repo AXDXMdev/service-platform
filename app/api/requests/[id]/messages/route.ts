@@ -27,7 +27,7 @@ export function createRequestMessagesPostHandler(deps: RequestMessagesRouteDeps)
         10 * 60 * 1000
       )
     ) {
-      return apiError(429, "rate_limited", "Zu viele Nachrichten in kurzer Zeit. Bitte spaeter erneut.")
+      return apiError(429, "rate_limited", "Zu viele Nachrichten in kurzer Zeit. Bitte später erneut.")
     }
 
     const json = await readJsonBody(request)

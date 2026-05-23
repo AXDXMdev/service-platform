@@ -343,7 +343,7 @@ export default function ServiceDetail() {
               )}
               {service.supports_sign_language && (
                 <span className="rounded-full bg-blue-500/15 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:text-blue-300">
-                  Gebaerdensprache moeglich
+                  Gebärdensprache möglich
                 </span>
               )}
               {service.text_chat_only && (
@@ -361,7 +361,7 @@ export default function ServiceDetail() {
           {service.provider_bio && (
             <section className="card-surface rounded-[14px] p-5 sm:p-7">
               <h2 className="text-xl font-semibold text-slate-950 dark:text-slate-100">
-                Ueber den Anbieter
+                Über den Anbieter
               </h2>
               <p className="mt-3 text-sm leading-7 text-slate-700 dark:text-slate-200">
                 {service.provider_bio}

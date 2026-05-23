@@ -21,13 +21,13 @@ npm run build
 npm run start
 ```
 
-Fuer die neue Live-Supabase-Integrationsspur:
+Für die neue Live-Supabase-Integrationsspur:
 
 ```bash
 npm run test:integration
 ```
 
-Der Lauf nutzt echte Supabase-/RLS-Pfade und braucht zusaetzlich `SUPABASE_SERVICE_ROLE_KEY` in `.env.local`. Ohne diesen Key skipped die Suite bewusst sauber.
+Der Lauf nutzt echte Supabase-/RLS-Pfade und braucht zusätzlich `SUPABASE_SERVICE_ROLE_KEY` in `.env.local`. Ohne diesen Key skipped die Suite bewusst sauber.
 
 ## Environment Variables
 
@@ -57,6 +57,27 @@ Die Migrationen liegen in `supabase/migrations/`. Vor Launch müssen alle Migrat
 - [HILFINIO_GREEN_STATUS_REPORT.md](/Users/alaadinadem/service-platform/HILFINIO_GREEN_STATUS_REPORT.md:1)
 - [LEGAL_LAUNCH_READINESS_AUDIT.md](/Users/alaadinadem/service-platform/LEGAL_LAUNCH_READINESS_AUDIT.md:1)
 - [HILFINIO_LAUNCH_OPERATIONS_CHECKLIST.md](/Users/alaadinadem/service-platform/HILFINIO_LAUNCH_OPERATIONS_CHECKLIST.md:1)
+- [docs/open-launch-checklist.md](/Users/alaadinadem/service-platform/docs/open-launch-checklist.md:1)
+- [content/social/](/Users/alaadinadem/service-platform/content/social/handles-checklist.md:1)
+
+## Open Launch
+
+Vor einem öffentlichen Launch:
+
+```bash
+npm run lint
+npm run type-check
+npm test
+npm run build
+```
+
+Zusätzlich prüfen:
+
+- Rechtstexte und Plattformrolle juristisch final freigeben lassen (`TODO_LEGAL_REVIEW`).
+- Google Search Console für `hilfinio.de` und `www.hilfinio.de` einrichten.
+- Supabase-Migrationen, RLS und Storage-Bucket im Live-Projekt verifizieren.
+- Sentry, Vercel Logs, Speed Insights und Abuse Reports in Woche 1 täglich prüfen.
+- Domains, HTTPS, Canonicals, Sitemap und robots.txt nach DNS-Änderungen erneut testen.
 
 ## Backend Support API
 

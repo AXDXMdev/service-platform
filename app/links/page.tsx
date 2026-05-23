@@ -42,6 +42,25 @@ const links = [
   },
 ]
 
+const platformLinks = [
+  {
+    href: "/services?utm_source=tiktok&utm_medium=social&utm_campaign=open-launch",
+    label: "TikTok",
+  },
+  {
+    href: "/services?utm_source=instagram&utm_medium=social&utm_campaign=open-launch",
+    label: "Instagram",
+  },
+  {
+    href: "/services?utm_source=youtube&utm_medium=social&utm_campaign=open-launch",
+    label: "YouTube",
+  },
+  {
+    href: "/services?utm_source=linkedin&utm_medium=social&utm_campaign=open-launch",
+    label: "LinkedIn",
+  },
+] as const
+
 export default function LinksPage() {
   const shareUrl = canonicalUrl("/links")
 
@@ -94,6 +113,21 @@ export default function LinksPage() {
             LinkedIn und andere Social-Kanäle.
           </p>
           <p className="mt-2 break-all text-xs">{shareUrl}</p>
+        </div>
+
+        <div className="mt-3 w-full rounded-[12px] border border-slate-200 bg-white/80 p-4 text-left text-sm leading-6 text-slate-600 dark:border-slate-800 dark:bg-slate-950/80 dark:text-slate-300">
+          <p className="font-semibold text-slate-950 dark:text-slate-100">Kampagnenlinks</p>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {platformLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="rounded-[10px] border border-slate-200 px-3 py-2 text-center font-semibold transition hover:border-[var(--brand)]/40 hover:text-[var(--brand)] dark:border-slate-800"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
     </main>

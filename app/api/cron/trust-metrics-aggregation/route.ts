@@ -41,7 +41,7 @@ export function createTrustMetricsAggregationPostHandler(
     }
 
     if (!deps.hasServiceRoleEnv()) {
-      return apiError(503, "configuration_error", "Trust-Metrics-Worker benoetigt SUPABASE_SERVICE_ROLE_KEY.")
+      return apiError(503, "configuration_error", "Trust-Metrics-Worker benötigt SUPABASE_SERVICE_ROLE_KEY.")
     }
 
     const admin = deps.createAdminClient()

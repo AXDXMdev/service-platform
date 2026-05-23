@@ -123,7 +123,7 @@ export default function RequestInboxClient() {
             <p className="page-eyebrow text-sm font-semibold uppercase tracking-wide">Inbox</p>
             <h1 className="page-title mt-2 text-3xl font-semibold">Anfragen verwalten</h1>
             <p className="page-subtitle mt-2 max-w-2xl text-sm leading-6">
-              Alle Kunden- und Anbieteranfragen an einem Ort: antworten, annehmen, abschliessen und bewerten.
+              Alle Kunden- und Anbieteranfragen an einem Ort: antworten, annehmen, abschließen und bewerten.
             </p>
           </div>
           <Link href="/services" className="btn-primary min-h-11 justify-center px-4 py-2 text-sm font-semibold">

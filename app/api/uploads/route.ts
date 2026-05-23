@@ -61,7 +61,7 @@ export function createUploadsPostHandler(overrides: Partial<UploadRouteDependenc
         ...logContext,
         durationMs: Date.now() - startedAt,
       })
-      return apiError(429, "rate_limited", "Zu viele Upload-Anfragen in kurzer Zeit. Bitte spaeter erneut.")
+      return apiError(429, "rate_limited", "Zu viele Upload-Anfragen in kurzer Zeit. Bitte später erneut.")
     }
 
     const auth = await deps.requireUserContext(request)
@@ -73,7 +73,7 @@ export function createUploadsPostHandler(overrides: Partial<UploadRouteDependenc
       return apiError(
         503,
         "configuration_error",
-        "Upload-Freigaben benoetigen SUPABASE_SERVICE_ROLE_KEY auf dem Server."
+        "Upload-Freigaben sind gerade nicht verfügbar. Bitte versuche es später erneut."
       )
     }
 

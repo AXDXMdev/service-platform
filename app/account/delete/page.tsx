@@ -81,7 +81,8 @@ export default function AccountDeletePage() {
                 Bestätigung
               </label>
               <p className="mb-2 text-sm text-slate-600 dark:text-slate-300">
-                Gib zur Bestätigung exakt <span className="font-semibold">LOESCHEN</span> ein.
+                Gib zur Bestätigung exakt <span className="font-semibold">LOESCHEN</span> ein
+                (technischer Bestätigungscode ohne Umlaut).
               </p>
               <input
                 className="field-input min-h-12 w-full rounded-[10px] px-4"

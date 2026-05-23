@@ -205,7 +205,7 @@ export default function RequestDetailClient({ requestId }: { requestId: string }
     return (
       <main className="readable-page min-h-screen px-4 py-6 sm:px-8 lg:px-12">
         <div className="card-surface mx-auto max-w-xl rounded-[14px] p-6 text-center">
-          <h1 className="text-xl font-semibold">Anfrage nicht verfuegbar</h1>
+          <h1 className="text-xl font-semibold">Anfrage nicht verfügbar</h1>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{error || "Diese Anfrage konnte nicht geladen werden."}</p>
           <button type="button" className="action-ghost mt-4" onClick={() => void load()}>
             Erneut versuchen

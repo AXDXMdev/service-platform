@@ -48,7 +48,7 @@ export function createAdminOverviewGetHandler(overrides: Partial<AdminOverviewRo
       return apiError(
         503,
         "configuration_error",
-        "Admin-Overview benoetigt SUPABASE_SERVICE_ROLE_KEY auf dem Server."
+        "Admin-Overview benötigt SUPABASE_SERVICE_ROLE_KEY auf dem Server."
       )
     }
 

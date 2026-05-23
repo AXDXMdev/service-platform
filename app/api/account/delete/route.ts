@@ -80,7 +80,7 @@ export async function POST(request: Request) {
     return apiError(
       503,
       "configuration_error",
-      "Direkte Kontolöschung ist aktuell nicht verfuegbar. Dein Antrag wurde stattdessen zur manuellen Bearbeitung gespeichert."
+      "Direkte Kontolöschung ist aktuell nicht verfügbar. Dein Antrag wurde stattdessen zur manuellen Bearbeitung gespeichert."
     )
   }
 
@@ -164,7 +164,7 @@ export async function POST(request: Request) {
     return apiOk({
       mode,
       status: "completed",
-      message: "Dein Konto wurde geloescht. Bitte schliesse offene Browser-Tabs und melde dich nicht erneut an.",
+      message: "Dein Konto wurde gelöscht. Bitte schließe offene Browser-Tabs und melde dich nicht erneut an.",
     })
   } catch (error) {
     await markDeletionRequest("failed")

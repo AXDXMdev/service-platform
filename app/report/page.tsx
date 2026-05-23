@@ -7,7 +7,7 @@ const categories = [
   { value: "bug", label: "Technischer Bug" },
   { value: "illegal_content", label: "Rechtswidriger Inhalt" },
   { value: "fraud", label: "Betrug / Scam" },
-  { value: "harassment", label: "Belaestigung / Missbrauch" },
+  { value: "harassment", label: "Belästigung / Missbrauch" },
   { value: "privacy", label: "Datenschutzproblem" },
   { value: "other", label: "Sonstiges Problem" },
 ] as const
@@ -63,7 +63,8 @@ export default function ReportPage() {
           </h1>
           <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">
             Nutze dieses Formular für technische Bugs sowie Meldungen zu rechtswidrigen
-            Inhalten, Betrug, Belaestigung, Datenschutzproblemen oder sonstigen Plattformproblemen.
+            Inhalten, Betrug, Belästigung, Datenschutzproblemen oder sonstigen Plattformproblemen.
+            Bitte sende keine unnötigen Ausweis-, Zahlungs- oder Gesundheitsdaten mit.
           </p>
 
           {status ? (
@@ -90,30 +91,50 @@ export default function ReportPage() {
               </select>
             </label>
 
-            <input
-              className="field-input min-h-12 rounded-[10px] px-4"
-              placeholder="Betroffene URL (optional)"
-              value={targetUrl}
-              onChange={(event) => setTargetUrl(event.target.value)}
-            />
-            <input
-              className="field-input min-h-12 rounded-[10px] px-4"
-              placeholder="Betroffene ID oder Referenz (optional)"
-              value={targetEntityId}
-              onChange={(event) => setTargetEntityId(event.target.value)}
-            />
-            <textarea
-              className="field-input min-h-32 rounded-[10px] px-4 py-3"
-              placeholder="Beschreibe den Bug oder das Problem moeglichst konkret. Was ist passiert, wo und wann?"
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-            />
-            <input
-              className="field-input min-h-12 rounded-[10px] px-4"
-              placeholder="Kontakt-E-Mail (optional)"
-              value={contactEmail}
-              onChange={(event) => setContactEmail(event.target.value)}
-            />
+            <label>
+              <span className="mb-2 block text-sm font-semibold text-slate-800 dark:text-slate-100">
+                Betroffene URL
+              </span>
+              <input
+                className="field-input min-h-12 w-full rounded-[10px] px-4"
+                placeholder="https://hilfinio.de/..."
+                value={targetUrl}
+                onChange={(event) => setTargetUrl(event.target.value)}
+              />
+            </label>
+            <label>
+              <span className="mb-2 block text-sm font-semibold text-slate-800 dark:text-slate-100">
+                Betroffene ID oder Referenz
+              </span>
+              <input
+                className="field-input min-h-12 w-full rounded-[10px] px-4"
+                placeholder="Optional, falls bekannt"
+                value={targetEntityId}
+                onChange={(event) => setTargetEntityId(event.target.value)}
+              />
+            </label>
+            <label>
+              <span className="mb-2 block text-sm font-semibold text-slate-800 dark:text-slate-100">
+                Beschreibung
+              </span>
+              <textarea
+                className="field-input min-h-32 w-full rounded-[10px] px-4 py-3"
+                placeholder="Beschreibe den Bug oder das Problem möglichst konkret. Was ist passiert, wo und wann?"
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+              />
+            </label>
+            <label>
+              <span className="mb-2 block text-sm font-semibold text-slate-800 dark:text-slate-100">
+                Kontakt-E-Mail
+              </span>
+              <input
+                className="field-input min-h-12 w-full rounded-[10px] px-4"
+                placeholder="Optional für Rückfragen"
+                value={contactEmail}
+                onChange={(event) => setContactEmail(event.target.value)}
+              />
+            </label>
             <input
               className="hidden"
               tabIndex={-1}

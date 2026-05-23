@@ -23,7 +23,7 @@ export async function GET() {
   }
 
   if (!getSupabaseServiceRoleEnv()) {
-    return apiError(503, "configuration_error", "Ops-API benoetigt SUPABASE_SERVICE_ROLE_KEY.")
+    return apiError(503, "configuration_error", "Ops-API benötigt SUPABASE_SERVICE_ROLE_KEY.")
   }
 
   const supabase = createServerSupabaseAdminClient()

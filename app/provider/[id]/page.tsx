@@ -128,7 +128,7 @@ export default function ProviderProfile() {
           <EmptyState
             className="mt-6"
             title={t("providerProfileEmpty")}
-            description="Dieses Profil hat aktuell keine oeffentlich sichtbaren Services. Schau in den Kategorien nach passenden Alternativen."
+            description="Dieses Profil hat aktuell keine öffentlich sichtbaren Services. Schau in den Kategorien nach passenden Alternativen."
             primaryAction={{ href: "/services", label: t("allServices") }}
           />
         )}

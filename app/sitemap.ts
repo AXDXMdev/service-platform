@@ -18,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/agb",
     "/cookie-einstellungen",
     "/plattform-beschwerden",
+    "/report",
   ]
 
   const localSeoRoutes = seoCities.flatMap((city) =>

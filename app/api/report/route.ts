@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     return apiError(
       503,
       "configuration_error",
-      "Meldeprozess benoetigt SUPABASE_SERVICE_ROLE_KEY auf dem Server."
+      "Meldeprozess ist gerade nicht verfügbar. Bitte kontaktiere den Support direkt per E-Mail."
     )
   }
 

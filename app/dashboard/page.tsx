@@ -490,7 +490,7 @@ export default function Dashboard() {
                               )
                             }
                           >
-                            Abschliessen
+                            Abschließen
                           </button>
                         )}
                         <button

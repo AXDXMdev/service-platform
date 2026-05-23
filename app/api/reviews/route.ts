@@ -17,7 +17,7 @@ export function createReviewsPostHandler(deps: ReviewRouteDeps) {
   return async function POST(request: Request) {
     const ip = deps.getRequestIp(request)
     if (deps.isRateLimited(`reviews:${ip}`, 12, 10 * 60 * 1000)) {
-      return apiError(429, "rate_limited", "Zu viele Bewertungsversuche in kurzer Zeit. Bitte spaeter erneut.")
+      return apiError(429, "rate_limited", "Zu viele Bewertungsversuche in kurzer Zeit. Bitte später erneut.")
     }
 
     const auth = await deps.requireUserContext(request)

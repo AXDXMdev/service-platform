@@ -79,6 +79,7 @@ test("marketplace pages expose server-side SEO metadata and JSON-LD", () => {
   const servicesLayout = read("app/services/layout.tsx")
   const serviceLayout = read("app/service/[id]/layout.tsx")
   const providerLayout = read("app/provider/[id]/layout.tsx")
+  const linksPage = read("app/links/page.tsx")
   const seo = read("lib/seo.ts")
 
   assert.match(servicesLayout, /servicesMarketplaceJsonLd/)
@@ -86,9 +87,30 @@ test("marketplace pages expose server-side SEO metadata and JSON-LD", () => {
   assert.match(serviceLayout, /serviceDetailJsonLd/)
   assert.match(providerLayout, /generateMetadata/)
   assert.match(providerLayout, /providerProfileJsonLd/)
+  assert.match(linksPage, /utm_source=tiktok/)
+  assert.match(linksPage, /utm_source=instagram/)
+  assert.match(linksPage, /utm_source=youtube/)
+  assert.match(linksPage, /utm_source=linkedin/)
   assert.match(seo, /"@type": "CollectionPage"/)
   assert.match(seo, /"@type": "Service"/)
   assert.match(seo, /"@type": "ProfilePage"/)
+})
+
+test("open launch social and operations documents exist", () => {
+  const requiredFiles = [
+    "docs/open-launch-checklist.md",
+    "content/social/handles-checklist.md",
+    "content/social/bios.md",
+    "content/social/hooks.md",
+    "content/social/captions.md",
+    "content/social/posting-plan.md",
+  ]
+
+  for (const relativePath of requiredFiles) {
+    const absolutePath = path.join(root, relativePath)
+    assert.equal(fs.existsSync(absolutePath), true, `${relativePath} is missing`)
+    assert.match(fs.readFileSync(absolutePath, "utf8"), /Hilfinio|Launch|Social|Hook|Caption/)
+  }
 })
 
 test("service detail experience includes conversion and trust components", () => {

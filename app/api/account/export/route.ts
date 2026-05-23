@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     return apiError(
       503,
       "configuration_error",
-      "Datenexport benoetigt SUPABASE_SERVICE_ROLE_KEY auf dem Server."
+      "Datenexport ist gerade nicht verfügbar. Bitte versuche es später erneut oder kontaktiere den Support."
     )
   }
 
@@ -95,8 +95,8 @@ export async function GET(request: Request) {
     sentChatMessages: chatsResult.data ?? [],
     verificationRequests: verificationResult.data ?? [],
     notes: [
-      "Der Export enthaelt deine eigenen Konto-, Profil- und Inhaltsdaten in strukturierter Form.",
-      "Daten anderer Nutzer werden bewusst nicht vollstaendig exportiert, auch wenn sie in gemeinsamen Prozessen vorkommen.",
+      "Der Export enthält deine eigenen Konto-, Profil- und Inhaltsdaten in strukturierter Form.",
+      "Daten anderer Nutzer werden bewusst nicht vollständig exportiert, auch wenn sie in gemeinsamen Prozessen vorkommen.",
     ],
   }
 
