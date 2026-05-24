@@ -50,6 +50,10 @@ jobs:
       - name: Test
         run: npm test
 
+      - name: Install mobile dependencies
+        run: npm ci
+        working-directory: mobile
+
       - name: Mobile typecheck
         run: npm run mobile:type-check
 
