@@ -34,6 +34,7 @@ export type Service = {
   availability_note?: string | null
   is_premium?: boolean | null
   boost_until?: string | null
+  is_active?: boolean | null
 }
 
 export type ServiceRequest = {

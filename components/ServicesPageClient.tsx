@@ -10,13 +10,12 @@ import {
 } from "@/app/serviceCatalog"
 import { formatDistanceKm, getDistanceKm, type Coords } from "@/app/location"
 import { useLanguage } from "@/components/LanguageProvider"
-import { PILOT_MODE_ENABLED, isPilotCity, pilotCityLabel } from "@/lib/pilotMode"
+import { PILOT_MODE_ENABLED, isPilotCity } from "@/lib/pilotMode"
 import { getCached, setCached } from "@/lib/clientCache"
 import { featureFlags } from "@/lib/featureFlags"
 import ServiceListingCard from "@/components/ServiceListingCard"
 import { useSiteSettings } from "@/components/SiteSettingsProvider"
 import { getServicesCatalogData } from "@/lib/publicCatalogApi"
-import MarketplaceTrustBar from "@/components/MarketplaceTrustBar"
 
 type SortMode = "rating" | "price" | "distance" | "newest"
 
@@ -96,6 +95,9 @@ export default function ServicesPageClient({
   const filteredServices = useMemo(
     () =>
       services.filter((service) => {
+        const isPubliclyVisible = service.is_verified === true && service.is_active !== false
+        if (!isPubliclyVisible) return false
+
         const inPilotScope =
           !PILOT_MODE_ENABLED || isPilotCity(service.city ?? undefined)
 
@@ -295,27 +297,6 @@ export default function ServicesPageClient({
               </button>
             )}
           </div>
-          {PILOT_MODE_ENABLED && (
-            <div className="panel-muted mt-4 rounded-[12px] p-4">
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                {t("pilotBannerTitle")}
-              </p>
-              <p className="mt-1 text-sm text-slate-700 dark:text-slate-300">
-                {t("pilotBannerText")}
-              </p>
-              <div className="mt-2 flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-[var(--brand)]/10 px-2.5 py-1 text-xs font-semibold text-[var(--brand)]">
-                  {pilotCityLabel()}
-                </span>
-                <Link
-                  href="/waitlist"
-                  className="text-sm font-semibold text-[var(--brand)] hover:underline"
-                >
-                  {t("waitlistCta")}
-                </Link>
-              </div>
-            </div>
-          )}
           {distanceMessage && (
             <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
               {distanceMessage}
@@ -352,12 +333,6 @@ export default function ServicesPageClient({
         </div>
       </section>
 
-      <section className="px-6 pt-8 sm:px-10 lg:px-12">
-        <div className="mx-auto max-w-7xl">
-          <MarketplaceTrustBar />
-        </div>
-      </section>
-
       <section className="px-6 py-10 sm:px-10 lg:px-12">
         <div className="mx-auto max-w-7xl animate-float-up">
           <div className="mb-6 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
@@ -369,11 +344,11 @@ export default function ServicesPageClient({
                   : `${sortedServices.length} ${sortedServices.length === 1 ? t("matchingService") : t("matchingServices")}`}
               </p>
             </div>
-            <p className="card-surface rounded-full px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300">
-              {viewerCoords
-                ? "Entfernungen werden grob angezeigt."
-                : t("verifiedSoon")}
-            </p>
+            {viewerCoords && (
+              <p className="card-surface rounded-full px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300">
+                Entfernungen werden grob angezeigt.
+              </p>
+            )}
           </div>
 
           {loading && (

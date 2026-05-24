@@ -70,18 +70,23 @@ export async function loadHomeFeaturedData(supabase: SupabasePublicClient) {
   const serviceResult = await selectFirstAvailable(
     supabase,
     [
-      "id,title,description,created_at,provider_name,user_id,city,district,is_verified,is_volunteer,price_from_eur,media_urls",
+      "id,title,description,created_at,provider_name,user_id,city,district,is_verified,is_active,is_volunteer,price_from_eur,media_urls",
       "id,title,description,created_at,provider_name,user_id,city,district,is_verified,is_volunteer,media_urls",
       "id,title,description,created_at,provider_name,user_id,city,district,is_verified,is_volunteer",
       "id,title,description,created_at,provider_name,user_id,city,district,is_verified",
     ],
-    async (select) =>
-      supabase
+    async (select) => {
+      let query = supabase
         .from("services")
         .select(select)
+        .eq("is_verified", true)
         .order("created_at", { ascending: false })
         .limit(6)
-        .returns<Service[]>()
+      if (select.includes("is_active")) {
+        query = query.eq("is_active", true)
+      }
+      return query.returns<Service[]>()
+    }
   )
 
   const featuredServices = serviceResult.data
@@ -108,17 +113,22 @@ export async function loadServicesCatalogData(supabase: SupabasePublicClient) {
   const serviceResult = await selectFirstAvailable(
     supabase,
     [
-      "id,title,description,created_at,provider_name,user_id,city,district,years_experience,service_radius_km,approx_lat,approx_lng,supports_sign_language,text_chat_only,barrier_free_support,is_volunteer,is_verified,media_urls,is_premium,boost_until,price_from_eur",
+      "id,title,description,created_at,provider_name,user_id,city,district,years_experience,service_radius_km,approx_lat,approx_lng,supports_sign_language,text_chat_only,barrier_free_support,is_volunteer,is_verified,is_active,media_urls,is_premium,boost_until,price_from_eur",
       "id,title,description,created_at,provider_name,user_id,city,district,years_experience,service_radius_km,approx_lat,approx_lng,supports_sign_language,text_chat_only,barrier_free_support,is_volunteer,is_verified,is_premium,boost_until,price_from_eur",
       "id,title,description,created_at,provider_name,user_id,city,district,years_experience,service_radius_km,approx_lat,approx_lng,is_verified,media_urls,is_premium,boost_until",
       "id,title,description,created_at,provider_name,user_id,city,district,years_experience,service_radius_km,approx_lat,approx_lng,is_verified,is_premium,boost_until",
       "id,title,description,created_at,provider_name,user_id,city,district,is_verified",
     ],
-    async (select) =>
-      supabase
+    async (select) => {
+      let query = supabase
         .from("services")
         .select(select)
-        .returns<Service[]>()
+        .eq("is_verified", true)
+      if (select.includes("is_active")) {
+        query = query.eq("is_active", true)
+      }
+      return query.returns<Service[]>()
+    }
   )
 
   const services = serviceResult.data

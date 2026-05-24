@@ -68,20 +68,24 @@ function ServiceListingCard({
       </h3>
 
       <div className="mt-3 flex flex-wrap gap-2 text-xs">
-        <span className="rounded-full bg-slate-500/10 px-2.5 py-1 font-semibold text-slate-700 dark:text-slate-300">
-          {service.city
-            ? `${service.city}${service.district ? `, ${service.district}` : ""}`
-            : t("serviceCardLocationUnknown")}
-        </span>
+        {service.city && (
+          <span className="rounded-full bg-slate-500/10 px-2.5 py-1 font-semibold text-slate-700 dark:text-slate-300">
+            {service.city}{service.district ? `, ${service.district}` : ""}
+          </span>
+        )}
         <span className="rounded-full bg-blue-500/10 px-2.5 py-1 font-semibold text-blue-700 dark:text-blue-300">
           {t("serviceCardPriceFrom")}: {service.price_from_eur ? `${service.price_from_eur} EUR` : t("serviceCardOnRequest")}
         </span>
-        <span className="rounded-full bg-amber-500/10 px-2.5 py-1 font-semibold text-amber-700 dark:text-amber-300">
-          {t("serviceCardRating")}: {ratingAverage != null ? `${ratingAverage}/5 (${ratingCount})` : t("serviceCardNew")}
-        </span>
-        <span className="rounded-full bg-emerald-500/10 px-2.5 py-1 font-semibold text-emerald-700 dark:text-emerald-300">
-          {service.is_verified ? t("serviceCardVerified") : t("serviceCardPending")}
-        </span>
+        {ratingAverage != null && (
+          <span className="rounded-full bg-amber-500/10 px-2.5 py-1 font-semibold text-amber-700 dark:text-amber-300">
+            {t("serviceCardRating")}: {ratingAverage}/5 ({ratingCount})
+          </span>
+        )}
+        {service.is_verified && (
+          <span className="rounded-full bg-emerald-500/10 px-2.5 py-1 font-semibold text-emerald-700 dark:text-emerald-300">
+            {t("serviceCardVerified")}
+          </span>
+        )}
         {distanceLabel && (
           <span className="rounded-full bg-violet-500/10 px-2.5 py-1 font-semibold text-violet-700 dark:text-violet-300">
             {distanceLabel}
@@ -97,15 +101,6 @@ function ServiceListingCard({
       <p className="mt-3 line-clamp-2 text-sm leading-6 text-slate-700 dark:text-slate-300">
         {service.description || t("serviceCardDetailsSoon")}
       </p>
-
-      <div className="mt-4 grid gap-2 text-xs text-slate-600 dark:text-slate-300 sm:grid-cols-2">
-        <span className="panel-muted rounded-[10px] px-3 py-2 font-semibold">
-          Anfrage ohne Vorkasse
-        </span>
-        <span className="panel-muted rounded-[10px] px-3 py-2 font-semibold">
-          Antwort im Chat
-        </span>
-      </div>
 
       <div className="mt-auto grid grid-cols-2 gap-2 pt-4">
         <Link

@@ -64,13 +64,16 @@ test("frontend forms expose accessible input names and mobile-safe submit flow",
   assert.match(serviceDetail, /htmlFor="customer-budget"/)
 })
 
-test("service discovery includes trust, empty state, and filter reset affordances", () => {
+test("service discovery includes clean public listing, empty state, and filter reset affordances", () => {
   const servicesPage = read("components/ServicesPageClient.tsx")
+  const serviceCard = read("components/ServiceListingCard.tsx")
   const providerPage = read("app/provider/[id]/page.tsx")
 
-  assert.match(servicesPage, /MarketplaceTrustBar/)
+  assert.match(servicesPage, /isPubliclyVisible/)
+  assert.match(servicesPage, /service\.is_verified === true/)
   assert.match(servicesPage, /Filter zurücksetzen/)
   assert.match(servicesPage, /Noch keine Anbieter|Regionaler Marktplatz im Aufbau/)
+  assert.doesNotMatch(serviceCard, /Anfrage ohne Vorkasse|Antwort im Chat|Prüfung läuft|serviceCardPending/)
   assert.match(providerPage, /MarketplaceTrustBar/)
   assert.match(providerPage, /Anfragen/)
 })
