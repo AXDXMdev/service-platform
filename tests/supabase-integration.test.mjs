@@ -14,7 +14,22 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-const hasIntegrationEnv = Boolean(supabaseUrl && supabaseAnonKey && supabaseServiceRoleKey)
+function hasRealSupabaseIntegrationEnv() {
+  if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceRoleKey) {
+    return false
+  }
+
+  const normalizedUrl = supabaseUrl.toLowerCase()
+  const hasPlaceholderUrl =
+    normalizedUrl.includes("example.supabase.co") ||
+    normalizedUrl.includes("localhost") ||
+    normalizedUrl.includes("127.0.0.1")
+  const hasPlaceholderKeys = [supabaseAnonKey, supabaseServiceRoleKey].some((key) => key.startsWith("ci-"))
+
+  return normalizedUrl.startsWith("https://") && normalizedUrl.endsWith(".supabase.co") && !hasPlaceholderUrl && !hasPlaceholderKeys
+}
+
+const hasIntegrationEnv = hasRealSupabaseIntegrationEnv()
 
 const integrationUsers = {
   provider: {
