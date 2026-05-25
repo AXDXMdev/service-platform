@@ -83,9 +83,9 @@ export const defaultThemeSettings: ThemeSettings = {
 
 export const defaultSiteSettings: SiteSettings = {
   key: "default",
-  hero_title: "Hilfinio - lokale Hilfe, die wirklich weiterhilft.",
+  hero_title: "Finde Menschen in deiner Nähe, die dir wirklich helfen.",
   hero_subheadline:
-    "Finde geprüfte Anbieter für Alltag, Zuhause und kleine Notfälle. Schnell, lokal und verständlich.",
+    "Ob Reinigung, Umzug, Möbelaufbau oder Nachhilfe: Hilfinio bringt dich schnell zu passenden Anbietern in Stuttgart, Esslingen und Umgebung.",
   hero_cta_find: null,
   hero_cta_offer: null,
   trust_badges: [],
@@ -97,8 +97,8 @@ export const defaultSiteSettings: SiteSettings = {
 export const defaultPageContents: PageContent[] = [
   {
     slug: "home",
-    title: "Hilfinio - lokale Hilfe, die wirklich weiterhilft.",
-    subtitle: "Finde passende Hilfe schnell, lokal und transparent.",
+    title: "Finde Menschen in deiner Nähe, die dir wirklich helfen.",
+    subtitle: "Schnelle lokale Hilfe für Alltag, Zuhause und kleine Notfälle.",
     content: "Startseite mit Services, Vertrauenselementen und Pilotstädten.",
     meta_title: "Hilfinio - Lokale Dienstleister finden",
     meta_description: "Hilfinio verbindet Kunden und Anbieter für lokale Dienstleistungen.",

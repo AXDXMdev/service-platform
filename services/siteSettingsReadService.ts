@@ -35,6 +35,14 @@ function defaultContentMap() {
 }
 
 const publicCopyReplacements: Array<[RegExp, string]> = [
+  [
+    /Hilfinio - lokale Hilfe, die wirklich weiterhilft\./g,
+    "Finde Menschen in deiner Nähe, die dir wirklich helfen.",
+  ],
+  [
+    /Finde geprüfte Anbieter für Alltag, Zuhause und kleine Notfälle\. Schnell, lokal und verständlich\./g,
+    "Ob Reinigung, Umzug, Möbelaufbau oder Nachhilfe: Hilfinio bringt dich schnell zu passenden Anbietern in Stuttgart, Esslingen und Umgebung.",
+  ],
   [/\bTaskora\b/g, "Hilfinio"],
   [/\bHilfino\b/g, "Hilfinio"],
   [/\bfuer\b/g, "für"],

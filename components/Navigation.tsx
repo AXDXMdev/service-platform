@@ -74,14 +74,70 @@ export default function Navigation() {
         </div>
 
         <div className="hidden shrink-0 items-center gap-1.5 sm:flex sm:gap-2">
-          <AccessibilityControls />
-          <ThemeToggle />
-          <LanguageSwitcher />
           <NotificationBell />
+          <details className="nav-preferences relative">
+            <summary className="btn-secondary flex min-h-10 cursor-pointer list-none items-center gap-2 px-3 py-2 text-sm font-semibold [&::-webkit-details-marker]:hidden">
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path d="M12 8.25a3.75 3.75 0 1 1 0 7.5 3.75 3.75 0 0 1 0-7.5Z" stroke="currentColor" strokeWidth="1.8" />
+                <path d="M19 13.2v-2.4l-2.05-.38a5.6 5.6 0 0 0-.65-1.55l1.18-1.72-1.7-1.7-1.72 1.18a5.6 5.6 0 0 0-1.55-.65L12.13 4h-2.4l-.38 2.05c-.56.15-1.08.37-1.55.65L6.08 5.52l-1.7 1.7 1.18 1.72c-.28.47-.5.99-.65 1.55L2.86 10.87v2.4l2.05.38c.15.56.37 1.08.65 1.55l-1.18 1.72 1.7 1.7 1.72-1.18c.47.28.99.5 1.55.65l.38 2.05h2.4l.38-2.05c.56-.15 1.08-.37 1.55-.65l1.72 1.18 1.7-1.7-1.18-1.72c.28-.47.5-.99.65-1.55L19 13.2Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+              </svg>
+              <span className="hidden xl:inline">{t("navPreferences")}</span>
+              <span className="sr-only">{t("navPreferences")}</span>
+            </summary>
+            <div className="card-surface absolute right-0 z-50 mt-2 flex w-[360px] max-w-[calc(100vw-2rem)] flex-col gap-3 rounded-[14px] p-3 shadow-xl">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  {t("languageLabel")}
+                </span>
+                <LanguageSwitcher />
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  {t("themeSwitch")}
+                </span>
+                <ThemeToggle />
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  {t("navAccessibility")}
+                </span>
+                <AccessibilityControls />
+              </div>
+            </div>
+          </details>
           <AuthButton />
         </div>
         <div className="flex shrink-0 items-center gap-1.5 sm:hidden">
           <NotificationBell />
+          <details className="nav-preferences relative">
+            <summary className="btn-secondary flex min-h-10 cursor-pointer list-none items-center gap-2 px-3 py-2 text-sm font-semibold [&::-webkit-details-marker]:hidden">
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path d="M12 8.25a3.75 3.75 0 1 1 0 7.5 3.75 3.75 0 0 1 0-7.5Z" stroke="currentColor" strokeWidth="1.8" />
+                <path d="M19 13.2v-2.4l-2.05-.38a5.6 5.6 0 0 0-.65-1.55l1.18-1.72-1.7-1.7-1.72 1.18a5.6 5.6 0 0 0-1.55-.65L12.13 4h-2.4l-.38 2.05c-.56.15-1.08.37-1.55.65L6.08 5.52l-1.7 1.7 1.18 1.72c-.28.47-.5.99-.65 1.55L2.86 10.87v2.4l2.05.38c.15.56.37 1.08.65 1.55l-1.18 1.72 1.7 1.7 1.72-1.18c.47.28.99.5 1.55.65l.38 2.05h2.4l.38-2.05c.56-.15 1.08-.37 1.55-.65l1.72 1.18 1.7-1.7-1.18-1.72c.28-.47.5-.99.65-1.55L19 13.2Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+              </svg>
+              <span className="sr-only">{t("navPreferences")}</span>
+            </summary>
+            <div className="card-surface absolute right-0 z-50 mt-2 flex w-[min(21rem,calc(100vw-1.5rem))] flex-col gap-3 rounded-[14px] p-3 shadow-xl">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  {t("languageLabel")}
+                </span>
+                <LanguageSwitcher />
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  {t("themeSwitch")}
+                </span>
+                <ThemeToggle />
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  {t("navAccessibility")}
+                </span>
+                <AccessibilityControls />
+              </div>
+            </div>
+          </details>
           <AuthButton />
         </div>
       </div>
