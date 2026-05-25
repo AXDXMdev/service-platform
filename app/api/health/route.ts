@@ -15,7 +15,8 @@ function buildHealthSnapshot() {
     checkEnv("NEXT_PUBLIC_SUPABASE_URL"),
     checkEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
     checkEnv("SUPABASE_SERVICE_ROLE_KEY"),
-    checkEnv("ADMIN_PANEL_PASSWORD"),
+    checkEnv("ADMIN_PANEL_PASSWORD", false),
+    checkEnv("ADMIN_PANEL_SECRET", false),
     checkEnv("ADMIN_PANEL_TOKEN"),
     checkEnv("NEXT_PUBLIC_SITE_URL", false),
   ]

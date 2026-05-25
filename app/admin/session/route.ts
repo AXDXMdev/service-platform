@@ -15,7 +15,7 @@ export async function GET() {
     return apiError(
       503,
       "configuration_error",
-      "Admin-Login ist noch nicht vollständig konfiguriert (ADMIN_PANEL_PASSWORD und ADMIN_PANEL_TOKEN erforderlich)."
+      "Admin-Login ist noch nicht vollständig konfiguriert (ADMIN_PANEL_PASSWORD oder ADMIN_PANEL_SECRET sowie ADMIN_PANEL_TOKEN erforderlich)."
     )
   }
 
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
   }
 
   if (!isAdminConfigured()) {
-    return apiError(503, "configuration_error", "ADMIN_PANEL_PASSWORD oder ADMIN_PANEL_TOKEN fehlt.")
+    return apiError(503, "configuration_error", "ADMIN_PANEL_PASSWORD/ADMIN_PANEL_SECRET oder ADMIN_PANEL_TOKEN fehlt.")
   }
 
   const password = getAdminPassword()

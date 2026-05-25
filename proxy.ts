@@ -93,7 +93,8 @@ export function proxy(request: NextRequest) {
   if (
     !isAdminPath ||
     pathname.startsWith("/admin/login") ||
-    pathname.startsWith("/admin/session")
+    pathname.startsWith("/admin/session") ||
+    pathname.startsWith("/admin/role")
   ) {
     return withCsp(request, undefined, cspMode)
   }

@@ -4,7 +4,8 @@ import { getServerEnv } from "@/lib/env"
 export const ADMIN_COOKIE = "taskora_admin_session"
 
 export function getAdminPassword() {
-  return getServerEnv().ADMIN_PANEL_PASSWORD ?? ""
+  const env = getServerEnv()
+  return env.ADMIN_PANEL_PASSWORD ?? env.ADMIN_PANEL_SECRET ?? ""
 }
 
 export function getAdminToken() {

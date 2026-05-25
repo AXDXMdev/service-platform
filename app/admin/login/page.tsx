@@ -115,7 +115,13 @@ export default function AdminLoginPage() {
       setLoading(false)
       await fetch("/admin/session", { method: "DELETE", credentials: "same-origin" })
       await supabase.auth.signOut()
-      setMessage(await readApiErrorMessage(roleResponse))
+      const roleMessage =
+        roleResponse.status === 401
+          ? "Die Supabase-Session konnte für den Rollencheck nicht gelesen werden. Bitte erneut anmelden."
+          : roleResponse.status === 503
+            ? "Der Admin-Rollencheck ist serverseitig nicht vollständig konfiguriert. Bitte Supabase-ENV prüfen."
+            : await readApiErrorMessage(roleResponse)
+      setMessage(roleMessage)
       return
     }
 
@@ -125,7 +131,7 @@ export default function AdminLoginPage() {
       setLoading(false)
       await fetch("/admin/session", { method: "DELETE", credentials: "same-origin" })
       await supabase.auth.signOut()
-      setMessage("Kein Admin-Profil gefunden (profiles). Zugriff verweigert.")
+      setMessage("Für dieses Konto ist keine Admin-/Moderator-Rolle in Supabase hinterlegt.")
       return
     }
 
@@ -133,7 +139,7 @@ export default function AdminLoginPage() {
       setLoading(false)
       await fetch("/admin/session", { method: "DELETE", credentials: "same-origin" })
       await supabase.auth.signOut()
-      setMessage("Kein Admin-/Moderator-Profil. Zugriff verweigert.")
+      setMessage("Dieses Konto ist angemeldet, aber nicht als Admin oder Moderator freigeschaltet.")
       return
     }
 
@@ -148,7 +154,7 @@ export default function AdminLoginPage() {
         <section className="card-surface rounded-[14px] p-7">
           <h1 className="text-3xl font-semibold">Admin Login</h1>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-            Nur mit Admin-Passwort zugänglich.
+            Melde dich mit deinem Supabase-Konto und dem serverseitigen Admin-Schlüssel an.
           </p>
 
           {message && (
@@ -164,7 +170,7 @@ export default function AdminLoginPage() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               className="field-input mt-2 min-h-12 w-full rounded-[10px] px-4"
-              placeholder="admin@hilfino.de"
+              placeholder="admin@hilfinio.de"
               autoComplete="email"
             />
           </label>
@@ -182,15 +188,18 @@ export default function AdminLoginPage() {
           </label>
 
           <label className="mt-3 block text-sm font-semibold text-slate-800 dark:text-slate-200">
-            Admin Panel Schlüssel
+            Admin-Schlüssel
             <input
               type="password"
               value={adminKey}
               onChange={(event) => setAdminKey(event.target.value)}
               className="field-input mt-2 min-h-12 w-full rounded-[10px] px-4"
-              placeholder="ADMIN_PANEL_PASSWORD"
+              placeholder="Serverseitiger Admin-Schlüssel"
               autoComplete="off"
             />
+            <span className="mt-2 block text-xs font-normal leading-5 text-slate-500 dark:text-slate-400">
+              Das ist der in Vercel gesetzte Admin-Schlüssel, nicht dein Supabase-Passwort.
+            </span>
           </label>
 
           <button

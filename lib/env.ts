@@ -18,6 +18,7 @@ const publicEnvSchema = z.object({
 
 const serverEnvSchema = publicEnvSchema.extend({
   SUPABASE_SERVICE_ROLE_KEY: z.string().trim().optional().or(z.literal("")).transform((value) => value || null),
+  ADMIN_PANEL_SECRET: z.string().trim().optional().or(z.literal("")).transform((value) => value || null),
   ADMIN_PANEL_PASSWORD: z.string().trim().optional().or(z.literal("")).transform((value) => value || null),
   ADMIN_PANEL_TOKEN: z.string().trim().optional().or(z.literal("")).transform((value) => value || null),
   UPSTASH_REDIS_REST_URL: optionalUrl,
@@ -50,11 +51,12 @@ export function getProductionReadinessIssues() {
   if (!env.NEXT_PUBLIC_SUPABASE_URL) issues.push("NEXT_PUBLIC_SUPABASE_URL fehlt.")
   if (!env.NEXT_PUBLIC_SUPABASE_ANON_KEY) issues.push("NEXT_PUBLIC_SUPABASE_ANON_KEY fehlt.")
   if (!env.SUPABASE_SERVICE_ROLE_KEY) issues.push("SUPABASE_SERVICE_ROLE_KEY fehlt.")
-  if (!env.ADMIN_PANEL_PASSWORD) issues.push("ADMIN_PANEL_PASSWORD fehlt.")
+  const adminPassword = env.ADMIN_PANEL_PASSWORD ?? env.ADMIN_PANEL_SECRET
+  if (!adminPassword) issues.push("ADMIN_PANEL_PASSWORD oder ADMIN_PANEL_SECRET fehlt.")
   if (!env.ADMIN_PANEL_TOKEN) issues.push("ADMIN_PANEL_TOKEN fehlt.")
 
-  if (env.ADMIN_PANEL_PASSWORD && env.ADMIN_PANEL_PASSWORD.length < 16) {
-    issues.push("ADMIN_PANEL_PASSWORD sollte mindestens 16 Zeichen lang sein.")
+  if (adminPassword && adminPassword.length < 16) {
+    issues.push("ADMIN_PANEL_PASSWORD/ADMIN_PANEL_SECRET sollte mindestens 16 Zeichen lang sein.")
   }
 
   if (env.ADMIN_PANEL_TOKEN && env.ADMIN_PANEL_TOKEN.length < 32) {
