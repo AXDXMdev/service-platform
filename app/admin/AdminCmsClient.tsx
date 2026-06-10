@@ -7,6 +7,7 @@ import { SITE_ASSET_POLICY, validateUploadFile } from "@/lib/mediaUpload"
 import { toValidHttpUrls } from "@/lib/validation"
 import { completeSignedUpload, requestSignedUpload } from "@/lib/authenticatedApi"
 import { getAdminOverview } from "@/app/admin/adminOverviewApi"
+import { getAdminOpsData, type AdminOpsPayload } from "@/app/admin/adminOpsApi"
 import { postAdminCmsAction } from "@/app/admin/adminCmsApi"
 import {
   buildApproveReviewAction,
@@ -46,6 +47,7 @@ import { AdminReviewModerationModule } from "@/app/admin/modules/AdminReviewMode
 import { AdminServicesOverviewModule } from "@/app/admin/modules/AdminServicesOverviewModule"
 import { AdminVerificationModule } from "@/app/admin/modules/AdminVerificationModule"
 import { AdminWaitlistModule } from "@/app/admin/modules/AdminWaitlistModule"
+import { AdminMarketplaceOpsModule } from "@/app/admin/modules/AdminMarketplaceOpsModule"
 
 type SiteContentEntry = {
   key: string
@@ -80,6 +82,9 @@ export default function AdminCmsClient() {
   const [pendingReviews, setPendingReviews] = useState<PendingReviewRow[]>([])
   const [auditEvents, setAuditEvents] = useState<AuditEventRow[]>([])
   const [actorUserId, setActorUserId] = useState<string | null>(null)
+  const [opsData, setOpsData] = useState<AdminOpsPayload | null>(null)
+  const [opsLoading, setOpsLoading] = useState(false)
+  const [opsError, setOpsError] = useState("")
 
   const [newCategory, setNewCategory] = useState<NewCategoryDraft>(emptyNewCategory)
 
@@ -311,12 +316,25 @@ export default function AdminCmsClient() {
     }
   }, [])
 
+  const loadOps = useCallback(async () => {
+    setOpsLoading(true)
+    setOpsError("")
+    try {
+      const ops = await getAdminOpsData()
+      setOpsData(ops)
+    } catch (error) {
+      setOpsError(error instanceof Error ? error.message : "Ops-Daten konnten nicht geladen werden.")
+    } finally {
+      setOpsLoading(false)
+    }
+  }, [])
+
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
-      void loadAll().finally(() => setLoading(false))
+      void Promise.all([loadAll(), loadOps()]).finally(() => setLoading(false))
     })
     return () => window.cancelAnimationFrame(frame)
-  }, [loadAll])
+  }, [loadAll, loadOps])
 
   const uploadSiteAsset = async (file: File) => {
     const validation = validateUploadFile(file, SITE_ASSET_POLICY)
@@ -570,6 +588,13 @@ export default function AdminCmsClient() {
           requests={providerVerificationRequests}
           onApprove={approveProviderVerification}
           onReject={rejectProviderVerification}
+        />
+
+        <AdminMarketplaceOpsModule
+          ops={opsData}
+          loading={opsLoading}
+          error={opsError}
+          onRefresh={loadOps}
         />
 
         <AdminReviewModerationModule
