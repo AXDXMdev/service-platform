@@ -23,6 +23,13 @@ export default function AdminLoginPage() {
 
   useEffect(() => {
     let cancelled = false
+    const routeError = new URLSearchParams(window.location.search).get("error")
+    if (routeError) {
+      window.requestAnimationFrame(() => {
+        if (!cancelled) setMessage(routeError)
+      })
+    }
+
     ;(async () => {
       try {
         const res = await fetch("/admin/session", { method: "GET", credentials: "same-origin" })
@@ -189,7 +196,7 @@ export default function AdminLoginPage() {
             </p>
           )}
 
-          <form onSubmit={submit}>
+          <form action="/admin/login-submit" method="post" onSubmit={submit}>
             <label htmlFor="admin-email" className="mt-6 block text-sm font-semibold text-slate-800 dark:text-slate-200">
               Admin E-Mail
               <input

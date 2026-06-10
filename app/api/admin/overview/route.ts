@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 import { apiError, apiOk } from "@/lib/apiResponse"
-import { ADMIN_COOKIE, hasValidAdminCookie, isAdminConfigured } from "@/lib/adminSession"
+import { ADMIN_ACTOR_COOKIE, ADMIN_COOKIE, hasValidAdminCookie, isAdminConfigured } from "@/lib/adminSession"
 import { requireAuthenticatedUser } from "@/lib/serverAuth"
 import { createRequestLogContext, logServerError, logServerInfo } from "@/lib/serverLogger"
 import { createServerSupabaseAdminClient, getSupabaseServiceRoleEnv } from "@/lib/serverSupabase"
@@ -9,6 +9,7 @@ import { loadAdminOverview } from "@/services/adminOverviewService"
 type AdminOverviewRouteDeps = {
   requireUserContext: typeof requireAuthenticatedUser
   getAdminCookieValue: () => Promise<string | undefined>
+  getAdminActorCookieValue: () => Promise<string | undefined>
   hasAdminSession: (value: string | undefined) => boolean
   hasSupabaseEnv: () => boolean
   createAdminClient: typeof createServerSupabaseAdminClient
@@ -20,6 +21,14 @@ const defaultDependencies: AdminOverviewRouteDeps = {
   getAdminCookieValue: async () => {
     const store = await cookies()
     return store.get(ADMIN_COOKIE)?.value
+  },
+  getAdminActorCookieValue: async () => {
+    try {
+      const store = await cookies()
+      return store.get(ADMIN_ACTOR_COOKIE)?.value
+    } catch {
+      return undefined
+    }
   },
   hasAdminSession: (value) => isAdminConfigured() && hasValidAdminCookie(value),
   hasSupabaseEnv: () => Boolean(getSupabaseServiceRoleEnv()),
@@ -40,9 +49,9 @@ export function createAdminOverviewGetHandler(overrides: Partial<AdminOverviewRo
     }
 
     const auth = await deps.requireUserContext(request)
-    if (auth.error || !auth.user) {
-      return auth.error ?? apiError(401, "unauthorized", "Nicht eingeloggt.")
-    }
+    const fallbackActorUserId = auth.error || !auth.user ? await deps.getAdminActorCookieValue() : undefined
+    const actorUserId = auth.user?.id ?? fallbackActorUserId
+    if (!actorUserId) return auth.error ?? apiError(401, "unauthorized", "Nicht eingeloggt.")
 
     if (!deps.hasSupabaseEnv()) {
       return apiError(
@@ -57,12 +66,12 @@ export function createAdminOverviewGetHandler(overrides: Partial<AdminOverviewRo
       return apiError(503, "configuration_error", "Supabase Admin Client konnte nicht initialisiert werden.")
     }
 
-    const result = await deps.loadOverview(admin as never, auth.user.id)
+    const result = await deps.loadOverview(admin as never, actorUserId)
     if (!result.ok) {
       if (result.status >= 500) {
         logServerError("Admin overview load failed", {
           ...logContext,
-          userId: auth.user.id,
+          userId: actorUserId,
           durationMs: Date.now() - startedAt,
           message: result.message,
         })
@@ -76,7 +85,7 @@ export function createAdminOverviewGetHandler(overrides: Partial<AdminOverviewRo
 
     logServerInfo("Admin overview loaded", {
       ...logContext,
-      userId: auth.user.id,
+      userId: actorUserId,
       role: result.data.role,
       durationMs: Date.now() - startedAt,
     })

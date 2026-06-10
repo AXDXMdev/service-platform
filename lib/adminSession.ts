@@ -2,6 +2,7 @@ import { timingSafeEqual } from "node:crypto"
 import { getServerEnv } from "@/lib/env"
 
 export const ADMIN_COOKIE = "taskora_admin_session"
+export const ADMIN_ACTOR_COOKIE = "hilfinio_admin_actor"
 
 export function getAdminPassword() {
   const env = getServerEnv()
