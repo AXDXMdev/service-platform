@@ -11,6 +11,8 @@ import Navigation from "@/components/Navigation";
 import SiteFooter from "@/components/SiteFooter";
 import JsonLd from "@/components/JsonLd";
 import { getBaseUrl, localMarketplaceJsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
+import { createServerSupabasePublicClient } from "@/lib/serverSupabase";
+import { loadSiteSettingsPayload } from "@/services/siteSettingsReadService";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -60,6 +62,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const adsClient = process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT;
+  const siteSettings = await loadSiteSettingsPayload(createServerSupabasePublicClient());
 
   return (
     <html
@@ -72,7 +75,7 @@ export default async function RootLayout({
         <ThemeProvider>
           <AccessibilityProvider>
             <LanguageProvider>
-              <SiteSettingsProvider>
+              <SiteSettingsProvider initialSettings={siteSettings}>
                 <Navigation />
                 <ClientErrorReporter />
                 {children}

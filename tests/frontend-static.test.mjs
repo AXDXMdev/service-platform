@@ -18,6 +18,8 @@ test("launch-critical frontend routes and boundaries exist", () => {
     "app/provider/[id]/page.tsx",
     "app/login/page.tsx",
     "app/register/page.tsx",
+    "app/beta/page.tsx",
+    "app/api/beta-access/route.ts",
     "app/auth/callback/route.ts",
     "app/dashboard/page.tsx",
     "app/my-requests/page.tsx",

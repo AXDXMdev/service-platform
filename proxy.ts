@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { ADMIN_COOKIE, hasValidAdminCookie, isAdminConfigured } from "@/lib/adminSession"
+import {
+  BETA_ACCESS_COOKIE,
+  hasValidBetaAccess,
+  isBetaExemptPath,
+} from "@/lib/betaAccess"
 
 function createNonce() {
   const value = crypto.randomUUID()
@@ -88,6 +93,15 @@ export function proxy(request: NextRequest) {
     const canonicalUrl = request.nextUrl.clone()
     canonicalUrl.hostname = "hilfinio.de"
     return withCsp(request, NextResponse.redirect(canonicalUrl, 308), cspMode)
+  }
+
+  if (
+    !isBetaExemptPath(pathname) &&
+    !hasValidBetaAccess(request.cookies.get(BETA_ACCESS_COOKIE)?.value)
+  ) {
+    const betaUrl = new URL("/beta", request.url)
+    betaUrl.searchParams.set("next", `${pathname}${request.nextUrl.search}`)
+    return withCsp(request, NextResponse.redirect(betaUrl), cspMode)
   }
 
   if (

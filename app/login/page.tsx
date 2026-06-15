@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useLanguage } from "@/components/LanguageProvider"
-import { humanizeAuthError } from "@/lib/clientErrors"
+import { humanizeAuthCallbackError, humanizeAuthError } from "@/lib/clientErrors"
 import { getAuthRedirectUrl, sanitizeAuthNextPath } from "@/lib/authRedirects"
 import { supabase } from "@/lib/supabaseClient"
 import {
@@ -19,7 +19,11 @@ export default function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState("")
+  const [message, setMessage] = useState(() => {
+    if (typeof window === "undefined") return ""
+    const callbackError = new URLSearchParams(window.location.search).get("error")
+    return humanizeAuthCallbackError(callbackError)
+  })
   const [websiteTrap, setWebsiteTrap] = useState("")
 
   const getSafeRedirectTarget = () => {

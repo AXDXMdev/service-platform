@@ -1,7 +1,9 @@
 "use client"
 
 import Link from "next/link"
+import { useState } from "react"
 import type { AdminOpsPayload } from "@/app/admin/adminOpsApi"
+import { runAdminOpsAction } from "@/app/admin/adminOpsApi"
 import type { RequestSlaTone } from "@/services/adminOpsService"
 
 type AdminMarketplaceOpsModuleProps = {
@@ -45,6 +47,27 @@ function formatDate(value: string | null | undefined) {
   }).format(new Date(value))
 }
 
+function mailtoHref(email: string, subject: string, body: string) {
+  return `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+}
+
+async function copyText(value: string) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(value)
+    return
+  }
+
+  const textarea = document.createElement("textarea")
+  textarea.value = value
+  textarea.style.position = "fixed"
+  textarea.style.opacity = "0"
+  document.body.appendChild(textarea)
+  textarea.focus()
+  textarea.select()
+  document.execCommand("copy")
+  textarea.remove()
+}
+
 function MetricCard({
   label,
   value,
@@ -73,6 +96,36 @@ export function AdminMarketplaceOpsModule({
 }: AdminMarketplaceOpsModuleProps) {
   const marketplace = ops?.marketplace
   const sla = marketplace?.sla
+  const [actionStatus, setActionStatus] = useState("")
+  const [busyRequestId, setBusyRequestId] = useState<string | null>(null)
+
+  const copy = async (value: string, label: string) => {
+    setActionStatus("")
+    try {
+      await copyText(value)
+      setActionStatus(`${label} kopiert.`)
+    } catch {
+      setActionStatus("Kopieren fehlgeschlagen. Bitte Text manuell markieren.")
+    }
+  }
+
+  const runAction = async (
+    requestId: string,
+    action: "provider_contacted" | "request_escalated",
+    note: string
+  ) => {
+    setBusyRequestId(requestId)
+    setActionStatus("")
+    try {
+      await runAdminOpsAction({ requestId, action, note })
+      setActionStatus(action === "request_escalated" ? "Request eskaliert und als urgent markiert." : "Kontaktversuch gespeichert und als high markiert.")
+      onRefresh()
+    } catch (error) {
+      setActionStatus(error instanceof Error ? error.message : "Ops-Aktion fehlgeschlagen.")
+    } finally {
+      setBusyRequestId(null)
+    }
+  }
 
   return (
     <section className="card-surface rounded-[14px] p-6">
@@ -93,6 +146,11 @@ export function AdminMarketplaceOpsModule({
       {error && (
         <p className="mt-4 rounded-[10px] bg-rose-500/10 px-3 py-2 text-sm text-rose-700 dark:text-rose-300">
           {error}
+        </p>
+      )}
+      {actionStatus && (
+        <p className="mt-4 rounded-[10px] bg-slate-100 px-3 py-2 text-sm text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+          {actionStatus}
         </p>
       )}
 
@@ -179,16 +237,67 @@ export function AdminMarketplaceOpsModule({
                         <p className="mt-2 text-xs font-semibold text-slate-600 dark:text-slate-300">
                           Aktion: {request.recommendedAction}
                         </p>
+                        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                          SLA bis {formatDate(request.slaDueAt)} · nächster Touch {formatDate(request.nextTouchAt)}
+                        </p>
                       </div>
                       <div className="flex shrink-0 flex-col gap-2 text-sm">
                         <Link className="action-ghost justify-center" href={`/dashboard/requests/${request.id}`}>
                           Request öffnen
                         </Link>
+                        {request.providerEmail && (
+                          <a
+                            className="action-ghost justify-center"
+                            href={mailtoHref(
+                              request.providerEmail,
+                              `Hilfinio Anfrage: ${request.serviceTitle}`,
+                              request.providerActivationText
+                            )}
+                          >
+                            Anbieter mailen
+                          </a>
+                        )}
+                        <button
+                          type="button"
+                          className="action-ghost justify-center"
+                          onClick={() => void copy(request.providerActivationText, "Anbietertext")}
+                        >
+                          Anbietertext kopieren
+                        </button>
                         {request.customerEmail && (
                           <a className="action-ghost justify-center" href={`mailto:${request.customerEmail}`}>
                             Kunde mailen
                           </a>
                         )}
+                        <button
+                          type="button"
+                          className="action-ghost justify-center"
+                          onClick={() => void copy(request.customerHoldingText, "Kundenupdate")}
+                        >
+                          Kundenupdate kopieren
+                        </button>
+                        <button
+                          type="button"
+                          className="action-ghost justify-center"
+                          disabled={busyRequestId === request.id}
+                          onClick={() =>
+                            void runAction(
+                              request.id,
+                              "provider_contacted",
+                              request.providerEmail ? `Provider per Mail kontaktiert: ${request.providerEmail}` : "Provider manuell kontaktiert"
+                            )
+                          }
+                        >
+                          Kontaktiert markieren
+                        </button>
+                        <button
+                          type="button"
+                          className="action-ghost justify-center border-rose-500/30 text-rose-700 dark:text-rose-300"
+                          disabled={busyRequestId === request.id}
+                          onClick={() => void runAction(request.id, "request_escalated", "4h-SLA gefaehrdet oder gerissen. Manuelle Rettung noetig.")}
+                        >
+                          Eskalieren
+                        </button>
                       </div>
                     </div>
                     <dl className="mt-3 grid gap-2 text-xs sm:grid-cols-3">
@@ -203,6 +312,10 @@ export function AdminMarketplaceOpsModule({
                       <div>
                         <dt className="font-semibold text-slate-500 dark:text-slate-400">Budget</dt>
                         <dd>{request.budgetEur == null ? "n/a" : `${request.budgetEur} EUR`}</dd>
+                      </div>
+                      <div>
+                        <dt className="font-semibold text-slate-500 dark:text-slate-400">Anbieter-Mail</dt>
+                        <dd>{request.providerEmail ?? "n/a"}</dd>
                       </div>
                     </dl>
                   </article>
@@ -224,6 +337,11 @@ export function AdminMarketplaceOpsModule({
                     <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
                       {provider.unansweredCount} offen · {provider.criticalCount} kritisch · ältester {provider.oldestAgeHours}h
                     </p>
+                    {provider.providerEmail && (
+                      <a className="mt-2 inline-flex text-xs font-semibold text-[var(--brand)] hover:underline" href={`mailto:${provider.providerEmail}`}>
+                        {provider.providerEmail}
+                      </a>
+                    )}
                     <p className="mt-2 line-clamp-2 text-xs text-slate-500 dark:text-slate-400">
                       {provider.serviceTitles.join(", ")}
                     </p>
